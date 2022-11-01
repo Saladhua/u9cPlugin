@@ -1,0 +1,25 @@
+﻿<?xml version="1.0"?>
+<pub-sub>
+	<!--采购行-->
+	<!--<subcription event="UFIDA.U9.PM.PO.POLine.AfterDefaultValue" ContactInfo="" Developer="" FeatureSummary="" PublishTime="0001年1月1日">
+    <subscriber  type="YY.U9.Cust.AY.AppPlugIn.POLineSubscriber,YY.U9.Cust.AY.AppPlugIn.dll" />
+  </subcription>-->
+  <!-- 调入单行-->
+  <!--<subcription event="UFIDA.U9.InvDoc.TransferIn.TransInLine.Inserting" ContactInfo="" Developer="" FeatureSummary="" PublishTime="0001年1月1日">
+    <subscriber  type="YY.U9.Cust.GD.AppPlugIn.TransferInInsertedSubscriber,YY.U9.Cust.GD.AppPlugIn.dll" />
+  </subcription>
+  -->
+  <!--调入单行更新操作-->
+  <!--
+  <subcription event="UFIDA.U9.InvDoc.TransferIn.TransInLine.Updating" ContactInfo="" Developer="" FeatureSummary="" PublishTime="0001年1月1日">
+    <subscriber  type="YY.U9.Cust.GD.AppPlugIn.TransferInUpdatingSubscriber,YY.U9.Cust.GD.AppPlugIn.dll" />
+  </subcription>-->
+  <!--宏巨-形态转换-更新-->
+  <subcription event="UFIDA.U9.InvDoc.TransferForm.TransferFormSL.Updating" ContactInfo="" Developer="" FeatureSummary="" PublishTime="0001年1月1日">
+    <subscriber  type="YY.U9.Cust.LI.AppPlugIn.TransferFormUpdatingSubscriber,YY.U9.Cust.LI.AppPlugIn.dll" />
+  </subcription>
+  <!--宏巨-形态转换-保存-->
+  <subcription event="UFIDA.U9.InvDoc.TransferForm.TransferFormSL.Inserted" ContactInfo="" Developer="" FeatureSummary="" PublishTime="0001年1月1日">
+    <subscriber  type="YY.U9.Cust.LI.AppPlugIn.TransferFormSLInsertedSubscriber,YY.U9.Cust.LI.AppPlugIn.dll" />
+  </subcription>
+</pub-sub>

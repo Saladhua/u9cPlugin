@@ -67,7 +67,6 @@ namespace YY.U9.Cust.LI.AppPlugIn
             {
                 transferIn.DescFlexSegments.PrivateDescSeg1 = (qty - transferIn.StoreUOMQty).ToString();
             }
-
             #endregion
         }
     }

@@ -22,4 +22,11 @@
   <subcription event="UFIDA.U9.InvDoc.TransferForm.TransferFormSL.Inserted" ContactInfo="" Developer="" FeatureSummary="" PublishTime="0001年1月1日">
     <subscriber  type="YY.U9.Cust.LI.AppPlugIn.TransferFormSLInsertedSubscriber,YY.U9.Cust.LI.AppPlugIn.dll" />
   </subcription>
+  	<!--君华-杂收单-批次单重计算-->	
+	<subcription event="UFIDA.U9.InvDoc.MiscRcv.MiscRcvTrans.BeforeInserting">
+		<subscriber  type="YY.U9.Cust.LI.AppPlugIn.MiscShipmentInsertedSubscriber,YY.U9.Cust.LI.AppPlugIn.dll" />
+	</subcription>
+	<subcription event="UFIDA.U9.InvDoc.MiscRcv.MiscRcvTrans.Updating">
+		<subscriber  type="YY.U9.Cust.LI.AppPlugIn.MiscShipmentUpdatingSubscriber,YY.U9.Cust.LI.AppPlugIn.dll" />
+	</subcription>
 </pub-sub>

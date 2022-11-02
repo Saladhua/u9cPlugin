@@ -166,6 +166,15 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\yonyou\U9V60\Portal\ApplicationServer\Libs\UFIDA.U9.IssueNew.IssueBE.dll</HintPath>
     </Reference>
+    <Reference Include="UFIDA.U9.ISV.CBO.LotSV">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\MailService\Libs\UFIDA.U9.ISV.CBO.LotSV.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.ISV.CBO.LotSV.Agent">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\MailService\Libs\UFIDA.U9.ISV.CBO.LotSV.Agent.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.ISV.CBO.LotSV.Deploy">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\MailService\Libs\UFIDA.U9.ISV.CBO.LotSV.Deploy.dll</HintPath>
+    </Reference>
     <Reference Include="UFIDA.U9.ISV.MiscShipISV.Agent, Version=25.5401.30562.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>D:\yonyou\U9V60\Portal\ApplicationLib\UFIDA.U9.ISV.MiscShipISV.Agent.dll</HintPath>
@@ -243,6 +252,8 @@
     <Compile Include="ApiHelper.cs" />
     <Compile Include="Components\ImplementationSQL.cs" />
     <Compile Include="GetAccessTokenResult.cs" />
+    <Compile Include="JUNHUA\MiscShipmentInsertedSubscriber.cs" />
+    <Compile Include="JUNHUA\MiscShipmentUpdatingSubscriber.cs" />
     <Compile Include="TokenManager.cs" />
     <Compile Include="Common.cs" />
     <Compile Include="HttpRequestClient.cs" />

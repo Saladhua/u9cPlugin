@@ -5,6 +5,7 @@ using UFIDA.U9.Base.DTOs;
 using UFIDA.U9.InvDoc.MiscRcv;
 using UFIDA.U9.ISV.CBO.Lot;
 using UFIDA.U9.ISV.CBO.Lot.Proxy;
+using UFIDA.U9.Lot;
 using UFSoft.UBF.Business;
 using UFSoft.UBF.Exceptions;
 using UFSoft.UBF.Util.DataAccess;
@@ -47,6 +48,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
                 }
                 string itemmaster = item.ItemInfo.ItemID.ID.ToString();
                 long see123 = item.LotInfo.LotMaster.ID;
+                long see7 = item.ID;
                 #region 
                 DataTable dataTable_1 = new DataTable();
                 string sql_1 = "select CBO_Category.Code from CBO_ItemMaster inner join CBO_Category on CBO_ItemMaster.MainItemCategory = CBO_Category.ID " +
@@ -83,6 +85,38 @@ namespace YY.U9.Cust.LI.AppPlugIn
                 //item.LotInfo.LotCode = GetBatch_U(longs, wide, db, dbname);
                 string lotcode = item.LotInfo.LotCode.Substring(0, 9);
                 string newlotcode = lotcode + "/" + wide + "*" + longs;
+                //item.LotInfo.LotCode = newlotcode;
+                string oldlotid = item.LotInfo.LotMaster.ID.ToString();
+                #region 通过创建bp的方式创建批号
+                if (string.IsNullOrWhiteSpace(item.LotInfo.LotMaster.ID.ToString()))
+                {
+                    CommonCreateLotMasterSRVProxy lotMasterSRV = new CommonCreateLotMasterSRVProxy();
+                    List<CreateLotMasterDTOData> createLotMasterDTOData = new List<CreateLotMasterDTOData>();
+                    CreateLotMasterDTOData createLot = new CreateLotMasterDTOData();
+                    createLot.Item = new UFIDA.U9.CBO.Pub.Controller.CommonArchiveDataDTOData();
+                    createLot.Item.ID = item.ItemInfo.ItemID.ID;//(long)item["ItemInfo_ItemID"];
+                    createLot.Item.Name = item.ItemInfo.ItemName;//item["ItemInfo_ItemName"].ToString();
+                    createLot.Item.Code = item.ItemInfo.ItemCode;//item["ItemInfo_ItemID"].ToString();
+                    createLot.LotCode = newlotcode;//item["LotInfo_LotCode"].ToString();
+                    createLotMasterDTOData.Add(createLot);
+                    lotMasterSRV.CreateLotMasterDTOList = createLotMasterDTOData;
+                    //lotMasterSRV.Do();
+                    List<IDCodeNameDTOData> see2222 = lotMasterSRV.Do();
+                    //保存新的id
+                    string newlotid = "";
+                    #region 修改批号
+                    foreach (var k in see2222)
+                    {
+                        item.LotInfo.LotMaster.ID = k.ID;
+                        item.LotInfo.LotMaster.Code = k.Code;
+                        item.LotInfo.LotMaster.Name = k.Name;
+                        newlotid = k.ID.ToString();
+                    }
+
+                }
+                item.LotInfo.LotCode = newlotcode;
+                #endregion
+                #endregion
                 string kg = "";
                 #region  根据长宽进行赋值计算KG
                 #region sql语句执行 kg 赋值
@@ -114,38 +148,23 @@ namespace YY.U9.Cust.LI.AppPlugIn
                 {
                     kg = "0";
                 }
-
-                #region 通过服务修改批号主档案
-
-                //CommonQueryLotMasterSRVProxy lotMasterSRV = new CommonQueryLotMasterSRVProxy();
-                //List<LotMasterDTOData> lotMasterDTODatas = new List<LotMasterDTOData>();
-                //LotMasterDTOData createLot = new LotMasterDTOData();
-                //createLot.Item = new UFIDA.U9.CBO.Pub.Controller.CommonArchiveDataDTOData();
-                //createLot.ID = item.LotInfo.LotMaster.ID;
-                //createLot.Item.ID = long.Parse(itemmaster);
-                //lotMasterDTODatas.Add(createLot);
-                //lotMasterSRV.Do();
-                //List<LotMasterDTOData> see2222 = lotMasterSRV.Do();
-
-                CommonModifyLotMasterSRVProxy lotMasterSRVProxy = new CommonModifyLotMasterSRVProxy();
-                List<LotMasterDTOData> lotMasterDTODatas = new List<LotMasterDTOData>();
-                LotMasterDTOData createLot = new LotMasterDTOData();
-                createLot.Item = new UFIDA.U9.CBO.Pub.Controller.CommonArchiveDataDTOData();
-                createLot.ID = item.LotInfo.LotMaster.ID;
-                createLot.Item.ID = long.Parse(itemmaster);
-                createLot.LotCode = newlotcode;
-                lotMasterDTODatas.Add(createLot);
-                lotMasterSRVProxy.Do(lotMasterDTODatas.ToArray().ToString());
+                #endregion
+                #region 使用session的方式modelfind去修改
+                LotMaster lotMaster = null;
+                using (UFSoft.UBF.Business.ISession session = Session.Open())
+                {
+                    lotMaster = LotMaster.Finder.FindByID(item.LotInfo.LotMaster.ID);
+                    lotMaster.LotCode = newlotcode;
+                    lotMaster.DescFlexSegments.PrivateDescSeg1 = longs;
+                    lotMaster.DescFlexSegments.PrivateDescSeg2 = wide;
+                    session.Modify(lotMaster);
+                    session.Commit();
+                }
+                #endregion
                 #endregion
 
-                #endregion
             }
-
-
-            #endregion
-
         }
-
 
         /// <summary>
         /// 生产批号

@@ -1,6 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
+using UFIDA.U9.Base.DTOs;
 using UFIDA.U9.InvDoc.MiscRcv;
+using UFIDA.U9.ISV.CBO.Lot;
+using UFIDA.U9.ISV.CBO.Lot.Proxy;
+using UFIDA.U9.Lot;
 using UFSoft.UBF.Business;
 using UFSoft.UBF.Util.DataAccess;
 using UFSoft.UBF.Util.Log;
@@ -69,13 +74,33 @@ namespace YY.U9.Cust.LI.AppPlugIn
                 #region 长宽没有值的情况下，手工录入批次号，不调用开发功能
                 if (!string.IsNullOrEmpty(longs) && !string.IsNullOrEmpty(wide))
                 {
-                    return ;
+                    return;
                 }
                 #endregion
                 //item.LotInfo.LotMaster.LotCode = GetBatch(longs, wide);
                 string db = "InvDoc_MiscRcvTransL";
                 string dbname = "Lotinfo_lotcode";
-                item.LotInfo.LotCode = GetBatch(longs, wide, db, dbname);
+                string newlotcode = GetBatch(longs, wide, db, dbname);
+                #region 通过创建bp的方式创建批号
+                CommonCreateLotMasterSRVProxy lotMasterSRV = new CommonCreateLotMasterSRVProxy();
+                List<CreateLotMasterDTOData> createLotMasterDTOData = new List<CreateLotMasterDTOData>();
+                CreateLotMasterDTOData createLot = new CreateLotMasterDTOData();
+                createLot.Item = new UFIDA.U9.CBO.Pub.Controller.CommonArchiveDataDTOData();
+                createLot.Item.ID = item.ItemInfo.ItemID.ID;//(long)item["ItemInfo_ItemID"];
+                createLot.Item.Name = item.ItemInfo.ItemName;//item["ItemInfo_ItemName"].ToString();
+                createLot.Item.Code = item.ItemInfo.ItemCode;//item["ItemInfo_ItemID"].ToString();
+                createLot.LotCode = newlotcode;//item["LotInfo_LotCode"].ToString();
+                createLotMasterDTOData.Add(createLot);
+                lotMasterSRV.CreateLotMasterDTOList = createLotMasterDTOData;
+                //lotMasterSRV.Do();
+                List<IDCodeNameDTOData> see2222 = lotMasterSRV.Do();
+                foreach (var k in see2222)
+                {
+                    item.LotInfo.LotMaster.ID = k.ID;
+                }
+                item.LotInfo.LotCode = newlotcode;
+
+                #endregion
                 string kg = "";
                 #region  根据长宽进行赋值计算KG
                 #region sql语句执行 kg 赋值
@@ -107,7 +132,19 @@ namespace YY.U9.Cust.LI.AppPlugIn
                     kg = "0";
                 }
                 #endregion
-
+                #region 使用session的方式modelfind去修改
+                LotMaster lotMaster = null;
+                using (UFSoft.UBF.Business.ISession session = Session.Open())
+                {
+                    lotMaster = LotMaster.Finder.FindByID(item.LotInfo.LotMaster.ID);
+                    lotMaster.LotCode = newlotcode;
+                    lotMaster.DescFlexSegments.PrivateDescSeg1 = longs;
+                    lotMaster.DescFlexSegments.PrivateDescSeg2 = wide;
+                    //lotMaster.DescFlexSegments.PrivateDescSeg3 = kg;
+                    session.Modify(lotMaster);
+                    session.Commit();
+                }
+                #endregion
 
                 #endregion
             }

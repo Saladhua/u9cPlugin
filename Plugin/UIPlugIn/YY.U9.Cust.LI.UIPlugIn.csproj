@@ -286,6 +286,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BomMainUIFormWebPartExtended.cs" />
+    <Compile Include="JUNHUA\MiscRcvUIMainFormWebPartExtended.cs" />
     <Compile Include="TransferFormUIMainFormWebPartExtended.cs" />
     <Compile Include="APRefScmBillUIFormWebPartExtended.cs" />
     <Compile Include="Common.cs" />

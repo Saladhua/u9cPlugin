@@ -8,7 +8,7 @@ using UFSoft.UBF.UI.Custom;
 using UFSoft.UBF.UI.IView;
 using UFSoft.UBF.Util.DataAccess;
 
-namespace YY.U9.Cust.AY.UIPlugIn
+namespace YY.U9.Cust.LI.UIPlugIn
 {
     /// <summary>
     /// 杂收单--奥音功能置换

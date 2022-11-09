@@ -8,8 +8,8 @@
     <ProjectGuid>{45B29E51-5729-411A-9DC7-B8070DDDB6DA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>YY.U9.Cust.AY.UIPlugIn</RootNamespace>
-    <AssemblyName>YY.U9.Cust.AY.UIPlugIn</AssemblyName>
+    <RootNamespace>YY.U9.Cust.LI.UIPlugIn</RootNamespace>
+    <AssemblyName>YY.U9.Cust.LI.UIPlugIn</AssemblyName>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>

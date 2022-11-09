@@ -6,12 +6,13 @@ using UFIDA.U9.InvDoc.MiscRcv;
 using UFIDA.U9.ISV.CBO.Lot;
 using UFIDA.U9.ISV.CBO.Lot.Proxy;
 using UFIDA.U9.Lot;
+using UFIDA.U9.MO.MO;
 using UFSoft.UBF.Business;
 using UFSoft.UBF.Exceptions;
 using UFSoft.UBF.Util.DataAccess;
 using UFSoft.UBF.Util.Log;
 
-namespace YY.U9.Cust.LI.AppPlugIn
+namespace YY.U9.Cust.JH.AppPlugIn
 {
     /// <summary>
     /// 杂发单--更新
@@ -68,10 +69,8 @@ namespace YY.U9.Cust.LI.AppPlugIn
                     return;
                 }
                 #endregion
-                string longs = item.DescFlexSegments.PrivateDescSeg2 = item.DescFlexSegments.PrivateDescSeg5;
-                string wide = item.DescFlexSegments.PrivateDescSeg3 = item.DescFlexSegments.PrivateDescSeg6;
-                //string longs = string.IsNullOrEmpty(item.DescFlexSegments.PrivateDescSeg1) ? "" : item.DescFlexSegments.PrivateDescSeg1;
-                //string wide = string.IsNullOrEmpty(item.DescFlexSegments.PrivateDescSeg2) ? "" : item.DescFlexSegments.PrivateDescSeg2;
+                string longs = string.IsNullOrEmpty(item.DescFlexSegments.PrivateDescSeg1) ? "" : item.DescFlexSegments.PrivateDescSeg1;
+                string wide = string.IsNullOrEmpty(item.DescFlexSegments.PrivateDescSeg2) ? "" : item.DescFlexSegments.PrivateDescSeg2;
                 //item.LotInfo.LotMaster.LotCode = GetBatch(longs, wide);
                 string db = "InvDoc_MiscRcvTransL";
                 string dbname = "Lotinfo_lotcode";
@@ -100,7 +99,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
                     createLot.LotCode = newlotcode;//item["LotInfo_LotCode"].ToString();
                     createLotMasterDTOData.Add(createLot);
                     lotMasterSRV.CreateLotMasterDTOList = createLotMasterDTOData;
-                    //lotMasterSRV.Do();
+                    lotMasterSRV.Do();
                     List<IDCodeNameDTOData> see2222 = lotMasterSRV.Do();
                     //保存新的id
                     string newlotid = "";
@@ -150,6 +149,8 @@ namespace YY.U9.Cust.LI.AppPlugIn
                 }
                 #endregion
                 #region 使用session的方式modelfind去修改
+                item.DescFlexSegments.PrivateDescSeg30 = "自动";
+
                 LotMaster lotMaster = null;
                 using (UFSoft.UBF.Business.ISession session = Session.Open())
                 {
@@ -157,6 +158,8 @@ namespace YY.U9.Cust.LI.AppPlugIn
                     lotMaster.LotCode = newlotcode;
                     lotMaster.DescFlexSegments.PrivateDescSeg1 = longs;
                     lotMaster.DescFlexSegments.PrivateDescSeg2 = wide;
+                    lotMaster.DescFlexSegments.PrivateDescSeg3 = kg;
+                    lotMaster.DescFlexSegments.PrivateDescSeg30 = "自动";
                     session.Modify(lotMaster);
                     session.Commit();
                 }

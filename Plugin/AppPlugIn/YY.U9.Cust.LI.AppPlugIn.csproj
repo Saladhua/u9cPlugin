@@ -273,7 +273,9 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="AOYIN\奥英.md" />
     <None Include="HJDZ\宏巨电子.md" />
+    <None Include="JUNHUA\君华.md" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -93,6 +93,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>D:\yonyou\U9V50\Portal\ApplicationLib\UFIDA.U9.CBO.PubBE.Deploy.dll</HintPath>
     </Reference>
+    <Reference Include="UFIDA.U9.CBO.PubSV.Agent">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\MailService\Libs\UFIDA.U9.CBO.PubSV.Agent.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.CBO.PubSV.Deploy">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\MailService\Libs\UFIDA.U9.CBO.PubSV.Deploy.dll</HintPath>
+    </Reference>
     <Reference Include="UFIDA.U9.CBO.SCM.SCMPickListUI.MetaData">
       <HintPath>..\..\..\yonyou\UBFCE\U9.VOB.Product.Metadata\UI\UFIDA.U9.CBO.SCM.SCMPickListUI.MetaData.dll</HintPath>
     </Reference>
@@ -106,6 +112,12 @@
     </Reference>
     <Reference Include="UFIDA.U9.FI.AP.PayReqFundUI.WebPart">
       <HintPath>F:\yonyou\U9CE\Portal\UILib\UFIDA.U9.FI.AP.PayReqFundUI.WebPart.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.ISV.MO.MOSV.Agent">
+      <HintPath>..\AppPlugIn\bin\Debug\UFIDA.U9.ISV.MO.MOSV.Agent.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.ISV.MO.MOSV.Deploy">
+      <HintPath>..\AppPlugIn\bin\Debug\UFIDA.U9.ISV.MO.MOSV.Deploy.dll</HintPath>
     </Reference>
     <Reference Include="UFIDA.U9.MFG.IssueNew.IssueApply.MaterialOutDocUI.WebPart">
       <HintPath>D:\yonyou\U9V60\Portal\UILib\UFIDA.U9.MFG.IssueNew.IssueApply.MaterialOutDocUI.WebPart.dll</HintPath>
@@ -136,6 +148,22 @@
     <Reference Include="UFIDA.U9.MFG.SFC.MOOperationRptUI.WebPart, Version=25.5401.37573.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\yonyou\U9CE\Portal\UILib\UFIDA.U9.MFG.SFC.MOOperationRptUI.WebPart.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.MO.MOBE, Version=25.5401.42918.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\yonyou\U9CE\MailService\Libs\UFIDA.U9.MO.MOBE.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.MO.MOBP, Version=25.5401.42811.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\yonyou\U9CE\MailService\Libs\UFIDA.U9.MO.MOBP.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.MO.MOBP.Agent, Version=25.5401.44073.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\yonyou\U9CE\MailService\Libs\UFIDA.U9.MO.MOBP.Agent.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.MO.MOBP.Deploy, Version=25.5401.44073.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\yonyou\U9CE\MailService\Libs\UFIDA.U9.MO.MOBP.Deploy.dll</HintPath>
     </Reference>
     <Reference Include="UFIDA.U9.SCM.INV.MiscRcvUI.WebPart, Version=25.5401.40803.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -286,6 +314,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BomMainUIFormWebPartExtended.cs" />
+    <Compile Include="AOYIN\Cust_Li_MOStockMainUIFormWebPartExtended.cs" />
     <Compile Include="JUNHUA\MiscRcvUIMainFormWebPartExtended.cs" />
     <Compile Include="TransferFormUIMainFormWebPartExtended.cs" />
     <Compile Include="APRefScmBillUIFormWebPartExtended.cs" />

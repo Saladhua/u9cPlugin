@@ -15,18 +15,22 @@
     <subscriber  type="YY.U9.Cust.GD.AppPlugIn.TransferInUpdatingSubscriber,YY.U9.Cust.GD.AppPlugIn.dll" />
   </subcription>-->
   <!--宏巨-形态转换-更新-->
-  <subcription event="UFIDA.U9.InvDoc.TransferForm.TransferFormSL.Updating" ContactInfo="" Developer="" FeatureSummary="" PublishTime="0001年1月1日">
+  <!--<subcription event="UFIDA.U9.InvDoc.TransferForm.TransferFormSL.Updating" ContactInfo="" Developer="" FeatureSummary="" PublishTime="0001年1月1日">
     <subscriber  type="YY.U9.Cust.LI.AppPlugIn.TransferFormUpdatingSubscriber,YY.U9.Cust.LI.AppPlugIn.dll" />
-  </subcription>
+  </subcription>-->
   <!--宏巨-形态转换-保存-->
-  <subcription event="UFIDA.U9.InvDoc.TransferForm.TransferFormSL.Inserted" ContactInfo="" Developer="" FeatureSummary="" PublishTime="0001年1月1日">
+  <!--<subcription event="UFIDA.U9.InvDoc.TransferForm.TransferFormSL.Inserted" ContactInfo="" Developer="" FeatureSummary="" PublishTime="0001年1月1日">
     <subscriber  type="YY.U9.Cust.LI.AppPlugIn.TransferFormSLInsertedSubscriber,YY.U9.Cust.LI.AppPlugIn.dll" />
-  </subcription>
+  </subcription>-->
   	<!--君华-杂收单-批次单重计算-->	
-	<subcription event="UFIDA.U9.InvDoc.MiscRcv.MiscRcvTrans.BeforeInserting">
+	<!--<subcription event="UFIDA.U9.InvDoc.MiscRcv.MiscRcvTrans.BeforeInserting">
 		<subscriber  type="YY.U9.Cust.LI.AppPlugIn.MiscShipmentInsertedSubscriber,YY.U9.Cust.LI.AppPlugIn.dll" />
 	</subcription>
 	<subcription event="UFIDA.U9.InvDoc.MiscRcv.MiscRcvTrans.Updating">
 		<subscriber  type="YY.U9.Cust.LI.AppPlugIn.MiscShipmentUpdatingSubscriber,YY.U9.Cust.LI.AppPlugIn.dll" />
-	</subcription>
+	</subcription>-->
+  <!--奥英-生产订单备料表-自动完工-->
+  <subcription event="UFIDA.U9.MO.MO.MOPickList.Updating" ContactInfo="" Developer="" FeatureSummary="" PublishTime="0001年1月1日">
+    <subscriber  type="YY.U9.Cust.LI.AppPlugIn.Cust_MOClonseSubscriber,YY.U9.Cust.LI.AppPlugIn.dll" />
+  </subcription>
 </pub-sub>

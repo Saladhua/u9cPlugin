@@ -1,16 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
-using UFIDA.U9.Base.DTOs;
 using UFIDA.U9.InvDoc.MiscRcv;
-using UFIDA.U9.ISV.CBO.Lot;
-using UFIDA.U9.ISV.CBO.Lot.Proxy;
-using UFIDA.U9.Lot;
 using UFSoft.UBF.Business;
 using UFSoft.UBF.Util.DataAccess;
 using UFSoft.UBF.Util.Log;
 
-namespace YY.U9.Cust.LI.AppPlugIn
+namespace YY.U9.Cust.JH.AppPlugIn
 {
     /// <summary>
     /// 杂发单--新增
@@ -43,10 +38,12 @@ namespace YY.U9.Cust.LI.AppPlugIn
             //直接循环遍历
             foreach (var item in miscRcvTrans.MiscRcvTransLs)
             {
+
                 if (!item.Wh.IsLot)
                 {
                     return;
                 }
+
                 #region
                 string itemmaster = item.ItemInfo.ItemID.ID.ToString();
                 #region 
@@ -59,48 +56,33 @@ namespace YY.U9.Cust.LI.AppPlugIn
                 string mainItemCategory = "";
                 if (dataTable_1.Rows != null && dataTable_1.Rows.Count > 0)
                 {
+
                     mainItemCategory = dataTable_1.Rows[0]["Code"].ToString().Substring(0, 2);
+
                 }
                 if (mainItemCategory == "10" || mainItemCategory == "11")
                 {
                     return;
                 }
                 #endregion
+
                 #endregion
                 //item.DescFlexSegments.PrivateDescSeg2 = item.DescFlexSegments.PrivateDescSeg5;
                 //item.DescFlexSegments.PrivateDescSeg3= item.DescFlexSegments.PrivateDescSeg6;
                 string longs = string.IsNullOrEmpty(item.DescFlexSegments.PrivateDescSeg1) ? "" : item.DescFlexSegments.PrivateDescSeg1;
                 string wide = string.IsNullOrEmpty(item.DescFlexSegments.PrivateDescSeg2) ? "" : item.DescFlexSegments.PrivateDescSeg2;
+                //item.LotInfo.LotMaster.LotCode = GetBatch(longs, wide);
+                string db = "InvDoc_MiscRcvTransL";
+                string dbname = "Lotinfo_lotcode";
+
                 #region 长宽没有值的情况下，手工录入批次号，不调用开发功能
-                if (!string.IsNullOrEmpty(longs) && !string.IsNullOrEmpty(wide))
+                if (string.IsNullOrEmpty(longs) && string.IsNullOrEmpty(wide))
                 {
                     return;
                 }
                 #endregion
-                //item.LotInfo.LotMaster.LotCode = GetBatch(longs, wide);
-                string db = "InvDoc_MiscRcvTransL";
-                string dbname = "Lotinfo_lotcode";
-                string newlotcode = GetBatch(longs, wide, db, dbname);
-                #region 通过创建bp的方式创建批号
-                CommonCreateLotMasterSRVProxy lotMasterSRV = new CommonCreateLotMasterSRVProxy();
-                List<CreateLotMasterDTOData> createLotMasterDTOData = new List<CreateLotMasterDTOData>();
-                CreateLotMasterDTOData createLot = new CreateLotMasterDTOData();
-                createLot.Item = new UFIDA.U9.CBO.Pub.Controller.CommonArchiveDataDTOData();
-                createLot.Item.ID = item.ItemInfo.ItemID.ID;//(long)item["ItemInfo_ItemID"];
-                createLot.Item.Name = item.ItemInfo.ItemName;//item["ItemInfo_ItemName"].ToString();
-                createLot.Item.Code = item.ItemInfo.ItemCode;//item["ItemInfo_ItemID"].ToString();
-                createLot.LotCode = newlotcode;//item["LotInfo_LotCode"].ToString();
-                createLotMasterDTOData.Add(createLot);
-                lotMasterSRV.CreateLotMasterDTOList = createLotMasterDTOData;
-                //lotMasterSRV.Do();
-                List<IDCodeNameDTOData> see2222 = lotMasterSRV.Do();
-                foreach (var k in see2222)
-                {
-                    item.LotInfo.LotMaster.ID = k.ID;
-                }
-                item.LotInfo.LotCode = newlotcode;
 
-                #endregion
+                item.LotInfo.LotCode = GetBatch(longs, wide, db, dbname);
                 string kg = "";
                 #region  根据长宽进行赋值计算KG
                 #region sql语句执行 kg 赋值
@@ -132,19 +114,15 @@ namespace YY.U9.Cust.LI.AppPlugIn
                     kg = "0";
                 }
                 #endregion
-                #region 使用session的方式modelfind去修改
-                LotMaster lotMaster = null;
-                using (UFSoft.UBF.Business.ISession session = Session.Open())
-                {
-                    lotMaster = LotMaster.Finder.FindByID(item.LotInfo.LotMaster.ID);
-                    lotMaster.LotCode = newlotcode;
-                    lotMaster.DescFlexSegments.PrivateDescSeg1 = longs;
-                    lotMaster.DescFlexSegments.PrivateDescSeg2 = wide;
-                    //lotMaster.DescFlexSegments.PrivateDescSeg3 = kg;
-                    session.Modify(lotMaster);
-                    session.Commit();
-                }
-                #endregion
+                item.DescFlexSegments.PrivateDescSeg30 = "自动";
+
+                string update1 = "UPDATE" +
+                    " Lot_LotMaster SET DescFlexSegments_PrivateDescSeg1 = '" + longs + "'," +
+                    " DescFlexSegments_PrivateDescSeg2 = '" + wide + "'," +
+                    " DescFlexSegments_PrivateDescSeg3 = '" + kg + "' WHERE id = '" + item.LotInfo.LotMaster.ID + "'";
+                DataAccessor.RunSQL(DataAccessor.GetConn(), update1, null);
+                string see = item.LotInfo.LotMaster.LotCode;
+                string see1 = item.LotInfo.LotCode;
 
                 #endregion
             }
@@ -170,13 +148,21 @@ namespace YY.U9.Cust.LI.AppPlugIn
             //SELECT TOP(1) Lotinfo_lotcode FROM InvDoc_MiscShipL WHERE Lotinfo_lotcode LIKE '20220822%' ORDER BY CreatedOn DESC
             int lotcode = 1;
             DataTable dataTable = new DataTable();
-            string valueSet = "SELECT TOP(1)  " + dbname + " FROM " + db + " WHERE " + dbname + " LIKE '" + time + "%' ORDER BY CreatedOn DESC";
+            string valueSet = "SELECT TOP(1)  " + dbname + " FROM " + db + " WHERE " + dbname + " LIKE '" + time + "%' and DescFlexSegments_PrivateDescSeg30='自动'" +
+                " ORDER BY CreatedOn DESC";
             DataSet dataSet = new DataSet();
             DataAccessor.RunSQL(DataAccessor.GetConn(), valueSet, null, out dataSet);
             dataTable = dataSet.Tables[0];
             if (dataTable.Rows != null && dataTable.Rows.Count > 0)
             {
-                lotcode = Convert.ToInt32(dataTable.Rows[0][dbname].ToString().Substring(6, 3));
+                try
+                {
+                    lotcode = Convert.ToInt32(dataTable.Rows[0][dbname].ToString().Substring(6, 3));
+                }
+                catch (Exception)
+                {
+                    lotcode = 0;
+                }
                 lotcode = lotcode + 1;
             }
             string code = lotcode.ToString("000");

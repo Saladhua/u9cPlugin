@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Data;
-using System.Net.NetworkInformation;
-using System.Reflection.Emit;
 using UFIDA.U9.SCM.INV.MiscRcvUIModel;
 using UFSoft.UBF.UI.Custom;
 using UFSoft.UBF.UI.IView;
-using UFSoft.UBF.UI.JModel;
 using UFSoft.UBF.Util.DataAccess;
 
 namespace YY.U9.Cust.JH.UIPlugIn
@@ -22,9 +19,12 @@ namespace YY.U9.Cust.JH.UIPlugIn
             base.BeforeEventProcess(part, eventName, sender, args, out executeDefault);
             this._part = (part as MiscRcvUIMainFormWebPart);
             long n = (long)Math.Floor((new Random()).NextDouble() * 10000000D);
+            UFSoft.UBF.UI.JMF.Controls.Adapters.UFWebButtonAdapter webButton = sender as UFSoft.UBF.UI.JMF.Controls.Adapters.UFWebButtonAdapter;
+
             foreach (var item in _part.Model.MiscRcvTrans_MiscRcvTransLs.Records)
             {
                 string isLotControl = item["IsLotControl"].ToString();
+
                 if (isLotControl == "False")
                 {
                     return;
@@ -73,16 +73,23 @@ namespace YY.U9.Cust.JH.UIPlugIn
                 #endregion
 
                 #region 长宽没有值的情况下，手工录入批次号，不调用开发功能
-                if (string.IsNullOrEmpty(item["DescFlexSegments_PrivateDescSeg1"].ToString()) && string.IsNullOrEmpty(item["DescFlexSegments_PrivateDescSeg2"].ToString()) && string.IsNullOrEmpty(item["LotInfo_LotCode"].ToString()))
+                if (string.IsNullOrEmpty(item["DescFlexSegments_PrivateDescSeg1"].ToString()) && string.IsNullOrEmpty(item["DescFlexSegments_PrivateDescSeg2"].ToString()))
                 {
                     return;
                 }
                 #endregion
-
                 #region 判断批号主档不一致
                 DataTable table_1 = new DataTable();
                 string id = item["ID"].ToString();
-                string lotcode_1 = item["LotInfo_LotCode"].ToString();
+                string lotcode_1 = "";
+                try
+                {
+                    lotcode_1 = item["LotInfo_LotCode"].ToString();
+                }
+                catch (Exception)
+                {
+                    lotcode_1 = "";
+                }
                 string lotcode = "";
                 string sql_1 = "SELECT LotInfo_LotCode FROM InvDoc_MiscRcvTransL WHERE ID='" + id + "'";
                 DataSet dataSet_1 = new DataSet();
@@ -92,13 +99,12 @@ namespace YY.U9.Cust.JH.UIPlugIn
                 {
                     lotcode = table_1.Rows[0]["LotInfo_LotCode"].ToString();
                 }
-                if (lotcode != lotcode_1 && !string.IsNullOrEmpty(lotcode))
+                if (lotcode != lotcode_1 && !string.IsNullOrEmpty(lotcode) && !string.IsNullOrEmpty(lotcode_1))
                 {
                     throw new Exception("批号主档不一致");
-
                 }
                 #endregion
-                string see = item["LotInfo_LotCode"].ToString();
+                string see = item["LotInfo_LotCode"] == null ? "" : item["LotInfo_LotCode"].ToString();
                 longs = string.IsNullOrEmpty(longs) ? "" : item["DescFlexSegments_PrivateDescSeg1"].ToString();
                 wide = string.IsNullOrEmpty(wide) ? "" : item["DescFlexSegments_PrivateDescSeg2"].ToString();
                 //string db = "InvDoc_MiscRcvTransL";
@@ -129,6 +135,7 @@ namespace YY.U9.Cust.JH.UIPlugIn
                 }
 
             }
+
         }
 
         /// <summary>
@@ -147,7 +154,8 @@ namespace YY.U9.Cust.JH.UIPlugIn
             int lotcode = 0;
             #region 
             DataTable dataTable = new DataTable();
-            string valueSet = "SELECT TOP(1)  " + dbname + " FROM " + db + " WHERE " + dbname + " LIKE '" + time + "%' ORDER BY CreatedOn DESC";
+            string valueSet = "SELECT TOP(1)  " + dbname + " FROM " + db + " WHERE " + dbname + " LIKE '" + time + "%' and DescFlexSegments_PrivateDescSeg30='自动'" +
+                " ORDER BY CreatedOn DESC";
             DataSet dataSet = new DataSet();
             DataAccessor.RunSQL(DataAccessor.GetConn(), valueSet, null, out dataSet);
             dataTable = dataSet.Tables[0];

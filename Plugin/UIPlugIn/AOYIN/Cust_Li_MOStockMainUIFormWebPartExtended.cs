@@ -4,7 +4,6 @@ using System.Data;
 using UFIDA.U9.ISV.MO;
 using UFIDA.U9.ISV.MO.Proxy;
 using UFIDA.U9.MFG.MO.DiscreteMOUIModel;
-using UFIDA.U9.MO.MO.Proxy;
 using UFIDA.U9.UI.PDHelper;
 using UFSoft.UBF.UI.Custom;
 using UFSoft.UBF.UI.IView;
@@ -64,7 +63,7 @@ namespace YY.U9.Cust.AY.UIPlugIn
                     string sqlForZS_1 = "SELECT b.DescFlexSegments_PrivateDescSeg2,b.MoDocNo,a.Status" +
                         " FROM InvDoc_MiscRcvTransL b " +
                         " INNER JOIN InvDoc_MiscRcvTrans a " +
-                        " ON a.ID = b.MiscRcvTrans WHERE MoDocNo = '" + moDocNo + "' AND a.Status = 0";
+                        " ON a.ID = b.MiscRcvTrans WHERE MoDocNo = '" + moDocNo + "' AND a.Status = 0  AND b.ItemInfo_ItemCode='" + item["ItemMaster_Code"].ToString() + "'";
                     DataAccessor.RunSQL(DataAccessor.GetConn(), sqlForZS_1, null, out dataSet);
                     dataTable = dataSet.Tables[0];
                     if (dataTable != null && dataTable.Rows.Count > 0)
@@ -118,7 +117,7 @@ namespace YY.U9.Cust.AY.UIPlugIn
                 //WHERE b.Code = '111'
                 string sqlForPre = "SELECT Round_Precision FROM CBO_ItemMaster b " +
                     " INNER JOIN Base_UOM a ON a.ID = b.InventoryUOM WHERE b.Code = '" + item["ItemMaster_Code"].ToString() + "'";
-                DataAccessor.RunSQL(DataAccessor.GetConn(), sqlForZS, null, out dataSet);
+                DataAccessor.RunSQL(DataAccessor.GetConn(), sqlForPre, null, out dataSet);
                 dataTable = dataSet.Tables[0];
                 if (dataTable != null && dataTable.Rows.Count > 0)
                 {

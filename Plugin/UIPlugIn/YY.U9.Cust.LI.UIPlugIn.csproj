@@ -313,6 +313,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AOYIN\Cust_Li_MiscRcvTransLUIFormWebPartExtended.cs" />
     <Compile Include="BomMainUIFormWebPartExtended.cs" />
     <Compile Include="AOYIN\Cust_Li_MOStockMainUIFormWebPartExtended.cs" />
     <Compile Include="JUNHUA\MiscRcvUIMainFormWebPartExtended.cs" />

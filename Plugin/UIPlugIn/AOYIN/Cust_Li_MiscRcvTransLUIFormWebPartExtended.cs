@@ -132,13 +132,20 @@ namespace YY.U9.Cust.LI.UIPlugIn
                         dprivateDescSeg4 = dataTable.Rows[0]["DescFlexField_PrivateDescSeg4"].ToString() == "" ? "0" : dataTable.Rows[0]["DescFlexField_PrivateDescSeg4"].ToString();
                         dprivateDescSeg5 = dataTable.Rows[0]["DescFlexField_PrivateDescSeg5"].ToString() == "" ? "0" : dataTable.Rows[0]["DescFlexField_PrivateDescSeg5"].ToString();
                     }
-                    double see1 = Convert.ToDouble(issuedQty);
-                    double see2 = Convert.ToDouble(dprivateDescSeg3);
-                    double see3 = Convert.ToDouble(dprivateDescSeg4);
-                    double see4 = Convert.ToDouble(dprivateDescSeg5);
+                    //double see1 = Convert.ToDouble(issuedQty);
+                    //double see2 = Convert.ToDouble(dprivateDescSeg3);
+                    //double see3 = Convert.ToDouble(dprivateDescSeg4);
+                    //double see4 = Convert.ToDouble(dprivateDescSeg5);
 
                     difference = Convert.ToDouble(issuedQty) - rcvPer - Convert.ToDouble(dprivateDescSeg3)
                         - Convert.ToDouble(dprivateDescSeg4) - Convert.ToDouble(dprivateDescSeg5);
+                    //反写回去
+                    if (!string.IsNullOrEmpty(moDocNoID)&&!string.IsNullOrEmpty(difference.ToString()))
+                    {
+                        string sqlForUpDate = "UPDATE MO_MOPickList  SET DescFlexField_PrivateDescSeg8='" + difference + "'WHERE ID = (SELECT a.ID FROM MO_MOPickList a" +
+                            " INNER JOIN MO_MO bON a.MO = b.ID WHERE b.DocNo = '" + moDocNo + "' AND a.ItemMaster = '" + itemmaster + "')";
+                        DataAccessor.RunSQL(DataAccessor.GetConn(), sqlForUpDate, null, out dataSet);
+                    }
                     #endregion
                     if (difference == 0)
                     {

@@ -68,18 +68,18 @@ namespace YY.U9.Cust.LI.UIPlugIn
                     itemmaster = item["ItemInfo_ItemID"].ToString();
                     DataTable dataTable = new DataTable();
                     DataSet dataSet = new DataSet();
+                    #region 获取当前生产订单单号的id
+                    string sqlForMoDocNoID = "SELECT ID FROM MO_MO WHERE DocNo='" + moDocNo + "'";
+                    DataAccessor.RunSQL(DataAccessor.GetConn(), sqlForMoDocNoID, null, out dataSet);
+                    dataTable = dataSet.Tables[0];
+                    if (dataTable != null && dataTable.Rows.Count > 0)
+                    {
+                        moDocNoID = dataTable.Rows[0]["ID"].ToString();
+                    }
+                    #endregion
                     //反写
                     if (!string.IsNullOrEmpty(scrapping))
                     {
-                        #region 获取当前生产订单单号的id
-                        string sqlForMoDocNoID = "SELECT ID FROM MO_MO WHERE DocNo='" + moDocNo + "'";
-                        DataAccessor.RunSQL(DataAccessor.GetConn(), sqlForMoDocNoID, null, out dataSet);
-                        dataTable = dataSet.Tables[0];
-                        if (dataTable != null && dataTable.Rows.Count > 0)
-                        {
-                            moDocNoID = dataTable.Rows[0]["ID"].ToString();
-                        }
-                        #endregion
                         //反写回去
                         if (!string.IsNullOrEmpty(moDocNoID))
                         {
@@ -143,11 +143,11 @@ namespace YY.U9.Cust.LI.UIPlugIn
                     if (!string.IsNullOrEmpty(moDocNoID)&&!string.IsNullOrEmpty(difference.ToString()))
                     {
                         string sqlForUpDate = "UPDATE MO_MOPickList  SET DescFlexField_PrivateDescSeg8='" + difference + "'WHERE ID = (SELECT a.ID FROM MO_MOPickList a" +
-                            " INNER JOIN MO_MO bON a.MO = b.ID WHERE b.DocNo = '" + moDocNo + "' AND a.ItemMaster = '" + itemmaster + "')";
+                            " INNER JOIN MO_MO b ON a.MO = b.ID WHERE b.DocNo = '" + moDocNo + "' AND a.ItemMaster = '" + itemmaster + "')";
                         DataAccessor.RunSQL(DataAccessor.GetConn(), sqlForUpDate, null, out dataSet);
                     }
                     #endregion
-                    if (difference == 0)
+                    if (difference <= 0)
                     {
                         CompleteMoProxy complete = new CompleteMoProxy();
                         List<MOOperateParamDTOData> mOOperates = new List<MOOperateParamDTOData>();
@@ -162,5 +162,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
                 }
             }
         }
+
+
     }
 }

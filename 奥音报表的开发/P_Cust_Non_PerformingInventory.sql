@@ -7,7 +7,8 @@ ALTER PROCEDURE Cust_Non_PerformingInventory
 @Item nvarchar(2000),
 @Project nvarchar(2000),
 @Org nvarchar(2000),
-@DateTime datetime
+@DateTime DateTime,
+@DateTimeForS nvarchar(2000)
 )
 AS
 BEGIN
@@ -27,11 +28,22 @@ BEGIN
 		SET @Org='AND A.Org LIKE '''+'%'+@Org+'%'+''''
 	END
 	--查找日期
+		BEGIN	
+			DECLARE  @DateTimeForS_1 nvarchar(2000)
+			set @DateTimeForS_1=getdate()
+		END
 	IF(ISNULL(@DateTime, '')!='')
 	BEGIN
-		SET @DateTime='AND A10.ApprovedOn LIKE '''+'%'+@DateTime+'%'+''''
+		--SET @DateTimeForS='AND A10.ApprovedOn LIKE '''+'%'+CONVERT(nvarchar(10),@DateTime, 20)+'%'+''''	
+		SET @DateTimeForS=' AND A10.ApprovedOn between '''+''+CONVERT(nvarchar(10),@DateTime, 20)+''+''' AND '''+''+CONVERT(nvarchar(10), @DateTime+1, 20)+''+''''
+		set @DateTimeForS_1=CONVERT(nvarchar(10), @DateTime, 20)
 	END
-
+	BEGIN	
+			DECLARE  @DateTimeForS_2 nvarchar(2000)
+			--set @DateTimeForS_2='convert(int,'''+@DateTimeForS_1+''', 20) - A10.ApprovedOn)) as Temp_Age'
+			set @DateTimeForS_2='convert(int,(convert(datetime,'''+@DateTimeForS_1+''') - A10.ApprovedOn)) as Temp_Age'
+			--convert(int,(convert(datetime,'2022-01-20') - A10.ApprovedOn)) as Temp_Age
+	END
 SELECT 
 A.ItemInfo_ItemID,
 case  when ((A.[DocType_EntityType] != 'UFIDA.U9.AP.APMatch.APMatchDocType') and (A.[BackLineType] = 0))
@@ -65,6 +77,12 @@ and A.[DisplayDirection] = 0 and A.[QtyPriceDealFlg] in (0, 1)
 --存储过程的具体的SQL语句-1.0版本
 --责任部门、处理措施、计划完成日期    私有字段
 		DECLARE @Sql NVARCHAR(MAX)
+		DECLARE @Sql_2 NVARCHAR(MAX)
+
+		--DECLARE @DateTime_2 datetime 
+		--BEGIN
+		--	SET  @DateTime_2=@DateTime
+		--END
 		SET　@Sql='SELECT
 --TransInWh,ItemInfo_ItemID,Project,
 (SELECT Name FROM CBO_ItemMaster WHERE ID=A.ItemInfo_ItemID) AS 料品Name,
@@ -88,20 +106,28 @@ DescFlexSegments_PrivateDescSeg5 as 处理措施,
 DescFlexSegments_PrivateDescSeg6 as 计划完成日期,
 DescFlexSegments_PrivateDescSeg1 as 不良类别,
 DescFlexSegments_PrivateDescSeg2 as 不良原因,
-convert(int,(convert(datetime,@DateTime) - A10.ApprovedOn)) as [Temp_Age]
+(SELECT BinInfo_Code FROM InvDoc_TransInBin WHERE TransInLine=A.id) as 库位,
+A10.BusinessDate as 入库日期,
+A10.ApprovedOn as Shrq,'
+SET　@Sql_2='
 FROM InvDoc_TransInLine A 
 inner join InvDoc_TransferIn A10 on A.TransferIn=A10.ID
 WHERE
 TransInWh in(1002107200005442,1002107200005814,1002108160005856,1002108160005874) and 1=1'
-
-exec (@Sql+@Item+@Project+@Org+@DateTime)
---print  (@SectionTime)
+exec (@Sql+@DateTimeForS_2+@Sql_2+@Item+@Project+@Org+@DateTimeForS)
+--print  (@Sql+@DateTimeForS_2+@Sql_2)
+--print  (@DateTimeForS_1)
 --print  (@Sql+@PlanName+@StartTime+@EndTime)
+--convert(int,('+@DateTime+' - A10.ApprovedOn)) as [Temp_Age]
+--convert(int,(@DateTime_2 - A10.ApprovedOn)) as Temp_Age
 
 END
 
+--convert(int, - A10.ApprovedOn)) as [Temp_Age]
+--convert(int,@DateTime - A10.ApprovedOn)) as [Temp_Age]
 --SELECT
-----TransInWh,ItemInfo_ItemID,Project,
+--TransInWh,ItemInfo_ItemID,Project,
+--A.id,
 --(SELECT Name FROM CBO_ItemMaster WHERE ID=A.ItemInfo_ItemID) AS 料品Name,
 --(SELECT Code FROM CBO_ItemMaster WHERE ID=A.ItemInfo_ItemID) AS 料品Code,
 --(SELECT Name FROM CBO_Project INNER JOIN CBO_Project_Trl ON CBO_Project.ID=CBO_Project_Trl.ID
@@ -123,7 +149,8 @@ END
 --DescFlexSegments_PrivateDescSeg6 as 计划完成日期,
 --DescFlexSegments_PrivateDescSeg1 as 不良类别,
 --DescFlexSegments_PrivateDescSeg2 as 不良原因,
---convert(int,(convert(datetime,@DateTime) - A10.ApprovedOn)) as [Temp_Age]
+--A10.BusinessDate as 入库日期,
+
 --FROM InvDoc_TransInLine A 
 --inner join InvDoc_TransferIn A10 on A.TransferIn=A10.ID
 --WHERE
@@ -181,7 +208,9 @@ END
 --SELECT Code,* FROM CBO_Project WHERE ID='1002107270111476'
 --入库时间
 --库位
---SELECT Code,Org,* FROM CBO_Wh WHERE Code='MRB-Pend' OR Code='MRB-RTV'
+
+
+
 
 
 

@@ -59,6 +59,8 @@ namespace YY.U9.Cust.LI.UIPlugIn
             string dprivateDescSeg5 = "";
             //已发放数量
             string issuedQty = "";
+            //bom用量
+            string bOMReqQty = "";
             if (webButton.Action == "ApproveClick")
             {
                 foreach (var item in _part.Model.MiscRcvTrans_MiscRcvTransLs.Records)
@@ -118,16 +120,16 @@ namespace YY.U9.Cust.LI.UIPlugIn
                     {
                         return;
                     }
-                    double rcvPer = Math.Round(double.Parse(rcvQtyByProductUom) * double.Parse(roundPrecision), Convert.ToInt32(roundPrecision));
-                    //差异结果
 
-                    string sqlForCy = "SELECT a.IssuedQty,a.DescFlexField_PrivateDescSeg3,a.DescFlexField_PrivateDescSeg4,a.DescFlexField_PrivateDescSeg5 FROM MO_MOPickList a" +
+
+                    string sqlForCy = "SELECT a.IssuedQty,a.DescFlexField_PrivateDescSeg3,a.DescFlexField_PrivateDescSeg4,a.DescFlexField_PrivateDescSeg5,a.QPA FROM MO_MOPickList a" +
                         " INNER JOIN MO_MO b ON a.MO = b.ID WHERE b.DocNo = '" + moDocNo + "' AND a.ItemMaster = '" + itemmaster + "'";
                     DataAccessor.RunSQL(DataAccessor.GetConn(), sqlForCy, null, out dataSet);
                     dataTable = dataSet.Tables[0];
                     if (dataTable != null && dataTable.Rows.Count > 0)
                     {
                         issuedQty = dataTable.Rows[0]["IssuedQty"].ToString();
+                        bOMReqQty = dataTable.Rows[0]["QPA"].ToString();
                         dprivateDescSeg3 = dataTable.Rows[0]["DescFlexField_PrivateDescSeg3"].ToString() == "" ? "0" : dataTable.Rows[0]["DescFlexField_PrivateDescSeg3"].ToString();
                         dprivateDescSeg4 = dataTable.Rows[0]["DescFlexField_PrivateDescSeg4"].ToString() == "" ? "0" : dataTable.Rows[0]["DescFlexField_PrivateDescSeg4"].ToString();
                         dprivateDescSeg5 = dataTable.Rows[0]["DescFlexField_PrivateDescSeg5"].ToString() == "" ? "0" : dataTable.Rows[0]["DescFlexField_PrivateDescSeg5"].ToString();
@@ -136,7 +138,10 @@ namespace YY.U9.Cust.LI.UIPlugIn
                     //double see2 = Convert.ToDouble(dprivateDescSeg3);
                     //double see3 = Convert.ToDouble(dprivateDescSeg4);
                     //double see4 = Convert.ToDouble(dprivateDescSeg5);
-
+                    //rcvQtyByProductUom = "50";bOMReqQty = "1";
+                    double r= double.Parse(rcvQtyByProductUom) * double.Parse(bOMReqQty);
+                    double rcvPer = Math.Round(r, Convert.ToInt32(roundPrecision));
+                    //差异结果
                     difference = Convert.ToDouble(issuedQty) - rcvPer - Convert.ToDouble(dprivateDescSeg3)
                         - Convert.ToDouble(dprivateDescSeg4) - Convert.ToDouble(dprivateDescSeg5);
                     //反写回去
@@ -147,7 +152,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
                         DataAccessor.RunSQL(DataAccessor.GetConn(), sqlForUpDate, null, out dataSet);
                     }
                     #endregion
-                    if (difference <= 0)
+                    if (difference <= 0.0001)
                     {
                         CompleteMoProxy complete = new CompleteMoProxy();
                         List<MOOperateParamDTOData> mOOperates = new List<MOOperateParamDTOData>();

@@ -113,6 +113,9 @@
     <Reference Include="UFIDA.U9.FI.AP.PayReqFundUI.WebPart">
       <HintPath>F:\yonyou\U9CE\Portal\UILib\UFIDA.U9.FI.AP.PayReqFundUI.WebPart.dll</HintPath>
     </Reference>
+    <Reference Include="UFIDA.U9.ISV.CBO.LotSV.Agent">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\MailService\Libs\UFIDA.U9.ISV.CBO.LotSV.Agent.dll</HintPath>
+    </Reference>
     <Reference Include="UFIDA.U9.ISV.MO.MOSV.Agent">
       <HintPath>..\AppPlugIn\bin\Debug\UFIDA.U9.ISV.MO.MOSV.Agent.dll</HintPath>
     </Reference>
@@ -317,6 +320,7 @@
     <Compile Include="BomMainUIFormWebPartExtended.cs" />
     <Compile Include="AOYIN\Cust_Li_MOStockMainUIFormWebPartExtended.cs" />
     <Compile Include="JUNHUA\MiscRcvUIMainFormWebPartExtended.cs" />
+    <Compile Include="JUNHUA\TransferFormUIMainFormWebPartExtended.cs" />
     <Compile Include="TransferFormUIMainFormWebPartExtended.cs" />
     <Compile Include="APRefScmBillUIFormWebPartExtended.cs" />
     <Compile Include="Common.cs" />

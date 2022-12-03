@@ -67,6 +67,9 @@
     <Reference Include="UFIDA.U9.AP.APBE">
       <HintPath>F:\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.AP.APBE.dll</HintPath>
     </Reference>
+    <Reference Include="UFIDA.U9.Base.BaseBE.Deploy">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\UBFLib\UFIDA.U9.Base.BaseBE.Deploy.dll</HintPath>
+    </Reference>
     <Reference Include="UFIDA.U9.Base.BaseBP.Agent">
       <HintPath>D:\yonyou\U9V50\Portal\ApplicationServer\Libs\UFIDA.U9.Base.BaseBP.Agent.dll</HintPath>
     </Reference>
@@ -93,6 +96,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>D:\yonyou\U9V50\Portal\ApplicationLib\UFIDA.U9.CBO.PubBE.Deploy.dll</HintPath>
     </Reference>
+    <Reference Include="UFIDA.U9.CBO.PubBP.Deploy">
+      <HintPath>..\AppPlugIn\bin\Debug\UFIDA.U9.CBO.PubBP.Deploy.dll</HintPath>
+    </Reference>
     <Reference Include="UFIDA.U9.CBO.PubSV.Agent">
       <HintPath>..\..\..\..\..\yonyou\U9CE\MailService\Libs\UFIDA.U9.CBO.PubSV.Agent.dll</HintPath>
     </Reference>
@@ -115,6 +121,9 @@
     </Reference>
     <Reference Include="UFIDA.U9.ISV.CBO.LotSV.Agent">
       <HintPath>..\..\..\..\..\yonyou\U9CE\MailService\Libs\UFIDA.U9.ISV.CBO.LotSV.Agent.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.ISV.CBO.LotSV.Deploy">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\MailService\Libs\UFIDA.U9.ISV.CBO.LotSV.Deploy.dll</HintPath>
     </Reference>
     <Reference Include="UFIDA.U9.ISV.MO.MOSV.Agent">
       <HintPath>..\AppPlugIn\bin\Debug\UFIDA.U9.ISV.MO.MOSV.Agent.dll</HintPath>

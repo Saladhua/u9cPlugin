@@ -90,7 +90,7 @@ and A.[DisplayDirection] = 0 and A.[QtyPriceDealFlg] in (0, 1)
 (SELECT Name FROM CBO_Project INNER JOIN CBO_Project_Trl ON CBO_Project.ID=CBO_Project_Trl.ID
 WHERE CBO_Project.ID=A.Project AND SysMLFlag=''zh-CN'') AS 项目ProjectName,
 (SELECT Version FROM CBO_ItemMaster WHERE ID=A.ItemInfo_ItemID) AS 版本Version,
-(SELECT Name FROM CBO_Category_Trl WHERE ID=(SELECT MainItemCategory FROM CBO_ItemMaster WHERE ID=A.ItemInfo_ItemID) and SysMLFlag=''zh-CN'') AS 料品主分类,
+(SELECT Name FROM CBO_Category_Trl WHERE ID=(SELECT AssetCategory FROM CBO_ItemMaster WHERE ID=A.ItemInfo_ItemID) and SysMLFlag=''zh-CN'') AS 料品主分类,
 (SELECT Name FROM Base_UOM_Trl WHERE ID=(SELECT InventoryUOM FROM CBO_ItemMaster WHERE ID=A.ItemInfo_ItemID) and SysMLFlag=''zh-CN'') AS 单位InventoryUOMName,
 (SELECT Name FROM Base_Organization_Trl WHERE ID=A.Org and SysMLFlag=''zh-CN'') AS 组织OrgName,
 (SELECT sum(Main_StoreUOMQty) FROM #sum_Main_StoreUOMQty_1 WHERE ItemInfo_ItemID=A.ItemInfo_ItemID) as 出库数量CKSL,
@@ -104,11 +104,21 @@ a.CostPrice) as CostPriceQty,
 (select x.Name from CBO_Department z inner join CBO_Department_Trl x on z.ID=x.ID where Code=a.DescFlexSegments_PrivateDescSeg4 and x.SysMLFlag=''zh-CN'') as 责任部门,
 DescFlexSegments_PrivateDescSeg5 as 处理措施,
 DescFlexSegments_PrivateDescSeg6 as 计划完成日期,
-DescFlexSegments_PrivateDescSeg1 as 不良类别,
+(select   A1.[Name]
+from  Base_DefineValue as A  left join [Base_DefineValue_Trl] as A1 on (A1.SysMlFlag = ''zh-CN'') 
+and (A.[ID] = A1.[ID]) where  (A.[ValueSetDef] = 1002108010458827) and Code=DescFlexSegments_PrivateDescSeg1)
+ as 不良类别,
+ (select  A1.[Name] as [Name]
+from  CBO_Operators as A 
+left join [CBO_Operators_Trl] as A1 on (A1.SysMlFlag = ''zh-CN'')and (A.[ID] = A1.[ID])
+left join [CBO_Department] as A2 on (A.[Dept] = A2.[ID])
+left join [Base_Organization] as A3 on (A.[Org] = A3.[ID]) 
+where A.Code=DescFlexSegments_PrivateDescSeg7) as 责任人,
 DescFlexSegments_PrivateDescSeg2 as 不良原因,
 (SELECT BinInfo_Code FROM InvDoc_TransInBin WHERE TransInLine=A.id) as 库位,
 A10.BusinessDate as 入库日期,
-A10.ApprovedOn as Shrq,'
+(select Name from CBO_Wh_Trl where ID=TransInWh) as 存储地点,
+ A10.ApprovedOn as Shrq,'
 SET　@Sql_2='
 FROM InvDoc_TransInLine A 
 inner join InvDoc_TransferIn A10 on A.TransferIn=A10.ID

@@ -91,27 +91,31 @@ namespace YY.U9.Cust.JH.AppPlugIn
                 DataSet dataSet = new DataSet();
                 DataAccessor.RunSQL(DataAccessor.GetConn(), sql, null, out dataSet);
                 dataTable = dataSet.Tables[0];
+                bool ok = true;
                 if (dataTable.Rows != null && dataTable.Rows.Count > 0)
                 {
                     kg = dataTable.Rows[0]["DescFlexField_PrivateDescSeg6"].ToString();
                     if (string.IsNullOrEmpty(kg))
+                        ok = false;
+                }
+                if (ok == true)
+                {
+                    if (!string.IsNullOrEmpty(longs) && !string.IsNullOrEmpty(wide))//都有值
+                    {
+                        kg = Math.Round((decimal.Parse(longs) / 1000 * decimal.Parse(wide) / 1000) * decimal.Parse(kg), 3).ToString();
+                    }
+                    else if (!string.IsNullOrEmpty(longs) && string.IsNullOrEmpty(wide))//长有值，宽无值
+                    {
+                        kg = Math.Round(decimal.Parse(longs) / 1000 * decimal.Parse(kg), 3).ToString();
+                    }
+                    else if (string.IsNullOrEmpty(longs) && !string.IsNullOrEmpty(wide))//宽有值，长无值
+                    {
+                        kg = Math.Round(decimal.Parse(wide) / 1000 * decimal.Parse(kg), 3).ToString();
+                    }
+                    else
+                    {
                         kg = "0";
-                }
-                if (!string.IsNullOrEmpty(longs) && !string.IsNullOrEmpty(wide))//都有值
-                {
-                    kg = Math.Round((decimal.Parse(longs) / 1000 * decimal.Parse(wide) / 1000) * decimal.Parse(kg), 3).ToString();
-                }
-                else if (!string.IsNullOrEmpty(longs) && string.IsNullOrEmpty(wide))//长有值，宽无值
-                {
-                    kg = Math.Round(decimal.Parse(longs) / 1000 * decimal.Parse(kg), 3).ToString();
-                }
-                else if (string.IsNullOrEmpty(longs) && !string.IsNullOrEmpty(wide))//宽有值，长无值
-                {
-                    kg = Math.Round(decimal.Parse(wide) / 1000 * decimal.Parse(kg), 3).ToString();
-                }
-                else
-                {
-                    kg = "0";
+                    }
                 }
                 #endregion
                 item.DescFlexSegments.PrivateDescSeg30 = "自动";

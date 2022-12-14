@@ -123,7 +123,11 @@ SET¡¡@Sql_2='
 FROM InvDoc_TransInLine A 
 inner join InvDoc_TransferIn A10 on A.TransferIn=A10.ID
 WHERE
-TransInWh in(1002107200005442,1002107200005814,1002108160005856,1002108160005874) and 1=1'
+TransInWh in(1002107200005442,1002107200005814,1002108160005856,1002108160005874) and 1=1
+and((SELECT sum(Main_StoreUOMQty) FROM #sum_Main_StoreUOMQty_0 WHERE ItemInfo_ItemID=A.ItemInfo_ItemID)-
+(SELECT sum(Main_StoreUOMQty) FROM #sum_Main_StoreUOMQty_1 WHERE ItemInfo_ItemID=A.ItemInfo_ItemID))  is not null
+and ((SELECT sum(Main_StoreUOMQty) FROM #sum_Main_StoreUOMQty_0 WHERE ItemInfo_ItemID=A.ItemInfo_ItemID)-
+(SELECT sum(Main_StoreUOMQty) FROM #sum_Main_StoreUOMQty_1 WHERE ItemInfo_ItemID=A.ItemInfo_ItemID))!=0'
 exec (@Sql+@DateTimeForS_2+@Sql_2+@Item+@Project+@Org+@DateTimeForS)
 --print  (@Sql+@DateTimeForS_2+@Sql_2)
 --print  (@DateTimeForS_1)

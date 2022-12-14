@@ -7,7 +7,7 @@ ALTER PROCEDURE Cust_Non_PerformingInventory
 @Item nvarchar(2000),
 @Project nvarchar(2000),
 @Org nvarchar(2000),
-@DateTime DateTime,
+@DateTime nvarchar(2000),
 @DateTimeForS nvarchar(2000)
 )
 AS
@@ -35,7 +35,10 @@ BEGIN
 	IF(ISNULL(@DateTime, '')!='')
 	BEGIN
 		--SET @DateTimeForS='AND A10.ApprovedOn LIKE '''+'%'+CONVERT(nvarchar(10),@DateTime, 20)+'%'+''''	
-		SET @DateTimeForS=' AND A10.ApprovedOn between '''+''+CONVERT(nvarchar(10),@DateTime, 20)+''+''' AND '''+''+CONVERT(nvarchar(10), @DateTime+1, 20)+''+''''
+		DECLARE @DateTimeForS_3 nvarchar(2000)
+		set @DateTimeForS_3=right(@DateTime,18)--:截取字符串长度
+		set @DateTime=left(@DateTime,18)--:截取字符串长度
+		SET @DateTimeForS=' AND A10.ApprovedOn between '''+''+@DateTime+''+''' AND '''+''+@DateTimeForS_3+''+''''
 		set @DateTimeForS_1=CONVERT(nvarchar(10), @DateTime, 20)
 	END
 	BEGIN	
@@ -123,14 +126,10 @@ SET　@Sql_2='
 FROM InvDoc_TransInLine A 
 inner join InvDoc_TransferIn A10 on A.TransferIn=A10.ID
 WHERE
-TransInWh in(1002107200005442,1002107200005814,1002108160005856,1002108160005874) and 1=1
-and((SELECT sum(Main_StoreUOMQty) FROM #sum_Main_StoreUOMQty_0 WHERE ItemInfo_ItemID=A.ItemInfo_ItemID)-
-(SELECT sum(Main_StoreUOMQty) FROM #sum_Main_StoreUOMQty_1 WHERE ItemInfo_ItemID=A.ItemInfo_ItemID))  is not null
-and ((SELECT sum(Main_StoreUOMQty) FROM #sum_Main_StoreUOMQty_0 WHERE ItemInfo_ItemID=A.ItemInfo_ItemID)-
-(SELECT sum(Main_StoreUOMQty) FROM #sum_Main_StoreUOMQty_1 WHERE ItemInfo_ItemID=A.ItemInfo_ItemID))!=0'
+TransInWh in(1002107200005442,1002107200005814,1002108160005856,1002108160005874) and 1=1'
 exec (@Sql+@DateTimeForS_2+@Sql_2+@Item+@Project+@Org+@DateTimeForS)
 --print  (@Sql+@DateTimeForS_2+@Sql_2)
---print  (@DateTimeForS_1)
+--print  (@DateTimeForS)
 --print  (@Sql+@PlanName+@StartTime+@EndTime)
 --convert(int,('+@DateTime+' - A10.ApprovedOn)) as [Temp_Age]
 --convert(int,(@DateTime_2 - A10.ApprovedOn)) as Temp_Age

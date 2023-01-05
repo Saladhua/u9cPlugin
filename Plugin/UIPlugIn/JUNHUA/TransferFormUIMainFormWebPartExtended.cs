@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Threading;
 using UFIDA.U9.Base.DTOs;
-using UFIDA.U9.Base.WorkCalendar;
 using UFIDA.U9.ISV.CBO.Lot;
 using UFIDA.U9.ISV.CBO.Lot.Proxy;
 using UFIDA.U9.SCM.INV.TransferFormUIModel;
@@ -164,6 +162,34 @@ namespace YY.U9.Cust.LI.UIPlugIn
                             else
                             {
                                 kg = "0";
+                            }
+                            //进行赋值操作
+                            try
+                            {
+                                string error = item["DescFlexSegments_PrivateDescSeg3"].ToString();
+                                if (error == "")
+                                {
+                                    item["DescFlexSegments_PrivateDescSeg3"] = kg;
+                                }
+                                else
+                                {
+                                    //没有异常说明不是第一进入进行对比
+                                    if (error != kg)
+                                    {
+                                        kg = error;
+                                    }
+                                    item["DescFlexSegments_PrivateDescSeg3"] = kg;
+                                }
+                                //if (string.IsNullOrEmpty(error))
+                                //{
+                                //    item["DescFlexSegments_PrivateDescSeg3"] = error;
+                                //    kg = error;
+                                //}
+                            }
+                            catch (Exception)
+                            {
+                                //说明是第一次进入对其赋值
+                                item["DescFlexSegments_PrivateDescSeg3"] = kg;
                             }
                         }
                         #endregion

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Data;
 using UFIDA.U9.ISV.MO;
 using UFIDA.U9.ISV.MO.Proxy;
+using UFIDA.U9.MFG.Complete.CompleteApplyRpt.CompleteApplyDocUIModel;
+using UFIDA.U9.MFG.MO.CompleteRptUIModel;
 using UFIDA.U9.SCM.INV.MiscRcvUIModel;
 using UFSoft.UBF.UI.Custom;
 using UFSoft.UBF.UI.IView;
@@ -10,33 +12,16 @@ using UFSoft.UBF.Util.DataAccess;
 
 namespace YY.U9.Cust.LI.UIPlugIn
 {
-    /// <summary>
-    /// 杂收单--奥音功能置换
-    /// </summary>
-    internal class Cust_Li_MiscRcvTransLUIFormWebPartExtended : ExtendedPartBase
+    internal class Cust_Li_CompleteRptMainUIFormWebPartWebPartExtended : ExtendedPartBase
     {
-        private MiscRcvUIMainFormWebPart _part;
+        private CompleteRptMainUIFormWebPart _part;
 
-
-        //public override void AfterRender(IPart part, EventArgs args)
-        //{
-        //    base.AfterRender(part, args);
-        //    this._part = (part as MiscRcvUIMainFormWebPart);
-        //    foreach (var item in _part.Model.MiscRcvTrans_MiscRcvTransLs.Records)
-        //    {
-        //        //生产订单单号
-        //        string moDocNo = item["MoDocNo"].ToString();
-        //        if (!string.IsNullOrEmpty(moDocNo))
-        //        {
-        //        }
-        //    }
-        //}
 
         public override void AfterEventProcess(IPart part, string eventName, object sender, EventArgs args)
         {
             base.AfterEventProcess(part, eventName, sender, args);
             UFSoft.UBF.UI.WebControlAdapter.UFWebButton4ToolbarAdapter webButton = sender as UFSoft.UBF.UI.WebControlAdapter.UFWebButton4ToolbarAdapter;
-            this._part = (part as MiscRcvUIMainFormWebPart);
+            this._part = (part as CompleteRptMainUIFormWebPart);
             //报废入库数量
             string scrapping = "";
             //生产订单单号
@@ -65,20 +50,24 @@ namespace YY.U9.Cust.LI.UIPlugIn
             string specialIssuedQty = "";
             if (webButton.Action == "ApproveClick")
             {
-                foreach (var item in _part.Model.MiscRcvTrans_MiscRcvTransLs.Records)
+                foreach (var item in _part.Model.CompleteRpt.Records)
                 {
-                    moDocNo = item["MoDocNo"].ToString();
-                    scrapping = item["DescFlexSegments_PrivateDescSeg2"].ToString();
-                    itemmaster = item["ItemInfo_ItemID"].ToString();
+                    moDocNo = item["MO"].ToString();
+                    //scrapping = item["DescFlexSegments_PrivateDescSeg2"].ToString();
+                    //itemmaster = item["ItemInfo_ItemID"].ToString();
+                    string donno = "";
                     DataTable dataTable = new DataTable();
                     DataSet dataSet = new DataSet();
                     #region 获取当前生产订单单号的id
-                    string sqlForMoDocNoID = "SELECT ID FROM MO_MO WHERE DocNo='" + moDocNo + "'";
+                    string sqlForMoDocNoID = "SELECT DocNo,ID,DescFlexField_PrivateDescSeg2,ItemMaster FROM MO_MO WHERE ID='" + moDocNo + "'";
                     DataAccessor.RunSQL(DataAccessor.GetConn(), sqlForMoDocNoID, null, out dataSet);
                     dataTable = dataSet.Tables[0];
                     if (dataTable != null && dataTable.Rows.Count > 0)
                     {
                         moDocNoID = dataTable.Rows[0]["ID"].ToString();
+                        scrapping = dataTable.Rows[0]["DescFlexField_PrivateDescSeg2"].ToString();
+                        donno = dataTable.Rows[0]["DocNo"].ToString();
+                        itemmaster = dataTable.Rows[0]["ItemMaster"].ToString();
                     }
                     #endregion
                     //反写
@@ -88,7 +77,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
                         if (!string.IsNullOrEmpty(moDocNoID))
                         {
                             string sqlForUpDate = "UPDATE MO_MOPickList  SET DescFlexField_PrivateDescSeg9='" + scrapping + "'WHERE ID = (SELECT a.ID FROM MO_MOPickList a" +
-                                " INNER JOIN MO_MO bON a.MO = b.ID WHERE b.DocNo = '" + moDocNo + "' AND a.ItemMaster = '" + itemmaster + "')";
+                                " INNER JOIN MO_MO b ON a.MO = b.ID WHERE b.DocNo = '" + moDocNo + "' AND a.ItemMaster = '" + itemmaster + "')";
                             DataAccessor.RunSQL(DataAccessor.GetConn(), sqlForUpDate, null, out dataSet);
                         }
                     }
@@ -98,7 +87,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
                     //INNER JOIN MO_MO b ON a.MO = b.ID
                     //WHERE b.DocNo = 'SZ4813222101'
                     string sqlForRBPUOM = "SELECT sum(a.RcvQtyByProductUOM) RcvQtyByProductUOM FROM MO_CompleteRpt a " +
-                    " INNER JOIN MO_MO b ON a.MO = b.ID WHERE b.DocNo = '" + moDocNo + "'";
+                    " INNER JOIN MO_MO b ON a.MO = b.ID WHERE b.ID = '" + moDocNo + "'";
                     DataAccessor.RunSQL(DataAccessor.GetConn(), sqlForRBPUOM, null, out dataSet);
                     dataTable = dataSet.Tables[0];
                     if (dataTable != null && dataTable.Rows.Count > 0)
@@ -109,9 +98,9 @@ namespace YY.U9.Cust.LI.UIPlugIn
                     //料品id
                     //SELECT Round_Precision FROM CBO_ItemMaster b
                     //INNER JOIN Base_UOM a ON a.ID = b.InventoryUOM
-                    //WHERE b.Code = '111'
+                    //WHERE b.Code = '111'a
                     string sqlForPre = "SELECT Round_Precision FROM CBO_ItemMaster b " +
-                        " INNER JOIN Base_UOM a ON a.ID = b.InventoryUOM WHERE b.Code = '" + item["ItemInfo_ItemCode"].ToString() + "'";
+                        " INNER JOIN Base_UOM a ON a.ID = b.InventoryUOM WHERE b.Code = '" + item["Item_Code"].ToString() + "'";
                     DataAccessor.RunSQL(DataAccessor.GetConn(), sqlForPre, null, out dataSet);
                     dataTable = dataSet.Tables[0];
                     if (dataTable != null && dataTable.Rows.Count > 0)
@@ -123,14 +112,14 @@ namespace YY.U9.Cust.LI.UIPlugIn
                         return;
                     }
                     string sqlForCy = "SELECT a.IssuedQty,a.DescFlexField_PrivateDescSeg3,a.DescFlexField_PrivateDescSeg4,a.DescFlexField_PrivateDescSeg5,a.QPA,a.SpecialIssuedQty FROM MO_MOPickList a" +
-                        " INNER JOIN MO_MO b ON a.MO = b.ID WHERE b.DocNo = '" + moDocNo + "' AND a.ItemMaster = '" + itemmaster + "'";
+                        " INNER JOIN MO_MO b ON a.MO = b.ID WHERE b.ID = '" + moDocNo + "' AND b.ItemMaster = '" + itemmaster + "'";
                     DataAccessor.RunSQL(DataAccessor.GetConn(), sqlForCy, null, out dataSet);
                     dataTable = dataSet.Tables[0];
                     if (dataTable != null && dataTable.Rows.Count > 0)
                     {
-                        issuedQty = dataTable.Rows[0]["IssuedQty"].ToString();
-                        bOMReqQty = dataTable.Rows[0]["QPA"].ToString();
-                        specialIssuedQty = dataTable.Rows[0]["SpecialIssuedQty"].ToString();
+                        issuedQty = dataTable.Rows[0]["IssuedQty"].ToString() == "" ? "0" : dataTable.Rows[0]["IssuedQty"].ToString();
+                        bOMReqQty = dataTable.Rows[0]["QPA"].ToString() == "" ? "0" : dataTable.Rows[0]["QPA"].ToString();
+                        specialIssuedQty = dataTable.Rows[0]["SpecialIssuedQty"].ToString() == "" ? "0" : dataTable.Rows[0]["SpecialIssuedQty"].ToString();
                         dprivateDescSeg3 = dataTable.Rows[0]["DescFlexField_PrivateDescSeg3"].ToString() == "" ? "0" : dataTable.Rows[0]["DescFlexField_PrivateDescSeg3"].ToString();
                         dprivateDescSeg4 = dataTable.Rows[0]["DescFlexField_PrivateDescSeg4"].ToString() == "" ? "0" : dataTable.Rows[0]["DescFlexField_PrivateDescSeg4"].ToString();
                         dprivateDescSeg5 = dataTable.Rows[0]["DescFlexField_PrivateDescSeg5"].ToString() == "" ? "0" : dataTable.Rows[0]["DescFlexField_PrivateDescSeg5"].ToString();
@@ -149,7 +138,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
                     if (!string.IsNullOrEmpty(moDocNoID) && !string.IsNullOrEmpty(difference.ToString()))
                     {
                         string sqlForUpDate = "UPDATE MO_MOPickList  SET DescFlexField_PrivateDescSeg8='" + difference + "'WHERE ID = (SELECT a.ID FROM MO_MOPickList a" +
-                            " INNER JOIN MO_MO b ON a.MO = b.ID WHERE b.DocNo = '" + moDocNo + "' AND a.ItemMaster = '" + itemmaster + "')";
+                            " INNER JOIN MO_MO b ON a.MO = b.ID WHERE b.ID = '" + moDocNo + "' AND a.ID = '" + itemmaster + "')";
                         DataAccessor.RunSQL(DataAccessor.GetConn(), sqlForUpDate, null, out dataSet);
                     }
                     bool ok = Convert.ToDecimal(rcvQtyByProductUom) == Math.Round(Convert.ToDecimal(issuedQty) + Convert.ToDecimal(specialIssuedQty)) ? true : false;
@@ -158,13 +147,13 @@ namespace YY.U9.Cust.LI.UIPlugIn
                     if (difference <= 0.0001 || ok == true)
                     {
                         #region 当关闭服务触发时，更新关闭人字段为yonyou
-                        string sqlForUpDate = "UPDATE MO_MO  SET ClosedBy='yonyou' WHERE ID='"+ moDocNoID + "'";
+                        string sqlForUpDate = "UPDATE MO_MO  SET ClosedBy='yonyou' WHERE ID='" + moDocNoID + "'";
                         DataAccessor.RunSQL(DataAccessor.GetConn(), sqlForUpDate, null, out dataSet);
                         #endregion
                         CompleteMoProxy complete = new CompleteMoProxy();
                         List<MOOperateParamDTOData> mOOperates = new List<MOOperateParamDTOData>();
                         MOOperateParamDTOData mOOperate = new MOOperateParamDTOData();
-                        mOOperate.MODocNo = moDocNo;
+                        mOOperate.MODocNo = donno;
                         mOOperate.OperateType = true;
                         mOOperate.OperateResult = true;
                         mOOperates.Add(mOOperate);

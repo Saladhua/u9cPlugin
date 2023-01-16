@@ -12,6 +12,9 @@ using UFSoft.UBF.Util.DataAccess;
 
 namespace YY.U9.Cust.LI.UIPlugIn
 {
+    /// <summary>
+    /// 完工报告，奥音 自动完工
+    /// </summary>
     internal class Cust_Li_CompleteRptMainUIFormWebPartWebPartExtended : ExtendedPartBase
     {
         private CompleteRptMainUIFormWebPart _part;

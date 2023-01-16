@@ -150,7 +150,11 @@ namespace YY.U9.Cust.JH.AppPlugIn
                     {
                         kg = "0";
                     }
-
+                    string p3 = item.DescFlexSegments.PrivateDescSeg3;//单据列上的单重字段
+                    if (!string.IsNullOrEmpty(p3) && p3 != kg)
+                    {
+                        kg = p3;
+                    }
                 }
                 #endregion
                 #region 使用session的方式modelfind去修改

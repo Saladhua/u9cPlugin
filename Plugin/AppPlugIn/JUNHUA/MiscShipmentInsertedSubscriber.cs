@@ -65,7 +65,6 @@ namespace YY.U9.Cust.JH.AppPlugIn
                     return;
                 }
                 #endregion
-
                 #endregion
                 //item.DescFlexSegments.PrivateDescSeg2 = item.DescFlexSegments.PrivateDescSeg5;
                 //item.DescFlexSegments.PrivateDescSeg3= item.DescFlexSegments.PrivateDescSeg6;
@@ -116,6 +115,7 @@ namespace YY.U9.Cust.JH.AppPlugIn
                     {
                         kg = "0";
                     }
+                    item.DescFlexSegments.PrivateDescSeg3 = kg;//单重的赋值
                 }
                 #endregion
                 item.DescFlexSegments.PrivateDescSeg30 = "自动";

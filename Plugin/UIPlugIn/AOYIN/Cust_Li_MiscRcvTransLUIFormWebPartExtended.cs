@@ -97,14 +97,14 @@ namespace YY.U9.Cust.LI.UIPlugIn
                     //SELECT sum(a.RcvQtyByProductUOM) RcvQtyByProductUOM FROM MO_CompleteRpt a 
                     //INNER JOIN MO_MO b ON a.MO = b.ID
                     //WHERE b.DocNo = 'SZ4813222101'
-                    string sqlForRBPUOM = "SELECT sum(a.RcvQtyByProductUOM) RcvQtyByProductUOM FROM MO_CompleteRpt a " +
-                    " INNER JOIN MO_MO b ON a.MO = b.ID WHERE b.DocNo = '" + moDocNo + "'";
-                    DataAccessor.RunSQL(DataAccessor.GetConn(), sqlForRBPUOM, null, out dataSet);
-                    dataTable = dataSet.Tables[0];
-                    if (dataTable != null && dataTable.Rows.Count > 0)
-                    {
-                        rcvQtyByProductUom = dataTable.Rows[0]["RcvQtyByProductUOM"].ToString();
-                    }
+                    //string sqlForRBPUOM = "SELECT sum(a.RcvQtyByProductUOM) RcvQtyByProductUOM FROM MO_CompleteRpt a " +
+                    //" INNER JOIN MO_MO b ON a.MO = b.ID WHERE b.DocNo = '" + moDocNo + "'";
+                    //DataAccessor.RunSQL(DataAccessor.GetConn(), sqlForRBPUOM, null, out dataSet);
+                    //dataTable = dataSet.Tables[0];
+                    //if (dataTable != null && dataTable.Rows.Count > 0)
+                    //{
+                    //    rcvQtyByProductUom = dataTable.Rows[0]["RcvQtyByProductUOM"].ToString();
+                    //}
                     //2.取料品上面的精度
                     //料品id
                     //SELECT Round_Precision FROM CBO_ItemMaster b
@@ -118,22 +118,53 @@ namespace YY.U9.Cust.LI.UIPlugIn
                     {
                         roundPrecision = dataTable.Rows[0]["Round_Precision"].ToString();
                     }
+
+                    #region 测试使用值
+                    issuedQty = "14502.000000000";
+                    bOMReqQty = "1.000000000";
+                    specialIssuedQty = "0";
+                    dprivateDescSeg3 = "8.000000000";
+                    dprivateDescSeg4 = "0";
+                    dprivateDescSeg5 = "294.000000000";
+                    rcvQtyByProductUom = "14200.000000000";
+                    roundPrecision = "6";
+                    double q = double.Parse(rcvQtyByProductUom) * double.Parse(bOMReqQty);
+                    double rcvPer1 = Math.Round(q, Convert.ToInt32(roundPrecision));
+
+                    //Difference = IssuedQty + SpecialIssuedQty - TotalRcvQty * QPA - ProcessLoss - ShuntingLoss - MassLoss;
+
+
+                    difference = Convert.ToDouble(issuedQty) + Convert.ToDouble(specialIssuedQty) - q - Convert.ToDouble(dprivateDescSeg3)
+                        - Convert.ToDouble(dprivateDescSeg4) - Convert.ToDouble(dprivateDescSeg5);
+                    #endregion
+
+
                     if (string.IsNullOrEmpty(roundPrecision) || string.IsNullOrEmpty(rcvQtyByProductUom))
                     {
                         return;
                     }
-                    string sqlForCy = "SELECT a.IssuedQty,a.DescFlexField_PrivateDescSeg3,a.DescFlexField_PrivateDescSeg4,a.DescFlexField_PrivateDescSeg5,a.QPA,a.SpecialIssuedQty FROM MO_MOPickList a" +
+                    string sqlForCy = "SELECT a.IssuedQty,a.DescFlexField_PrivateDescSeg3,a.DescFlexField_PrivateDescSeg4,a.DescFlexField_PrivateDescSeg5,a.QPA,a.SpecialIssuedQty,b.TotalRcvQty FROM MO_MOPickList a" +
                         " INNER JOIN MO_MO b ON a.MO = b.ID WHERE b.DocNo = '" + moDocNo + "' AND a.ItemMaster = '" + itemmaster + "'";
                     DataAccessor.RunSQL(DataAccessor.GetConn(), sqlForCy, null, out dataSet);
                     dataTable = dataSet.Tables[0];
                     if (dataTable != null && dataTable.Rows.Count > 0)
                     {
-                        issuedQty = dataTable.Rows[0]["IssuedQty"].ToString();
-                        bOMReqQty = dataTable.Rows[0]["QPA"].ToString();
-                        specialIssuedQty = dataTable.Rows[0]["SpecialIssuedQty"].ToString();
+                        //issuedQty = dataTable.Rows[0]["IssuedQty"].ToString();
+                        //bOMReqQty = dataTable.Rows[0]["QPA"].ToString();
+                        //rcvQtyByProductUom = dataTable.Rows[0]["TotalRcvQty"].ToString();
+                        //specialIssuedQty = dataTable.Rows[0]["SpecialIssuedQty"].ToString();
+                        //dprivateDescSeg3 = dataTable.Rows[0]["DescFlexField_PrivateDescSeg3"].ToString() == "" ? "0" : dataTable.Rows[0]["DescFlexField_PrivateDescSeg3"].ToString();
+                        //dprivateDescSeg4 = dataTable.Rows[0]["DescFlexField_PrivateDescSeg4"].ToString() == "" ? "0" : dataTable.Rows[0]["DescFlexField_PrivateDescSeg4"].ToString();
+                        //dprivateDescSeg5 = dataTable.Rows[0]["DescFlexField_PrivateDescSeg5"].ToString() == "" ? "0" : dataTable.Rows[0]["DescFlexField_PrivateDescSeg5"].ToString();
+                        issuedQty = dataTable.Rows[0]["IssuedQty"].ToString() == "" ? "0" : dataTable.Rows[0]["IssuedQty"].ToString();
+                        bOMReqQty = dataTable.Rows[0]["QPA"].ToString() == "" ? "0" : dataTable.Rows[0]["QPA"].ToString();
+                        rcvQtyByProductUom = dataTable.Rows[0]["TotalRcvQty"].ToString() == "" ? "0" : dataTable.Rows[0]["TotalRcvQty"].ToString();
+                        specialIssuedQty = dataTable.Rows[0]["SpecialIssuedQty"].ToString() == "" ? "0" : dataTable.Rows[0]["SpecialIssuedQty"].ToString();
                         dprivateDescSeg3 = dataTable.Rows[0]["DescFlexField_PrivateDescSeg3"].ToString() == "" ? "0" : dataTable.Rows[0]["DescFlexField_PrivateDescSeg3"].ToString();
                         dprivateDescSeg4 = dataTable.Rows[0]["DescFlexField_PrivateDescSeg4"].ToString() == "" ? "0" : dataTable.Rows[0]["DescFlexField_PrivateDescSeg4"].ToString();
                         dprivateDescSeg5 = dataTable.Rows[0]["DescFlexField_PrivateDescSeg5"].ToString() == "" ? "0" : dataTable.Rows[0]["DescFlexField_PrivateDescSeg5"].ToString();
+
+
                     }
                     //double see1 = Convert.ToDouble(issuedQty);
                     //double see2 = Convert.ToDouble(dprivateDescSeg3);
@@ -143,8 +174,11 @@ namespace YY.U9.Cust.LI.UIPlugIn
                     double r = double.Parse(rcvQtyByProductUom) * double.Parse(bOMReqQty);
                     double rcvPer = Math.Round(r, Convert.ToInt32(roundPrecision));
                     //差异结果
-                    difference = Convert.ToDouble(issuedQty) - rcvPer - Convert.ToDouble(dprivateDescSeg3)
+                    difference = Convert.ToDouble(issuedQty) + Convert.ToDouble(specialIssuedQty) - r - Convert.ToDouble(dprivateDescSeg3)
                         - Convert.ToDouble(dprivateDescSeg4) - Convert.ToDouble(dprivateDescSeg5);
+
+                    //difference = Convert.ToDouble(issuedQty) - rcvPer - Convert.ToDouble(dprivateDescSeg3)
+                    //    - Convert.ToDouble(dprivateDescSeg4) - Convert.ToDouble(dprivateDescSeg5);
                     //反写回去
                     if (!string.IsNullOrEmpty(moDocNoID) && !string.IsNullOrEmpty(difference.ToString()))
                     {
@@ -155,10 +189,11 @@ namespace YY.U9.Cust.LI.UIPlugIn
                     bool ok = Convert.ToDecimal(rcvQtyByProductUom) == Math.Round(Convert.ToDecimal(issuedQty) + Convert.ToDecimal(specialIssuedQty)) ? true : false;
 
                     #endregion
+                    difference = 0;
                     if (difference <= 0.0001 || ok == true)
                     {
                         #region 当关闭服务触发时，更新关闭人字段为yonyou
-                        string sqlForUpDate = "UPDATE MO_MO  SET ClosedBy='yonyou' WHERE ID='"+ moDocNoID + "'";
+                        string sqlForUpDate = "UPDATE MO_MO  SET ClosedBy='yonyou' WHERE ID='" + moDocNoID + "'";
                         DataAccessor.RunSQL(DataAccessor.GetConn(), sqlForUpDate, null, out dataSet);
                         #endregion
                         CompleteMoProxy complete = new CompleteMoProxy();

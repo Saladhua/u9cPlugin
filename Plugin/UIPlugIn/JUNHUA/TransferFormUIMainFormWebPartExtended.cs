@@ -40,6 +40,20 @@ namespace YY.U9.Cust.LI.UIPlugIn
             List<string> dp1code = new List<string>();
             List<string> dp2code = new List<string>();
             List<string> kgcode = new List<string>();
+            string doctypeid = "";
+            string doccode = "";
+            foreach (var item in _part.Model.TransferForm.Records)//新建个单据类型，根据单据类型区分 那种的话手工让他们修改批次号  就不用你自己生成了
+            {
+                doctypeid = item["TransferFormDocType"] == null ? "" : item["TransferFormDocType"].ToString();
+            }
+            if (!string.IsNullOrEmpty(doctypeid))
+            {
+                doccode = findDocTypeCode(doctypeid);
+                if (doccode == "TransForm006")
+                {
+                    return;
+                }
+            }
             foreach (var item in _part.Model.TransferForm_TransferFormLs.Records)
             {
                 string lotinfocode = item["LotInfo_LotCode"] == null ? "" : item["LotInfo_LotCode"].ToString();
@@ -261,6 +275,26 @@ namespace YY.U9.Cust.LI.UIPlugIn
                 string see2 = item["LotInfo_LotCode"].ToString();
 
             }
+        }
+
+        /// <summary>
+        /// 通过单据类型的id查到对应的code
+        /// </summary>
+        /// <param name="doctypeid"></param>
+        /// <returns></returns>
+        public string findDocTypeCode(string doctypeid)
+        {
+            string doccode = "";
+            DataTable dataTable_1 = new DataTable();
+            string sql = "select Code from InvDoc_TransferFormDocType where ID='" + doctypeid + "'";
+            DataSet dataSet_1 = new DataSet();
+            DataAccessor.RunSQL(DataAccessor.GetConn(), sql, null, out dataSet_1);
+            dataTable_1 = dataSet_1.Tables[0];
+            if (dataTable_1.Rows != null && dataTable_1.Rows.Count > 0)
+            {
+                doccode = dataTable_1.Rows[0]["Code"].ToString();
+            }
+            return doccode;
         }
 
     }

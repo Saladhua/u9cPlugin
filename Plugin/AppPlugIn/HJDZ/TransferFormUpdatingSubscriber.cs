@@ -124,6 +124,8 @@ namespace YY.U9.Cust.LI.AppPlugIn
                     shortName = dataTable_3.Rows[0]["ShortName"].ToString();
                     gysID = long.Parse(dataTable_3.Rows[0]["Supplier_Supplier"].ToString());
                 }
+
+                
                 start = true;
                 #endregion
             }

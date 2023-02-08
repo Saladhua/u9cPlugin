@@ -7,8 +7,10 @@ using UFSoft.UBF.Util.DataAccess;
 using UFSoft.UBF.Util.Log;
 namespace YY.U9.Cust.LI.AppPlugIn
 {
+    /// <summary>
+    /// 形态转换单
+    /// </summary>
     [UFSoft.UBF.Eventing.Configuration.Failfast]
-
     class TransferFormSLInsertedSubscriber : UFSoft.UBF.Eventing.IEventSubscriber
     {
         private static readonly ILogger logger = LoggerManager.GetLogger(typeof(TransferFormSLInsertedSubscriber));

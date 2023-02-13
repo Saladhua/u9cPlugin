@@ -63,6 +63,14 @@ namespace YY.U9.Cust.LI.UIPlugIn
             string bOMReqQty = "";
             //特别发料量
             string specialIssuedQty = "";
+            try
+            {
+                string s = webButton.Action;
+            }
+            catch (Exception)
+            {
+                return;
+            }
             if (webButton.Action == "ApproveClick")
             {
                 foreach (var item in _part.Model.MiscRcvTrans_MiscRcvTransLs.Records)
@@ -120,22 +128,22 @@ namespace YY.U9.Cust.LI.UIPlugIn
                     }
 
                     #region 测试使用值
-                    issuedQty = "9000.000000000";
-                    bOMReqQty = "0.022000000";
-                    specialIssuedQty = "0";
-                    dprivateDescSeg3 = "0";
-                    dprivateDescSeg4 = "0";
-                    dprivateDescSeg5 = "0.000000000";
-                    rcvQtyByProductUom = "9000.000000000";
-                    decimal seee = decimal.Parse(bOMReqQty);
-                    double q = double.Parse(rcvQtyByProductUom) * double.Parse(bOMReqQty);
+                    //issuedQty = "9000.000000000";
+                    //bOMReqQty = "0.022000000";
+                    //specialIssuedQty = "0";
+                    //dprivateDescSeg3 = "0";
+                    //dprivateDescSeg4 = "0";
+                    //dprivateDescSeg5 = "0.000000000";
+                    //rcvQtyByProductUom = "9000.000000000";
+                    //decimal seee = decimal.Parse(bOMReqQty);
+                    //double q = double.Parse(rcvQtyByProductUom) * double.Parse(bOMReqQty);
                     //double rcvPer1 = Math.Round(q, Convert.ToInt32(roundPrecision));
 
                     //Difference = IssuedQty + SpecialIssuedQty - TotalRcvQty * QPA - ProcessLoss - ShuntingLoss - MassLoss;
 
 
-                    difference = Convert.ToDouble(issuedQty) + Convert.ToDouble(specialIssuedQty) - q - Convert.ToDouble(dprivateDescSeg3)
-                        - Convert.ToDouble(dprivateDescSeg4) - Convert.ToDouble(dprivateDescSeg5);
+                    //difference = Convert.ToDouble(issuedQty) + Convert.ToDouble(specialIssuedQty) - q - Convert.ToDouble(dprivateDescSeg3)
+                    //    - Convert.ToDouble(dprivateDescSeg4) - Convert.ToDouble(dprivateDescSeg5);
                     #endregion
 
 

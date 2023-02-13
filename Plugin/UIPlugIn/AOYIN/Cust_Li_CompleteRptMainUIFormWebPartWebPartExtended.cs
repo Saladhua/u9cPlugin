@@ -59,7 +59,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
             {
                 return;
             }
-            if (webButton.Action == "ApproveClick")
+            if (webButton.Action == "ApproveClick")//SubmitClick  ApproveClick
             {
                 foreach (var item in _part.Model.CompleteRpt.Records)
                 {
@@ -110,6 +110,21 @@ namespace YY.U9.Cust.LI.UIPlugIn
                     //SELECT Round_Precision FROM CBO_ItemMaster b
                     //INNER JOIN Base_UOM a ON a.ID = b.InventoryUOM
                     //WHERE b.Code = '111'a
+
+                    //#region 测试使用值
+                    //issuedQty = "3840.000000000";
+                    //bOMReqQty = "1.000000000";
+                    //specialIssuedQty = "0";
+                    //dprivateDescSeg3 = "0";
+                    //dprivateDescSeg4 = "0";
+                    //dprivateDescSeg5 = "0.000000000";
+                    //rcvQtyByProductUom = "3840.000000000";
+                    //double q = double.Parse(rcvQtyByProductUom) * double.Parse(bOMReqQty);
+                    ////double rcvPer1 = Math.Round(q, Convert.ToInt32(roundPrecision));
+                    ////Difference = IssuedQty + SpecialIssuedQty - TotalRcvQty * QPA - ProcessLoss - ShuntingLoss - MassLoss;
+                    //difference = Convert.ToDouble(issuedQty) + Convert.ToDouble(specialIssuedQty) - q - Convert.ToDouble(dprivateDescSeg3)
+                    //    - Convert.ToDouble(dprivateDescSeg4) - Convert.ToDouble(dprivateDescSeg5);
+                    #endregion
                     string sqlForPre = "SELECT Round_Precision FROM CBO_ItemMaster b " +
                         " INNER JOIN Base_UOM a ON a.ID = b.InventoryUOM WHERE b.Code = '" + item["Item_Code"].ToString() + "'";
                     DataAccessor.RunSQL(DataAccessor.GetConn(), sqlForPre, null, out dataSet);
@@ -120,67 +135,65 @@ namespace YY.U9.Cust.LI.UIPlugIn
                     }
                     if (string.IsNullOrEmpty(roundPrecision) || string.IsNullOrEmpty(rcvQtyByProductUom))
                     {
-                        return;
+                        //return;
                     }
-                    string sqlForCy = "SELECT a.IssuedQty,a.DescFlexField_PrivateDescSeg3,a.DescFlexField_PrivateDescSeg4,a.DescFlexField_PrivateDescSeg5,a.QPA,a.SpecialIssuedQty,b.TotalRcvQty FROM MO_MOPickList a" +
-                        " INNER JOIN MO_MO b ON a.MO = b.ID WHERE b.DocNo = '" + moDocNo + "' AND a.ItemMaster = '" + itemmaster + "'";
+                    string sqlForCy = "SELECT a.IssuedQty,a.DescFlexField_PrivateDescSeg3,a.DescFlexField_PrivateDescSeg4,a.ItemMaster,a.DescFlexField_PrivateDescSeg5,a.QPA,a.SpecialIssuedQty,b.TotalRcvQty  FROM MO_MOPickList a" +
+                        " INNER JOIN MO_MO b ON a.MO = b.ID WHERE b.DocNo = '" + donno + "'";
                     DataAccessor.RunSQL(DataAccessor.GetConn(), sqlForCy, null, out dataSet);
                     dataTable = dataSet.Tables[0];
                     if (dataTable != null && dataTable.Rows.Count > 0)
                     {
-                        issuedQty = dataTable.Rows[0]["IssuedQty"].ToString() == "" ? "0" : dataTable.Rows[0]["IssuedQty"].ToString();
-                        bOMReqQty = dataTable.Rows[0]["QPA"].ToString() == "" ? "0" : dataTable.Rows[0]["QPA"].ToString();
-                        rcvQtyByProductUom = dataTable.Rows[0]["TotalRcvQty"].ToString() == "" ? "0" : dataTable.Rows[0]["TotalRcvQty"].ToString();
-                        specialIssuedQty = dataTable.Rows[0]["SpecialIssuedQty"].ToString() == "" ? "0" : dataTable.Rows[0]["SpecialIssuedQty"].ToString();
-                        dprivateDescSeg3 = dataTable.Rows[0]["DescFlexField_PrivateDescSeg3"].ToString() == "" ? "0" : dataTable.Rows[0]["DescFlexField_PrivateDescSeg3"].ToString();
-                        dprivateDescSeg4 = dataTable.Rows[0]["DescFlexField_PrivateDescSeg4"].ToString() == "" ? "0" : dataTable.Rows[0]["DescFlexField_PrivateDescSeg4"].ToString();
-                        dprivateDescSeg5 = dataTable.Rows[0]["DescFlexField_PrivateDescSeg5"].ToString() == "" ? "0" : dataTable.Rows[0]["DescFlexField_PrivateDescSeg5"].ToString();
-                    }
-                    //double see1 = Convert.ToDouble(issuedQty);
-                    //double see2 = Convert.ToDouble(dprivateDescSeg3);
-                    //double see3 = Convert.ToDouble(dprivateDescSeg4);
-                    //double see4 = Convert.ToDouble(dprivateDescSeg5);
-                    //rcvQtyByProductUom = "50";bOMReqQty = "1";
-                    double r = double.Parse(rcvQtyByProductUom) * double.Parse(bOMReqQty);
-                    double rcvPer = Math.Round(r, Convert.ToInt32(roundPrecision));
-                    //差异结果
-                    //Difference = IssuedQty + SpecialIssuedQty - TotalRcvQty * QPA - ProcessLoss - ShuntingLoss - MassLoss;
+                        int i = 0;
+                        string see = dataTable.Rows.Count.ToString();
+                        while (i < dataTable.Rows.Count)
+                        {
+                            issuedQty = dataTable.Rows[i]["IssuedQty"].ToString() == "" ? "0" : dataTable.Rows[i]["IssuedQty"].ToString();
+                            bOMReqQty = dataTable.Rows[i]["QPA"].ToString() == "" ? "0" : dataTable.Rows[i]["QPA"].ToString();
+                            rcvQtyByProductUom = dataTable.Rows[i]["TotalRcvQty"].ToString() == "" ? "0" : dataTable.Rows[i]["TotalRcvQty"].ToString();
+                            specialIssuedQty = dataTable.Rows[i]["SpecialIssuedQty"].ToString() == "" ? "0" : dataTable.Rows[i]["SpecialIssuedQty"].ToString();
+                            dprivateDescSeg3 = dataTable.Rows[i]["DescFlexField_PrivateDescSeg3"].ToString() == "" ? "0" : dataTable.Rows[i]["DescFlexField_PrivateDescSeg3"].ToString();
+                            dprivateDescSeg4 = dataTable.Rows[i]["DescFlexField_PrivateDescSeg4"].ToString() == "" ? "0" : dataTable.Rows[i]["DescFlexField_PrivateDescSeg4"].ToString();
+                            dprivateDescSeg5 = dataTable.Rows[i]["DescFlexField_PrivateDescSeg5"].ToString() == "" ? "0" : dataTable.Rows[i]["DescFlexField_PrivateDescSeg5"].ToString();
+                            double r = double.Parse(rcvQtyByProductUom) * double.Parse(bOMReqQty);
+                            double rcvPer = Math.Round(r, Convert.ToInt32(roundPrecision));
+                            //差异结果
+                            //Difference = IssuedQty + SpecialIssuedQty - TotalRcvQty * QPA - ProcessLoss - ShuntingLoss - MassLoss;
 
-                    difference = Convert.ToDouble(issuedQty) + Convert.ToDouble(specialIssuedQty) - r - Convert.ToDouble(dprivateDescSeg3)
-                        - Convert.ToDouble(dprivateDescSeg4) - Convert.ToDouble(dprivateDescSeg5);
+                            difference = Convert.ToDouble(issuedQty) + Convert.ToDouble(specialIssuedQty) - r - Convert.ToDouble(dprivateDescSeg3)
+                                - Convert.ToDouble(dprivateDescSeg4) - Convert.ToDouble(dprivateDescSeg5);
 
-                    //difference = Convert.ToDouble(issuedQty) - rcvPer - Convert.ToDouble(dprivateDescSeg3)
-                    //    - Convert.ToDouble(dprivateDescSeg4) - Convert.ToDouble(dprivateDescSeg5);
-                    //反写回去
-                    if (!string.IsNullOrEmpty(moDocNoID) && !string.IsNullOrEmpty(difference.ToString()))
-                    {
-                        string sqlForUpDate = "UPDATE MO_MOPickList  SET DescFlexField_PrivateDescSeg8='" + difference + "'WHERE ID = (SELECT a.ID FROM MO_MOPickList a" +
-                            " INNER JOIN MO_MO b ON a.MO = b.ID WHERE b.ID = '" + moDocNo + "' AND a.ID = '" + itemmaster + "')";
-                        DataAccessor.RunSQL(DataAccessor.GetConn(), sqlForUpDate, null, out dataSet);
-                    }
-                    bool ok = Convert.ToDecimal(rcvQtyByProductUom) == Math.Round(Convert.ToDecimal(issuedQty) + Convert.ToDecimal(specialIssuedQty)) ? true : false;
+                            //difference = Convert.ToDouble(issuedQty) - rcvPer - Convert.ToDouble(dprivateDescSeg3)
+                            //    - Convert.ToDouble(dprivateDescSeg4) - Convert.ToDouble(dprivateDescSeg5);
+                            //反写回去
+                            if (!string.IsNullOrEmpty(moDocNoID) && !string.IsNullOrEmpty(difference.ToString()))
+                            {
+                                string sqlForUpDate = "UPDATE MO_MOPickList  SET DescFlexField_PrivateDescSeg8='" + difference + "'WHERE ID = (SELECT a.ID FROM MO_MOPickList a" +
+                                    " INNER JOIN MO_MO b ON a.MO = b.ID WHERE b.DocNo = '" + donno + "' AND a.ItemMaster = '" + dataTable.Rows[i]["ItemMaster"].ToString() + "')";
+                                DataAccessor.RunSQL(DataAccessor.GetConn(), sqlForUpDate, null, out dataSet);
+                            }
+                            i++;
+                            bool ok = Convert.ToDecimal(rcvQtyByProductUom) == Math.Round(Convert.ToDecimal(issuedQty) + Convert.ToDecimal(specialIssuedQty)) ? true : false;
 
-                    #endregion
-                    if (difference <= 0.0001 || ok == true)
-                    {
-                        #region 当关闭服务触发时，更新关闭人字段为yonyou
-                        string sqlForUpDate = "UPDATE MO_MO  SET ClosedBy='yonyou' WHERE ID='" + moDocNoID + "'";
-                        DataAccessor.RunSQL(DataAccessor.GetConn(), sqlForUpDate, null, out dataSet);
-                        #endregion
-                        CompleteMoProxy complete = new CompleteMoProxy();
-                        List<MOOperateParamDTOData> mOOperates = new List<MOOperateParamDTOData>();
-                        MOOperateParamDTOData mOOperate = new MOOperateParamDTOData();
-                        mOOperate.MODocNo = donno;
-                        mOOperate.OperateType = true;
-                        mOOperate.OperateResult = true;
-                        mOOperates.Add(mOOperate);
-                        complete.MOOperateParamDTOs = mOOperates;
-                        List<MOOperateParamDTOData> see2222 = complete.Do();
+                            if (difference <= 0.0001 || ok == true)
+                            {
+                                #region 当关闭服务触发时，更新关闭人字段为yonyou
+                                string sqlForUpDate = "UPDATE MO_MO  SET ClosedBy='yonyou' WHERE ID='" + moDocNoID + "'";
+                                DataAccessor.RunSQL(DataAccessor.GetConn(), sqlForUpDate, null, out dataSet);
+                                #endregion
+                                CompleteMoProxy complete = new CompleteMoProxy();
+                                List<MOOperateParamDTOData> mOOperates = new List<MOOperateParamDTOData>();
+                                MOOperateParamDTOData mOOperate = new MOOperateParamDTOData();
+                                mOOperate.MODocNo = donno;
+                                mOOperate.OperateType = true;
+                                mOOperate.OperateResult = true;
+                                mOOperates.Add(mOOperate);
+                                complete.MOOperateParamDTOs = mOOperates;
+                                List<MOOperateParamDTOData> see2222 = complete.Do();
+                            }
+                        }
                     }
                 }
             }
         }
-
-
     }
 }

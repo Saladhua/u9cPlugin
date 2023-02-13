@@ -120,16 +120,16 @@ namespace YY.U9.Cust.LI.UIPlugIn
                     }
 
                     #region 测试使用值
-                    issuedQty = "14502.000000000";
-                    bOMReqQty = "1.000000000";
+                    issuedQty = "9000.000000000";
+                    bOMReqQty = "0.022000000";
                     specialIssuedQty = "0";
-                    dprivateDescSeg3 = "8.000000000";
+                    dprivateDescSeg3 = "0";
                     dprivateDescSeg4 = "0";
-                    dprivateDescSeg5 = "294.000000000";
-                    rcvQtyByProductUom = "14200.000000000";
-                    roundPrecision = "6";
+                    dprivateDescSeg5 = "0.000000000";
+                    rcvQtyByProductUom = "9000.000000000";
+                    decimal seee = decimal.Parse(bOMReqQty);
                     double q = double.Parse(rcvQtyByProductUom) * double.Parse(bOMReqQty);
-                    double rcvPer1 = Math.Round(q, Convert.ToInt32(roundPrecision));
+                    //double rcvPer1 = Math.Round(q, Convert.ToInt32(roundPrecision));
 
                     //Difference = IssuedQty + SpecialIssuedQty - TotalRcvQty * QPA - ProcessLoss - ShuntingLoss - MassLoss;
 
@@ -141,7 +141,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
 
                     if (string.IsNullOrEmpty(roundPrecision) || string.IsNullOrEmpty(rcvQtyByProductUom))
                     {
-                        return;
+                        //return;
                     }
                     string sqlForCy = "SELECT a.IssuedQty,a.DescFlexField_PrivateDescSeg3,a.DescFlexField_PrivateDescSeg4,a.DescFlexField_PrivateDescSeg5,a.QPA,a.SpecialIssuedQty,b.TotalRcvQty FROM MO_MOPickList a" +
                         " INNER JOIN MO_MO b ON a.MO = b.ID WHERE b.DocNo = '" + moDocNo + "' AND a.ItemMaster = '" + itemmaster + "'";
@@ -172,7 +172,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
                     //double see4 = Convert.ToDouble(dprivateDescSeg5);
                     //rcvQtyByProductUom = "50";bOMReqQty = "1";
                     double r = double.Parse(rcvQtyByProductUom) * double.Parse(bOMReqQty);
-                    double rcvPer = Math.Round(r, Convert.ToInt32(roundPrecision));
+                    //double rcvPer = Math.Round(r, Convert.ToInt32(roundPrecision));
                     //差异结果
                     difference = Convert.ToDouble(issuedQty) + Convert.ToDouble(specialIssuedQty) - r - Convert.ToDouble(dprivateDescSeg3)
                         - Convert.ToDouble(dprivateDescSeg4) - Convert.ToDouble(dprivateDescSeg5);
@@ -189,7 +189,6 @@ namespace YY.U9.Cust.LI.UIPlugIn
                     bool ok = Convert.ToDecimal(rcvQtyByProductUom) == Math.Round(Convert.ToDecimal(issuedQty) + Convert.ToDecimal(specialIssuedQty)) ? true : false;
 
                     #endregion
-                    difference = 0;
                     if (difference <= 0.0001 || ok == true)
                     {
                         #region 当关闭服务触发时，更新关闭人字段为yonyou

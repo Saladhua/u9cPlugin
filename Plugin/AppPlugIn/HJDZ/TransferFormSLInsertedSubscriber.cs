@@ -67,7 +67,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
             {
                 #region 执行SQL
                 DataTable dataTable_2 = new DataTable();
-                string sql_2 = "SELECT DocNo FROM Lot_LotMaster WHERE ID=(SELECT LotInfo_LotMaster FROM InvDoc_TransferForm " +
+                string sql_2 = "SELECT DocNo FROM Lot_LotMaster WHERE ID=(SELECT TOP(1) LotInfo_LotMaster FROM InvDoc_TransferForm " +
                     " INNER JOIN InvDoc_TransferFormL ON InvDoc_TransferForm.ID = InvDoc_TransferFormL.TransferForm" +
                     " WHERE DocNo = '" + lotinfo_docno + "')"; ;
                 DataSet dataSet_2 = new DataSet();

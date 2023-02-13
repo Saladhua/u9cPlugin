@@ -221,6 +221,15 @@
     <Reference Include="UFIDA.U9.SM.SMBE">
       <HintPath>..\..\..\..\UFIDA\U9V25\Portal\ApplicationServer\Libs\UFIDA.U9.SM.SMBE.dll</HintPath>
     </Reference>
+    <Reference Include="UFIDA.U9.SM.SMSV">
+      <HintPath>..\..\..\..\..\yonyou\UBFCE\U9.VOB.Product.Component\App\UFIDA.U9.SM.SMSV.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.SM.SMSV.Agent">
+      <HintPath>..\..\..\..\..\yonyou\UBFCE\U9.VOB.Product.Component\App\UFIDA.U9.SM.SMSV.Agent.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.SM.SMSV.Deploy">
+      <HintPath>..\..\..\..\..\yonyou\UBFCE\U9.VOB.Product.Component\App\UFIDA.U9.SM.SMSV.Deploy.dll</HintPath>
+    </Reference>
     <Reference Include="UFIDA.UBF.MD.Entity, Version=25.5401.30981.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>D:\yonyou\U9V60\Portal\ApplicationServer\Libs\UFIDA.UBF.MD.Entity.dll</HintPath>
@@ -252,6 +261,7 @@
     <Compile Include="ApiHelper.cs" />
     <Compile Include="Components\ImplementationSQL.cs" />
     <Compile Include="GetAccessTokenResult.cs" />
+    <Compile Include="HJDZ\ShipLinesUpdatingSubscriber.cs" />
     <Compile Include="JUNHUA\MiscShipmentInsertedSubscriber.cs" />
     <Compile Include="JUNHUA\MiscShipmentUpdatingSubscriber.cs" />
     <Compile Include="TokenManager.cs" />

@@ -51,8 +51,15 @@ namespace YY.U9.Cust.LI.AppPlugIn
             {
                 return;
             }
-            string see = lotinfo_docno.Substring(0, 3);
-            string see2 = lotinfo_docno.Substring(2, 3);
+            try
+            {
+                string see = lotinfo_docno.Substring(0, 3);
+                string see2 = lotinfo_docno.Substring(2, 3);
+            }
+            catch (Exception ex)
+            {
+                return;
+            }
             string rcvdocno = "";//标准收货单据的单号
             string gysname = "";
             string gyscode = "";

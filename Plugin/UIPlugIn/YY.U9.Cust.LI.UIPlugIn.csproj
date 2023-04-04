@@ -15,7 +15,7 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>3.5</OldToolsVersion>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <PublishUrl>http://localhost/Yonyou.U9.BZ.UIPlugIn/</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
@@ -31,7 +31,12 @@
     <IsWebBootstrapper>true</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <WarningLevel>4.0</WarningLevel>
+    <LangVersion>8.0</LangVersion>
     <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup>
+    <LangVersion>preview</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -130,6 +135,26 @@
     </Reference>
     <Reference Include="UFIDA.U9.ISV.MO.MOSV.Deploy">
       <HintPath>..\AppPlugIn\bin\Debug\UFIDA.U9.ISV.MO.MOSV.Deploy.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.Lot.LotBE">
+      <HintPath>..\..\..\..\..\yonyou\UBFCE\U9.VOB.Product.Component\App\UFIDA.U9.Lot.LotBE.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.Lot.LotBE.Deploy">
+      <HintPath>..\..\..\..\..\yonyou\UBFCE\U9.VOB.Product.Component\App\UFIDA.U9.Lot.LotBE.Deploy.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.Lot.LotBE.MetaData">
+      <HintPath>..\..\..\..\..\yonyou\UBFCE\U9.VOB.Product.Component\App\UFIDA.U9.Lot.LotBE.MetaData.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.Lot.LotSV">
+      <HintPath>..\..\..\..\..\yonyou\UBFCE\U9.VOB.Product.Component\App\UFIDA.U9.Lot.LotSV.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.Lot.LotSV.Agent, Version=25.5401.36955.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\AppPlugIn\bin\Debug\UFIDA.U9.Lot.LotSV.Agent.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.Lot.LotSV.Deploy, Version=25.5401.44001.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\yonyou\UBFCE\U9.VOB.Product.Component\App\UFIDA.U9.Lot.LotSV.Deploy.dll</HintPath>
     </Reference>
     <Reference Include="UFIDA.U9.MFG.Complete.CompleteApplyRpt.CompleteApplyDocUI.WebPart">
       <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\UILib\UFIDA.U9.MFG.Complete.CompleteApplyRpt.CompleteApplyDocUI.WebPart.dll</HintPath>
@@ -335,6 +360,7 @@
     <Compile Include="AOYIN\Cust_Li_MiscRcvTransLUIFormWebPartExtended.cs" />
     <Compile Include="BomMainUIFormWebPartExtended.cs" />
     <Compile Include="AOYIN\Cust_Li_MOStockMainUIFormWebPartExtended.cs" />
+    <Compile Include="ceshi\sysceshi.cs" />
     <Compile Include="JUNHUA\MiscRcvUIMainFormWebPartExtended.cs" />
     <Compile Include="JUNHUA\TransferFormUIMainFormWebPartExtended.cs" />
     <Compile Include="TransferFormUIMainFormWebPartExtended.cs" />
@@ -359,6 +385,9 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

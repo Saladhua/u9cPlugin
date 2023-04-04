@@ -33,7 +33,6 @@ namespace YY.U9.Cust.LI.AppPlugIn
             {
                 return;
             }
-
             string lineid = item.TransferFormL.ID.ToString();
             string lotinfo_docno = "";
             //string itemmasterid = item["ItemInfo_ItemID"].ToString();
@@ -53,8 +52,20 @@ namespace YY.U9.Cust.LI.AppPlugIn
             {
                 return;
             }
-            string see = lotinfo_docno.Substring(0, 3);
-            string see2 = lotinfo_docno.Substring(2, 3);
+            //if (lotinfo_docno.Length < 6)
+            //{
+            //    return;
+            //}
+            //lotinfo_docno = "XT01";
+            try
+            {
+                string see = lotinfo_docno.Substring(0, 3);
+                string see2 = lotinfo_docno.Substring(2, 3);
+            }
+            catch (Exception ex)
+            {
+                return ;
+            }
             string rcvdocno = "";//标准收货单据的单号
             string gysname = "";
             string gyscode = "";
@@ -63,7 +74,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
             string confirmDate = "";
             string shortName = "";
             bool start = false;
-
+            //lotinfo_docno = "BL05";
             //找到了该行的批号的创建单据，需要取出来进行判断
             if (lotinfo_docno.Substring(0, 3) == "Tra")//tra就是形态转换的单号，就能找到对应的收货的东西
             {

@@ -2,9 +2,13 @@
 using System.Collections.Generic;
 using System.Data;
 using UFIDA.U9.Base.DTOs;
+using UFIDA.U9.CBO.Pub.Controller;
 using UFIDA.U9.ISV.CBO.Lot;
 using UFIDA.U9.ISV.CBO.Lot.Proxy;
+using UFIDA.U9.Lot;
+using UFIDA.U9.Lot.Proxy;
 using UFIDA.U9.SCM.INV.TransferFormUIModel;
+using UFIDA.U9.UI.PDHelper;
 using UFSoft.UBF.UI.Custom;
 using UFSoft.UBF.UI.IView;
 using UFSoft.UBF.Util.DataAccess;
@@ -147,15 +151,15 @@ namespace YY.U9.Cust.LI.UIPlugIn
                         wide = widef;
                         longs = longsf;
                         #region 单中的计算 -- 不计算单重直接取
-                        DataTable dataTable = new DataTable();
+                        DataTable dataTable2 = new DataTable();
                         string sql_2 = "SELECT DescFlexField_PrivateDescSeg6 FROM cbo_ItemMaster WHERE ID='" + item_id + "'";
                         DataSet dataSet = new DataSet();
                         DataAccessor.RunSQL(DataAccessor.GetConn(), sql_2, null, out dataSet);
-                        dataTable = dataSet.Tables[0];
+                        dataTable2 = dataSet.Tables[0];
                         bool ok = false;
-                        if (dataTable.Rows != null && dataTable.Rows.Count > 0)
+                        if (dataTable2.Rows != null && dataTable2.Rows.Count > 0)
                         {
-                            kg = dataTable.Rows[0]["DescFlexField_PrivateDescSeg6"].ToString();
+                            kg = dataTable2.Rows[0]["DescFlexField_PrivateDescSeg6"].ToString();
                             if (string.IsNullOrEmpty(kg))
                                 ok = true;
                         }
@@ -209,13 +213,52 @@ namespace YY.U9.Cust.LI.UIPlugIn
                         #endregion
                     }
                     #endregion
+
+                    #region 测试
+                    //UFIDA.U9.Lot.Proxy.BatchCreateLotMasterProxy masterProxy = new UFIDA.U9.Lot.Proxy.BatchCreateLotMasterProxy();
+                    //List<LotMasterCreateDTOData> lotMasterCreateDTODatas = new List<LotMasterCreateDTOData>();
+                    //LotMasterCreateDTOData lotMasterCreateDTOData = new LotMasterCreateDTOData();
+                    //lotMasterCreateDTOData.ItemMaster = (long)item["ItemInfo_ItemID"];
+                    //lotMasterCreateDTOData.LotCode = lotcode;
+                    //lotMasterCreateDTOData.UsingOrg = 1002206140000035;
+                    //lotMasterCreateDTOData.UsingOrg_SKey = new UFSoft.UBF.Business.BusinessEntity.EntityKey();
+                    //lotMasterCreateDTOData.UsingOrg_SKey.ID = 1002206140000035;
+                    //masterProxy.TargetOrgName = "江苏君华特种工程塑料制品有限公司";
+                    //masterProxy.TargetOrgCode = "10";
+                    //lotMasterCreateDTODatas.Add(lotMasterCreateDTOData);
+                    //masterProxy.LotMasterCreateDTOS = lotMasterCreateDTODatas;
+                    //List<LotMasterInfoData> see2222 = masterProxy.Do();
+                    //foreach (var k in see2222)
+                    //{
+                    //    item["LotInfo_LotMaster"] = k.LotMaster;
+                    //}
+                    #endregion
+
                     CommonCreateLotMasterSRVProxy lotMasterSRV = new CommonCreateLotMasterSRVProxy();
                     List<CreateLotMasterDTOData> createLotMasterDTOData = new List<CreateLotMasterDTOData>();
                     CreateLotMasterDTOData createLot = new CreateLotMasterDTOData();
                     createLot.Item = new UFIDA.U9.CBO.Pub.Controller.CommonArchiveDataDTOData();
-                    createLot.Item.ID = (long)item["ItemInfo_ItemID"];
+                    DataTable dataTable = new DataTable();
+                    string itemfor10 = "";
+                    if (PDContext.Current.OrgID != "1002206140000035")
+                    {
+                        string sqlFor = "SELECT ID FROM CBO_ItemMaster WHERE Name='" + item["ItemInfo_ItemName"].ToString() + "' AND Org = '1002206140000035'";
+                        DataSet dataSet = new DataSet();
+                        DataAccessor.RunSQL(DataAccessor.GetConn(), sqlFor, null, out dataSet);
+                        dataTable = dataSet.Tables[0];
+                        if (dataTable != null && dataTable.Rows.Count > 0)
+                        {
+                            itemfor10 = dataTable.Rows[0]["ID"].ToString();
+                        }
+                        createLot.Item.ID = Int64.Parse(itemfor10);
+                    }
+                    else
+                    {
+                        createLot.Item.ID = (long)item["ItemInfo_ItemName"];
+                    }
                     createLot.Item.Name = item["ItemInfo_ItemName"].ToString();
                     createLot.Item.Code = item["ItemInfo_ItemID"].ToString();
+                    createLot.UsedToOrg = new CommonArchiveDataDTOData();
                     createLot.LotCode = lotcode;
                     createLotMasterDTOData.Add(createLot);
                     lotMasterSRV.CreateLotMasterDTOList = createLotMasterDTOData;
@@ -263,7 +306,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
                     DataAccessor.RunSQL(DataAccessor.GetConn(), update1, null);
 
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
                     item["LotInfo_LotMaster"] = n;
                     longs = string.IsNullOrEmpty(longs) ? "" : item["DescFlexSegments_PrivateDescSeg1"].ToString();
@@ -271,9 +314,9 @@ namespace YY.U9.Cust.LI.UIPlugIn
                     string db = "InvDoc_TransferFormSL";
                     string dbname = "Lotinfo_lotcode";
                     //item["LotInfo_LotCode"] = MiscRcvUIMainFormWebPartExtended.GetBatch(longs, wide, db, dbname);
+                    throw new Exception(e.Message);
                 }
                 string see2 = item["LotInfo_LotCode"].ToString();
-
             }
         }
 

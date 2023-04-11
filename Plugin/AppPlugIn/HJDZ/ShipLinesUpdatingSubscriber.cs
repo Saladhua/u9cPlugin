@@ -75,7 +75,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
                     string update1 = "update SM_ShipLine  set DescFlexField_PrivateDescSeg5='" + hJShipDocNo + "', DescFlexField_PrivateDescSeg6='" + date + "' " +
                         "where SrcDocNo = '" + docNo + "' and Org = '1002208260110060' and ItemInfo_ItemCode = '" + itemCode + "'";
                     DataAccessor.RunSQL(DataAccessor.GetConn(), update1, null);
-                    2023 - 4 - 新增出货单头增加赋值两个字段
+                    //2023 - 4 - 新增出货单头增加赋值两个字段
                     string docnonew = "";
                     string sqlFor4 = "select b.DocNo,b.ID from SM_ShipLine a inner join SM_Ship b on a.Ship= b.ID where a.SrcDocNo='" + docNo + "' " +
                         " and a.Org = '1002208260110060'";

@@ -117,39 +117,40 @@ namespace YY.U9.Cust.LI.UIPlugIn
                     //issuedQty = 9.000000000,bOMReqQty = 9.000000000,rcvQtyByProductUom = 9000,
                     //    specialIssuedQty = 0.000000000,dprivateDescSeg3 = 0,dprivateDescSeg4 = 0,
                     //    dprivateDescSeg5 = 0,r = 9.375003,difference = -0.375003
-
+                    //issuedQty = 0.000000000,bOMReqQty = 0.000000000,rcvQtyByProductUom = 20,
+                    //specialIssuedQty = 0.000000000,dprivateDescSeg3 = 0,dprivateDescSeg4 = 0,
+                    //dprivateDescSeg5 = 0,r = 6E-07,difference = -6E-07
 
                     //issuedQty = 9.000000000,bOMReqQty = 9.000000000,rcvQtyByProductUom = 9000,
                     //    specialIssuedQty = 0.000000000,dprivateDescSeg3 = 0,dprivateDescSeg4 = 0,dprivateDescSeg5 = 0,r = 9.375003,difference = -0.375003
-                    //issuedQty = "10";
-                    //bOMReqQty = "0.001041667";
-                    //specialIssuedQty = "0";
-                    //dprivateDescSeg3 = "0";
-                    //dprivateDescSeg4 = "0";
-                    //dprivateDescSeg5 = "0";
-                    //rcvQtyByProductUom = "9000";
-                    //double q = double.Parse(rcvQtyByProductUom) * double.Parse(bOMReqQty);
-                    //// double rcvPer1 = Math.Round(q, Convert.ToInt32(roundPrecision));
-                    ////Difference = IssuedQty + SpecialIssuedQty - TotalRcvQty * QPA - ProcessLoss - ShuntingLoss - MassLoss;
-                    ////difference = Convert.ToDouble(issuedQty) + Convert.ToDouble(specialIssuedQty) - q - Convert.ToDouble(dprivateDescSeg3)
-                    ////    - Convert.ToDouble(dprivateDescSeg4) - Convert.ToDouble(dprivateDescSeg5);
-
-                    //issuedQty = issuedQty == "" ? "0" : issuedQty;
-                    //bOMReqQty = bOMReqQty == "" ? "0" : bOMReqQty;
-                    //rcvQtyByProductUom = Math.Round(double.Parse(rcvQtyByProductUom) + double.Parse("0")).ToString();
-                    //specialIssuedQty = specialIssuedQty == "" ? "0" : specialIssuedQty;
-                    //dprivateDescSeg3 = dprivateDescSeg3 == "" ? "0" : dprivateDescSeg3;
-                    //dprivateDescSeg4 = dprivateDescSeg4 == "" ? "0" : dprivateDescSeg4;
-                    //dprivateDescSeg5 = dprivateDescSeg5 == "" ? "0" : dprivateDescSeg5;
-                    ////double qq = double.Parse(rcvQtyByProductUom) * double.Parse(bOMReqQty);
-                    ////double rcvPer = Math.Round(r, Convert.ToInt32(roundPrecision));
-                    ////差异结果
-                    ////Difference = IssuedQty + SpecialIssuedQty - TotalRcvQty * QPA - ProcessLoss - ShuntingLoss - MassLoss;
+                    issuedQty = "0.000000000";
+                    bOMReqQty = "0.000000000";
+                    specialIssuedQty = "0.000000000";
+                    dprivateDescSeg3 = "0";
+                    dprivateDescSeg4 = "0";
+                    dprivateDescSeg5 = "0";
+                    rcvQtyByProductUom = "20";
+                    double q = double.Parse(rcvQtyByProductUom) * double.Parse(bOMReqQty);
+                    // double rcvPer1 = Math.Round(q, Convert.ToInt32(roundPrecision));
+                    //Difference = IssuedQty + SpecialIssuedQty - TotalRcvQty * QPA - ProcessLoss - ShuntingLoss - MassLoss;
                     //difference = Convert.ToDouble(issuedQty) + Convert.ToDouble(specialIssuedQty) - q - Convert.ToDouble(dprivateDescSeg3)
                     //    - Convert.ToDouble(dprivateDescSeg4) - Convert.ToDouble(dprivateDescSeg5);
+                    issuedQty = issuedQty == "" ? "0" : issuedQty;
+                    bOMReqQty = bOMReqQty == "" ? "0" : bOMReqQty;
+                    rcvQtyByProductUom = Math.Round(double.Parse(rcvQtyByProductUom) + double.Parse("0")).ToString();
+                    specialIssuedQty = specialIssuedQty == "" ? "0" : specialIssuedQty;
+                    dprivateDescSeg3 = dprivateDescSeg3 == "" ? "0" : dprivateDescSeg3;
+                    dprivateDescSeg4 = dprivateDescSeg4 == "" ? "0" : dprivateDescSeg4;
+                    dprivateDescSeg5 = dprivateDescSeg5 == "" ? "0" : dprivateDescSeg5;
+                    //double qq = double.Parse(rcvQtyByProductUom) * double.Parse(bOMReqQty);
+                    //double rcvPer = Math.Round(r, Convert.ToInt32(roundPrecision));
+                    //差异结果
+                    //Difference = IssuedQty + SpecialIssuedQty - TotalRcvQty * QPA - ProcessLoss - ShuntingLoss - MassLoss;
+                    difference = Convert.ToDouble(issuedQty) + Convert.ToDouble(specialIssuedQty) - q - Convert.ToDouble(dprivateDescSeg3)
+                        - Convert.ToDouble(dprivateDescSeg4) - Convert.ToDouble(dprivateDescSeg5);
 
-                    //if (difference <= 0.0001)
-                    //{ string q1qqqqq23123123123 = "13123123"; }
+                    if (difference <= 0.0001)
+                    { string q1qqqqq23123123123 = "13123123"; }
                     #endregion
 
                     string sqlForPre = "SELECT Round_Precision FROM CBO_ItemMaster b " +

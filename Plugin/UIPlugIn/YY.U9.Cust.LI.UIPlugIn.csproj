@@ -58,6 +58,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -96,6 +97,12 @@
     <Reference Include="UFIDA.U9.CBO.Pub.Item.ItemUI.WebPart, Version=25.5401.41699.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\yonyou\U9CE\Portal\UILib\UFIDA.U9.CBO.Pub.Item.ItemUI.WebPart.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.CBO.Pub.Supplier.SupplierUI.WebPart">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\UILib\UFIDA.U9.CBO.Pub.Supplier.SupplierUI.WebPart.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.CBO.PubBE">
+      <HintPath>..\..\..\..\..\yonyou\UBFCE\U9.VOB.Product.Component\App\UFIDA.U9.CBO.PubBE.dll</HintPath>
     </Reference>
     <Reference Include="UFIDA.U9.CBO.PubBE.Deploy, Version=25.5401.31476.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -361,8 +368,10 @@
     <Compile Include="BomMainUIFormWebPartExtended.cs" />
     <Compile Include="AOYIN\Cust_Li_MOStockMainUIFormWebPartExtended.cs" />
     <Compile Include="ceshi\sysceshi.cs" />
+    <Compile Include="HJ\MOStockMainUIFormWebPartExtend.cs" />
     <Compile Include="JUNHUA\MiscRcvUIMainFormWebPartExtended.cs" />
     <Compile Include="JUNHUA\TransferFormUIMainFormWebPartExtended.cs" />
+    <Compile Include="KaiZhi\SupplierUIFormWebPartExtended.cs" />
     <Compile Include="TransferFormUIMainFormWebPartExtended.cs" />
     <Compile Include="APRefScmBillUIFormWebPartExtended.cs" />
     <Compile Include="Common.cs" />
@@ -389,6 +398,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

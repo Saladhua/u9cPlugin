@@ -36,7 +36,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
             //精度
             string roundPrecision = "";
             //差异
-            double difference = 0;
+            Decimal difference = 0;
             //私有字段3
             string dprivateDescSeg3 = "";
             //私有字段4
@@ -57,7 +57,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
             {
                 return;
             }
-            
+
             if (webButton.Action == "SubmitClick")//SubmitClick  ApproveClick
             {
                 foreach (var item in _part.Model.CompleteRpt.Records)
@@ -121,15 +121,16 @@ namespace YY.U9.Cust.LI.UIPlugIn
                     //specialIssuedQty = 0.000000000,dprivateDescSeg3 = 0,dprivateDescSeg4 = 0,
                     //dprivateDescSeg5 = 0,r = 6E-07,difference = -6E-07
 
-                    //issuedQty = 9.000000000,bOMReqQty = 9.000000000,rcvQtyByProductUom = 9000,
-                    //    specialIssuedQty = 0.000000000,dprivateDescSeg3 = 0,dprivateDescSeg4 = 0,dprivateDescSeg5 = 0,r = 9.375003,difference = -0.375003
-                    issuedQty = "0.000000000";
-                    bOMReqQty = "0.000000000";
+                    //issuedQty = 0.012750000,bOMReqQty = 0.000001700,rcvQtyByProductUom = 6865,specialIssuedQty = 0.000000000,dprivateDescSeg3 = 0,dprivateDescSeg4 = 0,
+                    //dprivateDescSeg5 = 0.001079000,r = 0.0116705,difference = 4.99999999998765E-07
+
+                    issuedQty = "0.012750000";
+                    bOMReqQty = "0.000001700";
                     specialIssuedQty = "0.000000000";
                     dprivateDescSeg3 = "0";
                     dprivateDescSeg4 = "0";
-                    dprivateDescSeg5 = "0";
-                    rcvQtyByProductUom = "20";
+                    dprivateDescSeg5 = "0.001079000";
+                    rcvQtyByProductUom = "6865";
                     double q = double.Parse(rcvQtyByProductUom) * double.Parse(bOMReqQty);
                     // double rcvPer1 = Math.Round(q, Convert.ToInt32(roundPrecision));
                     //Difference = IssuedQty + SpecialIssuedQty - TotalRcvQty * QPA - ProcessLoss - ShuntingLoss - MassLoss;
@@ -146,10 +147,11 @@ namespace YY.U9.Cust.LI.UIPlugIn
                     //double rcvPer = Math.Round(r, Convert.ToInt32(roundPrecision));
                     //差异结果
                     //Difference = IssuedQty + SpecialIssuedQty - TotalRcvQty * QPA - ProcessLoss - ShuntingLoss - MassLoss;
-                    difference = Convert.ToDouble(issuedQty) + Convert.ToDouble(specialIssuedQty) - q - Convert.ToDouble(dprivateDescSeg3)
-                        - Convert.ToDouble(dprivateDescSeg4) - Convert.ToDouble(dprivateDescSeg5);
+                    difference = Decimal.Parse(issuedQty) + Decimal.Parse(specialIssuedQty) - Decimal.Parse(q.ToString()) - Decimal.Parse(dprivateDescSeg3)
+                        - Decimal.Parse(dprivateDescSeg4) - Decimal.Parse(dprivateDescSeg5);
+                    bool ok11 = Convert.ToDecimal(rcvQtyByProductUom) == Math.Round(Convert.ToDecimal(issuedQty) + Convert.ToDecimal(specialIssuedQty)) ? true : false;
 
-                    if (difference <= 0.0001)
+                    if (difference <= Decimal.Parse((0.0001).ToString()))
                     { string q1qqqqq23123123123 = "13123123"; }
                     #endregion
 
@@ -188,8 +190,8 @@ namespace YY.U9.Cust.LI.UIPlugIn
                             //差异结果
                             //Difference = IssuedQty + SpecialIssuedQty - TotalRcvQty * QPA - ProcessLoss - ShuntingLoss - MassLoss;
 
-                            difference = Convert.ToDouble(issuedQty) + Convert.ToDouble(specialIssuedQty) - r - Convert.ToDouble(dprivateDescSeg3)
-                                - Convert.ToDouble(dprivateDescSeg4) - Convert.ToDouble(dprivateDescSeg5);
+                            difference = Decimal.Parse(issuedQty) + Decimal.Parse(specialIssuedQty) - Decimal.Parse(r.ToString()) - Decimal.Parse(dprivateDescSeg3)
+                                - Decimal.Parse(dprivateDescSeg4) - Decimal.Parse(dprivateDescSeg5);
                             string allsee = "issuedQty=" + issuedQty + "," + "bOMReqQty=" + bOMReqQty + "," + "rcvQtyByProductUom=" + rcvQtyByProductUom + ","
                                 + "specialIssuedQty=" + specialIssuedQty + "," + "dprivateDescSeg3=" + dprivateDescSeg3 + ","
                                 + "dprivateDescSeg4=" + dprivateDescSeg4 + "," + "dprivateDescSeg5=" + dprivateDescSeg5 + ","
@@ -199,14 +201,14 @@ namespace YY.U9.Cust.LI.UIPlugIn
                             //反写回去
                             if (!string.IsNullOrEmpty(moDocNoID) && !string.IsNullOrEmpty(difference.ToString()))
                             {
-                                string sqlForUpDate = "UPDATE MO_MOPickList  SET DescFlexField_PrivateDescSeg8='" + difference + "', DescFlexField_PrivateDescSeg29='" + allsee + "'  WHERE ID = (SELECT a.ID FROM MO_MOPickList a" +
+                                string sqlForUpDate = "UPDATE MO_MOPickList  SET DescFlexField_PrivateDescSeg8='" + difference + "', DescFlexField_PrivateDescSeg29='" + allsee + "'  WHERE ID = (SELECT  top(1) a.ID FROM MO_MOPickList a" +
                                     " INNER JOIN MO_MO b ON a.MO = b.ID WHERE b.DocNo = '" + donno + "' AND a.ItemMaster = '" + dataTable.Rows[i]["ItemMaster"].ToString() + "')";
                                 DataAccessor.RunSQL(DataAccessor.GetConn(), sqlForUpDate, null, out dataSet);
                             }
                             i++;
                             bool ok = Convert.ToDecimal(rcvQtyByProductUom) == Math.Round(Convert.ToDecimal(issuedQty) + Convert.ToDecimal(specialIssuedQty)) ? true : false;
 
-                            if (difference <= 0.0001 || ok == true)
+                            if (difference <= Decimal.Parse((0.0001).ToString()) || ok == true)
                             {
                                 #region 当关闭服务触发时，更新关闭人字段为yonyou
                                 string sqlForUpDate = "UPDATE MO_MO  SET ClosedBy='yonyou' WHERE ID='" + moDocNoID + "'";

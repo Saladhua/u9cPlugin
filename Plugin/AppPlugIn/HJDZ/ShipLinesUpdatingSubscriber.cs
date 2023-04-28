@@ -102,7 +102,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
                     {
                         receivementid = dataTable.Rows[0]["SrcDoc_SrcDocNo"].ToString();
                     }
-                    string update2 = "update PM_RcvLine  set DescFlexSegments_PrivateDescSeg12='" + hJShipDocNo + "',DescFlexSegments_PrivateDescSeg13 = '" + date + "'" +
+                    string update2 = "update PM_RcvLine  set DescFlexSegments_PrivateDescSeg14='" + hJShipDocNo + "',DescFlexSegments_PrivateDescSeg15 = '" + date + "'" +
                         " where SrcDoc_SrcDocNo = '" + receivementid + "'  and ItemInfo_ItemCode = '" + itemCode + "'";
                     DataAccessor.RunSQL(DataAccessor.GetConn(), update2, null);
                     #endregion

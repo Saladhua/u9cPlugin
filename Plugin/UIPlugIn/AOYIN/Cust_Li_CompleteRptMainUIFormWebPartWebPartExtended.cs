@@ -121,8 +121,11 @@ namespace YY.U9.Cust.LI.UIPlugIn
                     //specialIssuedQty = 0.000000000,dprivateDescSeg3 = 0,dprivateDescSeg4 = 0,
                     //dprivateDescSeg5 = 0,r = 6E-07,difference = -6E-07
 
-                    //issuedQty = 0.012750000,bOMReqQty = 0.000001700,rcvQtyByProductUom = 6865,specialIssuedQty = 0.000000000,dprivateDescSeg3 = 0,dprivateDescSeg4 = 0,
-                    //dprivateDescSeg5 = 0.001079000,r = 0.0116705,difference = 4.99999999998765E-07
+                   //issuedQty = 18200.000000000,bOMReqQty = 1.000000000,
+                    //rcvQtyByProductUom = 18200,specialIssuedQty = 106.000000000,
+                    //dprivateDescSeg3 = 0,dprivateDescSeg4 = 0,dprivateDescSeg5 = 0,
+                    //r = 18200,
+                    //difference = 106.000000000
 
                     issuedQty = "0.012750000";
                     bOMReqQty = "0.000001700";

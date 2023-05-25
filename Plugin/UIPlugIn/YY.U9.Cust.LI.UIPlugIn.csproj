@@ -143,6 +143,24 @@
     <Reference Include="UFIDA.U9.ISV.MO.MOSV.Deploy">
       <HintPath>..\AppPlugIn\bin\Debug\UFIDA.U9.ISV.MO.MOSV.Deploy.dll</HintPath>
     </Reference>
+    <Reference Include="UFIDA.U9.ISV.SM.SDIndustryChainSV">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.ISV.SM.SDIndustryChainSV.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.ISV.SM.SDIndustryChainSV.Agent">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.ISV.SM.SDIndustryChainSV.Agent.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.ISV.SM.SDIndustryChainSV.Deploy">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.ISV.SM.SDIndustryChainSV.Deploy.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.ISV.TransferInISV">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.ISV.TransferInISV.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.ISV.TransferInISV.Agent">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\MailService\Libs\UFIDA.U9.ISV.TransferInISV.Agent.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.ISV.TransferInISV.Deploy">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\MailService\Libs\UFIDA.U9.ISV.TransferInISV.Deploy.dll</HintPath>
+    </Reference>
     <Reference Include="UFIDA.U9.Lot.LotBE">
       <HintPath>..\..\..\..\..\yonyou\UBFCE\U9.VOB.Product.Component\App\UFIDA.U9.Lot.LotBE.dll</HintPath>
     </Reference>
@@ -180,6 +198,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\yonyou\U9CE\Portal\UILib\UFIDA.U9.MFG.MO.IssueTXN.IssueTXNUI.WebPart.dll</HintPath>
     </Reference>
+    <Reference Include="UFIDA.U9.MFG.MO.ItemWIPSimuBListUI.WebPart">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\UILib\UFIDA.U9.MFG.MO.ItemWIPSimuBListUI.WebPart.dll</HintPath>
+    </Reference>
     <Reference Include="UFIDA.U9.MFG.MO.MOWorkHourUI.MetaData">
       <HintPath>..\..\..\yonyou\UBFCE\U9.VOB.Product.Metadata\UI\UFIDA.U9.MFG.MO.MOWorkHourUI.MetaData.dll</HintPath>
     </Reference>
@@ -190,6 +211,9 @@
     <Reference Include="UFIDA.U9.MFG.MO.PullListUI.WebPart, Version=25.5401.41569.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\yonyou\U9CE\Portal\UILib\UFIDA.U9.MFG.MO.PullListUI.WebPart.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.MFG.MO.StartAnalysisUI.WebPart">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\UILib\UFIDA.U9.MFG.MO.StartAnalysisUI.WebPart.dll</HintPath>
     </Reference>
     <Reference Include="UFIDA.U9.MFG.MRP.MRPMaintenUI.WebPart, Version=25.5401.36817.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -249,9 +273,6 @@
     </Reference>
     <Reference Include="UFIDA.U9.SCM.SD.ShipUI.WebPart">
       <HintPath>D:\yonyou\U9V60\Portal\UILib\UFIDA.U9.SCM.SD.ShipUI.WebPart.dll</HintPath>
-    </Reference>
-    <Reference Include="UFIDA.U9.UI.BusinessHelper">
-      <HintPath>D:\yonyou\U9V29\Portal\ApplicationLib\UFIDA.U9.UI.BusinessHelper.dll</HintPath>
     </Reference>
     <Reference Include="UFIDA.U9.UI.PDHelper, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -369,6 +390,7 @@
     <Compile Include="AOYIN\Cust_Li_MOStockMainUIFormWebPartExtended.cs" />
     <Compile Include="ceshi\sysceshi.cs" />
     <Compile Include="HJ\MOStockMainUIFormWebPartExtend.cs" />
+    <Compile Include="HJ\ShipBListUIFormWebPartExtend.cs" />
     <Compile Include="JUNHUA\MiscRcvUIMainFormWebPartExtended.cs" />
     <Compile Include="JUNHUA\TransferFormUIMainFormWebPartExtended.cs" />
     <Compile Include="KaiZhi\SupplierUIFormWebPartExtended.cs" />
@@ -377,6 +399,7 @@
     <Compile Include="Common.cs" />
     <Compile Include="CommonFunction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="YOUKE\ItemWIPSimuBListUIFormWebPartExtended.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

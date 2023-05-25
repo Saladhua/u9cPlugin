@@ -149,11 +149,23 @@
     <Reference Include="UFIDA.U9.InvDoc.InvDocBE">
       <HintPath>..\..\..\..\UFIDA\U9V25\Portal\ApplicationServer\Libs\UFIDA.U9.InvDoc.InvDocBE.dll</HintPath>
     </Reference>
+    <Reference Include="UFIDA.U9.InvDoc.INVDocSV">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.InvDoc.INVDocSV.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.InvDoc.InvDocSV.Agent">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.InvDoc.InvDocSV.Agent.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.InvDoc.InvDocSV.Deploy">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.InvDoc.InvDocSV.Deploy.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.InvTrans.InvTransBE, Version=25.5401.44197.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.InvTrans.InvTransBE.dll</HintPath>
+    </Reference>
     <Reference Include="UFIDA.U9.InvTrans.InvTransBE.Deploy, Version=25.5401.31672.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>D:\yonyou\U9V60\Portal\ApplicationServer\Libs\UFIDA.U9.InvTrans.InvTransBE.Deploy.dll</HintPath>
     </Reference>
-    <Reference Include="UFIDA.U9.InvTrans.InvTransBP.Deploy, Version=25.5401.31398.0, Culture=neutral, PublicKeyToken=null" />
     <Reference Include="UFIDA.U9.InvTrans.InvTransSV.Agent, Version=25.5401.31948.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>D:\yonyou\U9V60\Portal\ApplicationLib\UFIDA.U9.InvTrans.InvTransSV.Agent.dll</HintPath>
@@ -191,6 +203,15 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>D:\yonyou\U9V60\Portal\ApplicationLib\UFIDA.U9.ISV.MO.MOSV.Deploy.dll</HintPath>
     </Reference>
+    <Reference Include="UFIDA.U9.ISV.TransferInISV">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.ISV.TransferInISV.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.ISV.TransferInISV.Agent">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.ISV.TransferInISV.Agent.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.ISV.TransferInISV.Deploy">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.ISV.TransferInISV.Deploy.dll</HintPath>
+    </Reference>
     <Reference Include="UFIDA.U9.Lot.LotBE">
       <HintPath>..\..\..\..\UFIDA\U9V25\Portal\ApplicationServer\Libs\UFIDA.U9.Lot.LotBE.dll</HintPath>
     </Reference>
@@ -204,6 +225,18 @@
     </Reference>
     <Reference Include="UFIDA.U9.MO.MOBE">
       <HintPath>..\..\..\..\UFIDA\U9V25\Portal\ApplicationServer\Libs\UFIDA.U9.MO.MOBE.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.MO.MOBP, Version=25.5401.37165.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.MO.MOBP.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.MO.MOBP.Agent, Version=25.5401.37165.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.MO.MOBP.Agent.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.MO.MOBP.Deploy, Version=25.5401.37165.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.MO.MOBP.Deploy.dll</HintPath>
     </Reference>
     <Reference Include="UFIDA.U9.PM.PMBE">
       <HintPath>..\..\..\..\UFIDA\U9V25\Portal\ApplicationServer\Libs\UFIDA.U9.PM.PMBE.dll</HintPath>
@@ -220,6 +253,15 @@
     </Reference>
     <Reference Include="UFIDA.U9.SM.SMBE">
       <HintPath>..\..\..\..\UFIDA\U9V25\Portal\ApplicationServer\Libs\UFIDA.U9.SM.SMBE.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.SM.SMBP">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.SM.SMBP.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.SM.SMBP.Agent">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.SM.SMBP.Agent.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.SM.SMBP.Deploy">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.SM.SMBP.Deploy.dll</HintPath>
     </Reference>
     <Reference Include="UFIDA.U9.SM.SMSV">
       <HintPath>..\..\..\..\..\yonyou\UBFCE\U9.VOB.Product.Component\App\UFIDA.U9.SM.SMSV.dll</HintPath>
@@ -275,6 +317,7 @@
     <Compile Include="HJDZ\TransferFormUpdatingSubscriber.cs" />
     <Compile Include="TransferInUpdatingSubscriber.cs" />
     <Compile Include="TransferInInsertedSubscriber.cs" />
+    <Compile Include="YouKE\MOSimuDocInsertedSubscriber.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="YY.U9.Cust.LI.sub.xml">

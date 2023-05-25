@@ -242,7 +242,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
                     string itemfor10 = "";
                     if (PDContext.Current.OrgID != "1002206140000035")
                     {
-                        string sqlFor = "SELECT ID FROM CBO_ItemMaster WHERE Name='" + item["ItemInfo_ItemName"].ToString() + "' AND Org = '1002206140000035'";
+                        string sqlFor = "SELECT ID FROM CBO_ItemMaster WHERE Name='" + item["ItemInfo_ItemName"].ToString() + "' AND Org = '1002206140000035' AND SPECS='" + item["ItemInfo_ItemID_SPECS"].ToString() + "'";
                         DataSet dataSet = new DataSet();
                         DataAccessor.RunSQL(DataAccessor.GetConn(), sqlFor, null, out dataSet);
                         dataTable = dataSet.Tables[0];

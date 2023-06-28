@@ -114,26 +114,18 @@ namespace YY.U9.Cust.LI.UIPlugIn
                     //0.013500000 0.008489000 0   1002111170030995    0   0.000002700 0.000000000 1856.000000000
                     //1856.000000000  0   0   1002201180043856    0   1.000000000 0.000000000 1856.000000000
                     #region 测试使用值
-                    //issuedQty = 9.000000000,bOMReqQty = 9.000000000,rcvQtyByProductUom = 9000,
-                    //    specialIssuedQty = 0.000000000,dprivateDescSeg3 = 0,dprivateDescSeg4 = 0,
-                    //    dprivateDescSeg5 = 0,r = 9.375003,difference = -0.375003
-                    //issuedQty = 0.000000000,bOMReqQty = 0.000000000,rcvQtyByProductUom = 20,
-                    //specialIssuedQty = 0.000000000,dprivateDescSeg3 = 0,dprivateDescSeg4 = 0,
-                    //dprivateDescSeg5 = 0,r = 6E-07,difference = -6E-07
 
-                   //issuedQty = 18200.000000000,bOMReqQty = 1.000000000,
-                    //rcvQtyByProductUom = 18200,specialIssuedQty = 106.000000000,
-                    //dprivateDescSeg3 = 0,dprivateDescSeg4 = 0,dprivateDescSeg5 = 0,
-                    //r = 18200,
-                    //difference = 106.000000000
+                    //issuedQty = 0.000000000,bOMReqQty = 1.000000000,rcvQtyByProductUom = 8400,
+                    //specialIssuedQty = 0.000000000,dprivateDescSeg3 = 0,dprivateDescSeg4 = 0,dprivateDescSeg5 = 0,
+                    //r = 8400,
 
-                    issuedQty = "0.012750000";
-                    bOMReqQty = "0.000001700";
+                    issuedQty = "0.000000000";
+                    bOMReqQty = "1.000000000";
                     specialIssuedQty = "0.000000000";
                     dprivateDescSeg3 = "0";
                     dprivateDescSeg4 = "0";
-                    dprivateDescSeg5 = "0.001079000";
-                    rcvQtyByProductUom = "6865";
+                    dprivateDescSeg5 = "0";
+                    rcvQtyByProductUom = "8400";
                     double q = double.Parse(rcvQtyByProductUom) * double.Parse(bOMReqQty);
                     // double rcvPer1 = Math.Round(q, Convert.ToInt32(roundPrecision));
                     //Difference = IssuedQty + SpecialIssuedQty - TotalRcvQty * QPA - ProcessLoss - ShuntingLoss - MassLoss;

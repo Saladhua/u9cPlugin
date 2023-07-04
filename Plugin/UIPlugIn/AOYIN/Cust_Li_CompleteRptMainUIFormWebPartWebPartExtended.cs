@@ -58,8 +58,10 @@ namespace YY.U9.Cust.LI.UIPlugIn
                 return;
             }
 
-            if (webButton.Action == "SubmitClick")//SubmitClick  ApproveClick
+            if (webButton.Action == "ApproveClick")//SubmitClick  ApproveClick
             {
+                string Yi = "是";//所有行差异是否满足
+
                 foreach (var item in _part.Model.CompleteRpt.Records)
                 {
                     moDocNo = item["MO"].ToString();
@@ -119,35 +121,35 @@ namespace YY.U9.Cust.LI.UIPlugIn
                     //specialIssuedQty = 0.000000000,dprivateDescSeg3 = 0,dprivateDescSeg4 = 0,dprivateDescSeg5 = 0,
                     //r = 8400,
 
-                    issuedQty = "0.000000000";
-                    bOMReqQty = "1.000000000";
-                    specialIssuedQty = "0.000000000";
-                    dprivateDescSeg3 = "0";
-                    dprivateDescSeg4 = "0";
-                    dprivateDescSeg5 = "0";
-                    rcvQtyByProductUom = "8400";
-                    double q = double.Parse(rcvQtyByProductUom) * double.Parse(bOMReqQty);
-                    // double rcvPer1 = Math.Round(q, Convert.ToInt32(roundPrecision));
-                    //Difference = IssuedQty + SpecialIssuedQty - TotalRcvQty * QPA - ProcessLoss - ShuntingLoss - MassLoss;
-                    //difference = Convert.ToDouble(issuedQty) + Convert.ToDouble(specialIssuedQty) - q - Convert.ToDouble(dprivateDescSeg3)
-                    //    - Convert.ToDouble(dprivateDescSeg4) - Convert.ToDouble(dprivateDescSeg5);
-                    issuedQty = issuedQty == "" ? "0" : issuedQty;
-                    bOMReqQty = bOMReqQty == "" ? "0" : bOMReqQty;
-                    rcvQtyByProductUom = Math.Round(double.Parse(rcvQtyByProductUom) + double.Parse("0")).ToString();
-                    specialIssuedQty = specialIssuedQty == "" ? "0" : specialIssuedQty;
-                    dprivateDescSeg3 = dprivateDescSeg3 == "" ? "0" : dprivateDescSeg3;
-                    dprivateDescSeg4 = dprivateDescSeg4 == "" ? "0" : dprivateDescSeg4;
-                    dprivateDescSeg5 = dprivateDescSeg5 == "" ? "0" : dprivateDescSeg5;
-                    //double qq = double.Parse(rcvQtyByProductUom) * double.Parse(bOMReqQty);
-                    //double rcvPer = Math.Round(r, Convert.ToInt32(roundPrecision));
-                    //差异结果
-                    //Difference = IssuedQty + SpecialIssuedQty - TotalRcvQty * QPA - ProcessLoss - ShuntingLoss - MassLoss;
-                    difference = Decimal.Parse(issuedQty) + Decimal.Parse(specialIssuedQty) - Decimal.Parse(q.ToString()) - Decimal.Parse(dprivateDescSeg3)
-                        - Decimal.Parse(dprivateDescSeg4) - Decimal.Parse(dprivateDescSeg5);
-                    bool ok11 = Convert.ToDecimal(rcvQtyByProductUom) == Math.Round(Convert.ToDecimal(issuedQty) + Convert.ToDecimal(specialIssuedQty)) ? true : false;
+                    //issuedQty = "0.000000000";
+                    //bOMReqQty = "1.000000000";
+                    //specialIssuedQty = "0.000000000";
+                    //dprivateDescSeg3 = "0";
+                    //dprivateDescSeg4 = "0";
+                    //dprivateDescSeg5 = "0";
+                    //rcvQtyByProductUom = "8400";
+                    //double q = double.Parse(rcvQtyByProductUom) * double.Parse(bOMReqQty);
+                    //// double rcvPer1 = Math.Round(q, Convert.ToInt32(roundPrecision));
+                    ////Difference = IssuedQty + SpecialIssuedQty - TotalRcvQty * QPA - ProcessLoss - ShuntingLoss - MassLoss;
+                    ////difference = Convert.ToDouble(issuedQty) + Convert.ToDouble(specialIssuedQty) - q - Convert.ToDouble(dprivateDescSeg3)
+                    ////    - Convert.ToDouble(dprivateDescSeg4) - Convert.ToDouble(dprivateDescSeg5);
+                    //issuedQty = issuedQty == "" ? "0" : issuedQty;
+                    //bOMReqQty = bOMReqQty == "" ? "0" : bOMReqQty;
+                    //rcvQtyByProductUom = Math.Round(double.Parse(rcvQtyByProductUom) + double.Parse("0")).ToString();
+                    //specialIssuedQty = specialIssuedQty == "" ? "0" : specialIssuedQty;
+                    //dprivateDescSeg3 = dprivateDescSeg3 == "" ? "0" : dprivateDescSeg3;
+                    //dprivateDescSeg4 = dprivateDescSeg4 == "" ? "0" : dprivateDescSeg4;
+                    //dprivateDescSeg5 = dprivateDescSeg5 == "" ? "0" : dprivateDescSeg5;
+                    ////double qq = double.Parse(rcvQtyByProductUom) * double.Parse(bOMReqQty);
+                    ////double rcvPer = Math.Round(r, Convert.ToInt32(roundPrecision));
+                    ////差异结果
+                    ////Difference = IssuedQty + SpecialIssuedQty - TotalRcvQty * QPA - ProcessLoss - ShuntingLoss - MassLoss;
+                    //difference = Decimal.Parse(issuedQty) + Decimal.Parse(specialIssuedQty) - Decimal.Parse(q.ToString()) - Decimal.Parse(dprivateDescSeg3)
+                    //    - Decimal.Parse(dprivateDescSeg4) - Decimal.Parse(dprivateDescSeg5);
+                    //bool ok11 = Convert.ToDecimal(rcvQtyByProductUom) == Math.Round(Convert.ToDecimal(issuedQty) + Convert.ToDecimal(specialIssuedQty)) ? true : false;
 
-                    if (difference <= Decimal.Parse((0.0001).ToString()))
-                    { string q1qqqqq23123123123 = "13123123"; }
+                    //if (difference <= Decimal.Parse((0.0001).ToString()))
+                    //{ string q1qqqqq23123123123 = "13123123"; }
                     #endregion
 
                     string sqlForPre = "SELECT Round_Precision FROM CBO_ItemMaster b " +
@@ -166,12 +168,14 @@ namespace YY.U9.Cust.LI.UIPlugIn
                         " INNER JOIN MO_MO b ON a.MO = b.ID WHERE b.DocNo = '" + donno + "'";
                     DataAccessor.RunSQL(DataAccessor.GetConn(), sqlForCy, null, out dataSet);
                     dataTable = dataSet.Tables[0];
+                    List<DtoDer> dtoDers = new List<DtoDer>();
                     if (dataTable != null && dataTable.Rows.Count > 0)
                     {
                         int i = 0;
                         string see = dataTable.Rows.Count.ToString();
                         while (i < dataTable.Rows.Count)
                         {
+                            DtoDer dtoDer = new DtoDer();
                             issuedQty = dataTable.Rows[i]["IssuedQty"].ToString() == "" ? "0" : dataTable.Rows[i]["IssuedQty"].ToString();
                             bOMReqQty = dataTable.Rows[i]["QPA"].ToString() == "" ? "0" : dataTable.Rows[i]["QPA"].ToString();
                             //rcvQtyByProductUom = (double.Parse(dataTable.Rows[i]["TotalRcvQty"].ToString()) + double.Parse(item["CompleteQty"].ToString())).ToString();
@@ -202,27 +206,45 @@ namespace YY.U9.Cust.LI.UIPlugIn
                             }
                             i++;
                             bool ok = Convert.ToDecimal(rcvQtyByProductUom) == Math.Round(Convert.ToDecimal(issuedQty) + Convert.ToDecimal(specialIssuedQty)) ? true : false;
-
-                            if (difference <= Decimal.Parse((0.0001).ToString()) || ok == true)
+                            dtoDer.ok = ok;
+                            dtoDer.Difference = difference;
+                            dtoDers.Add(dtoDer);
+                        }
+                        //if (difference <= Decimal.Parse((0.0001).ToString()) || ok == true)
+                        foreach (var ite in dtoDers)
+                        {
+                            if (ite.Difference > Decimal.Parse((0.0001).ToString()))
                             {
-                                #region 当关闭服务触发时，更新关闭人字段为yonyou
-                                string sqlForUpDate = "UPDATE MO_MO  SET ClosedBy='yonyou' WHERE ID='" + moDocNoID + "'";
-                                DataAccessor.RunSQL(DataAccessor.GetConn(), sqlForUpDate, null, out dataSet);
-                                #endregion
-                                CompleteMoProxy complete = new CompleteMoProxy();
-                                List<MOOperateParamDTOData> mOOperates = new List<MOOperateParamDTOData>();
-                                MOOperateParamDTOData mOOperate = new MOOperateParamDTOData();
-                                mOOperate.MODocNo = donno;
-                                mOOperate.OperateType = true;
-                                mOOperate.OperateResult = true;
-                                mOOperates.Add(mOOperate);
-                                complete.MOOperateParamDTOs = mOOperates;
-                                List<MOOperateParamDTOData> see2222 = complete.Do();
+                                Yi = "否";
                             }
+                        }
+                        if (Yi == "是")
+                        {
+                            #region 当关闭服务触发时，更新关闭人字段为yonyou
+                            string sqlForUpDate = "UPDATE MO_MO  SET ClosedBy='yonyou' WHERE ID='" + moDocNoID + "'";
+                            DataAccessor.RunSQL(DataAccessor.GetConn(), sqlForUpDate, null, out dataSet);
+                            #endregion
+                            CompleteMoProxy complete = new CompleteMoProxy();
+                            List<MOOperateParamDTOData> mOOperates = new List<MOOperateParamDTOData>();
+                            MOOperateParamDTOData mOOperate = new MOOperateParamDTOData();
+                            mOOperate.MODocNo = donno;
+                            mOOperate.OperateType = true;
+                            mOOperate.OperateResult = true;
+                            mOOperates.Add(mOOperate);
+                            complete.MOOperateParamDTOs = mOOperates;
+                            List<MOOperateParamDTOData> see2222 = complete.Do();
                         }
                     }
                 }
             }
+        }
+        /// <summary>
+        /// 记录差异
+        /// </summary>
+        public class DtoDer
+        {
+            public Decimal Difference { get; set; }
+            public bool ok { get; set; }
         }
     }
 }

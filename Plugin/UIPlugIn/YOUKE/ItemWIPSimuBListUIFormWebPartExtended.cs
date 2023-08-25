@@ -68,20 +68,17 @@ namespace YY.U9.Cust.LI.UIPlugIn
                 string docno = item["MO_DocNo"].ToString();
                 string itemcode = item["ItemMaster_Code"].ToString();
                 string SetableStatus = item["SetableStatus"].ToString();
-                string sqlForMoDocNoID = "SELECT a.ItemMaster,a.ActualReqQty,a.SupplyWh," +
-                    " (SELECT Name FROM CBO_Wh_Trl WHERE ID = a.SupplyWh) AS SupplyWhCode," +
-                    " (SELECT  InventorySecondUOM FROM CBO_ItemMaster WHERE ID=a.ItemMaster  AND Org = '" + PDContext.Current.OrgID + "' ) AS StoreUOM," +
-                    " (SELECT  (SELECT Round_Precision FROM Base_UOM WHERE ID=CBO_ItemMaster.InventorySecondUOM) AS StoreUOM FROM CBO_ItemMaster WHERE ID=a.ItemMaster AND Org = '" + PDContext.Current.OrgID + "' ) AS Round_Precision," +
-                    " (a.ActualReqQty-a.IssuedQty) AS IssuedQty," +
-                    " (select top(1) b.DescFlexField_PrivateDescSeg2 from  MO_MOPickList a INNER JOIN MO_MO b ON a.MO = b.ID " +
-                    " WHERE b.DocNo = '" + docno + "' AND b.ItemMaster = (SELECT ID FROM CBO_ItemMaster WHERE Code = '" + itemcode + "' AND Org = '" + PDContext.Current.OrgID + "')) " +
-                    " AS DescFlexField_PrivateDescSeg2," +
-                    " (SELECT DescFlexField_PrivateDescSeg15 FROM CBO_ItemMaster WHERE ID = a.ItemMaster) AS PrivateDescSeg15," +
-                    " (SELECT  sum((StoreQty - ResvStQty - ResvOccupyStQty))  AS 库存可用量 FROM InvTrans_WhQoh WHERE Wh = a.SupplyWh and" +
-                    "  ItemInfo_ItemID = a.ItemMaster AND  Org = '" + PDContext.Current.OrgID + "') AS KCKYL," +
-                    " (SELECT CostUOM FROM CBO_ItemMaster WHERE ID=a.ItemMaster) AS CostUOM" +
-                    " FROM MO_MOPickList a INNER JOIN MO_MO b ON a.MO = b.ID WHERE b.DocNo = '" + docno + "'" +
-                    " AND b.ItemMaster = (SELECT ID FROM CBO_ItemMaster WHERE Code = '" + itemcode + "' AND Org = '" + PDContext.Current.OrgID + "')";
+                string sqlForMoDocNoID = "select" +
+                    " b.ItemMaster," +
+                    " b.SupplyWh," +
+                    " a.DescFlexField_PrivateDescSeg2," +
+                    " (select DescFlexField_PrivateDescSeg15 from CBO_ItemMaster where ID = b.ItemMaster) as PrivateDescSeg15" +
+                    " from MO_MO a inner" +
+                    " join MO_MOPickList b" +
+                    " on a.ID = b.MO" +
+                    " where a.DocNo = '" + docno + "'" +
+                    " and a.ItemMaster =" +
+                    " (select ID from CBO_ItemMaster where Code = '" + itemcode + "' and Org='" + PDContext.Current.OrgID + "')";
                 DataAccessor.RunSQL(DataAccessor.GetConn(), sqlForMoDocNoID, null, out dataSet);
                 dataTable = dataSet.Tables[0];
                 if (dataTable != null && dataTable.Rows.Count > 0)
@@ -99,15 +96,8 @@ namespace YY.U9.Cust.LI.UIPlugIn
                         {
                             this._part.Model.ErrorMessage.Message = "单号" + docno + "下备料" + itemcode + "供应地点为空";
                         }
-                        moItem.ActualReqQty = decimal.Parse(dataTable.Rows[i]["ActualReqQty"] == null ? "" : dataTable.Rows[i]["ActualReqQty"].ToString());
                         moItem.PrivateDescSeg15 = dataTable.Rows[i]["PrivateDescSeg15"].ToString();//dataTable.Rows[i]["PrivateDescSeg15"].ToString();//"1"
-                        moItem.CostUOM = long.Parse(dataTable.Rows[i]["CostUOM"].ToString());
-                        moItem.SupplyWhCode = dataTable.Rows[i]["SupplyWhCode"].ToString();
-                        moItem.StoreUOM = dataTable.Rows[i]["StoreUOM"].ToString();
-                        moItem.IssuedQty = decimal.Parse(dataTable.Rows[i]["IssuedQty"] == null ? "" : dataTable.Rows[i]["IssuedQty"].ToString());//调入数量
-                        moItem.KCKYL = dataTable.Rows[i]["KCKYL"].ToString();//库存可用量
-                        moItem.Round_Precision = dataTable.Rows[i]["Round_Precision"].ToString();//库存精度
-                        moItem.DescFlexField_PrivateDescSeg2 = dataTable.Rows[i]["DescFlexField_PrivateDescSeg2"].ToString();//是否调拨
+                        moItem.DescFlexField_PrivateDescSeg2 = dataTable.Rows[i]["DescFlexField_PrivateDescSeg2"].ToString();
                         moItem.SetableStatus = SetableStatus;
                         Mmos.Add(moItem);
                     }
@@ -123,146 +113,157 @@ namespace YY.U9.Cust.LI.UIPlugIn
             foreach (var itemc in whcount)
             {
 
-                List<MoItem> mos = Mmos.Where(x => x.CompleteWhCode == long.Parse(itemc.ToString())).ToList();
-                #region 调入单
-                UFIDA.U9.ISV.TransferInISV.Proxy.CommonCreateTransferInSVProxy transferInSVProxy = new UFIDA.U9.ISV.TransferInISV.Proxy.CommonCreateTransferInSVProxy();
-
-                UFIDA.U9.ISV.TransferInISV.IC_TransferInDTOData[] Boms;
-                List<UFIDA.U9.ISV.TransferInISV.IC_TransferInDTOData> listBom = new List<UFIDA.U9.ISV.TransferInISV.IC_TransferInDTOData>();
-                List<UFIDA.U9.ISV.TransferInISV.IC_TransInLineDTOData> listBomLine = new List<UFIDA.U9.ISV.TransferInISV.IC_TransInLineDTOData>();
-
-                //头
-                UFIDA.U9.ISV.TransferInISV.IC_TransferInDTOData Bom = new UFIDA.U9.ISV.TransferInISV.IC_TransferInDTOData();
-                Bom.TransInDocType = new UFIDA.U9.CBO.Pub.Controller.CommonArchiveDataDTOData();
-                Bom.TransInDocType.Code = "TransIn010";//单据类型
-                Bom.TransferType = 0;//调入类型 0为一步式 1为两步式
-                Bom.Org = new UFIDA.U9.CBO.Pub.Controller.CommonArchiveDataDTOData();
-                Bom.Org.ID = long.Parse(PDContext.Current.OrgID);
-                Bom.BusinessDate = new DateTime();
-                //Bom.Memo=//备注
-                Bom.TransInLines = new List<UFIDA.U9.ISV.TransferInISV.IC_TransInLineDTOData>();
-                Bom.SysState = ObjectState.Inserted;
-
-                //做一次数据筛选
-                List<MoItem> nmos = ForLoopRemove(mos);
-
-
-
-                //设置全局变量Q
-                decimal quanjuQ = 0;
-
-                //行
-                foreach (var item in nmos)
+                if (itemc.ToString() == "1002302240000602" || itemc.ToString() == "1002302240000591")
                 {
-                    decimal iqty = decimal.Parse(getActualReqQty(item.ItemMasterCode, item.MoID));
-                    //decimal DrQty = 0;
 
-                    string kuc = "0";
-                    if (!string.IsNullOrEmpty(item.ItemMasterCode.ToString()) && !string.IsNullOrEmpty(item.CompleteWhCode.ToString()))
-                    {
-                        kuc = getkc(item.ItemMasterCode, item.CompleteWhCode);
-                    }
-                    //kuc
-                    decimal see = decimal.Parse(kuc);
-                    // item.IssuedQty = iqty;
-                    decimal DrQty = iqty - decimal.Parse(kuc);
-                    #region 原来的
-                    //if (decimal.Parse(item.KCKYL) != item.IssuedQty)//生产订单备料对应料品的总数和库存可用量不等
-                    //{
-                    //    DrQty = item.IssuedQty - decimal.Parse(item.KCKYL);
-                    //}
-                    //else
-                    //{
-                    //    DrQty = Math.Round(item.IssuedQty, int.Parse(item.Round_Precision));
-                    //    //DrQty = decimal.Parse(item.IssuedQty);
-                    //}
-                    //quanjuQ = DrQty + quanjuQ;
-                    //if (string.IsNullOrEmpty(item.DescFlexField_PrivateDescSeg2) && quanjuQ <= DrQty)
-                    //{
-                    //    string see = "";
-                    //}
-                    //if (item.PrivateDescSeg15 == "1" && DrQty > 0 && item.SetableStatus == "2" && DQTY > 0 && quanjuQ <= DrQty && string.IsNullOrEmpty(item.DescFlexField_PrivateDescSeg2))
 
-                    #endregion
-                    if (item.PrivateDescSeg15 == "1" && DrQty > 0 && item.SetableStatus == "2")
+                    List<MoItem> mos = Mmos.Where(x => x.CompleteWhCode == long.Parse(itemc.ToString())).ToList();
+                    #region 调入单
+                    UFIDA.U9.ISV.TransferInISV.Proxy.CommonCreateTransferInSVProxy transferInSVProxy = new UFIDA.U9.ISV.TransferInISV.Proxy.CommonCreateTransferInSVProxy();
+
+                    UFIDA.U9.ISV.TransferInISV.IC_TransferInDTOData[] Boms;
+                    List<UFIDA.U9.ISV.TransferInISV.IC_TransferInDTOData> listBom = new List<UFIDA.U9.ISV.TransferInISV.IC_TransferInDTOData>();
+                    List<UFIDA.U9.ISV.TransferInISV.IC_TransInLineDTOData> listBomLine = new List<UFIDA.U9.ISV.TransferInISV.IC_TransInLineDTOData>();
+
+                    //头
+                    UFIDA.U9.ISV.TransferInISV.IC_TransferInDTOData Bom = new UFIDA.U9.ISV.TransferInISV.IC_TransferInDTOData();
+                    Bom.TransInDocType = new UFIDA.U9.CBO.Pub.Controller.CommonArchiveDataDTOData();
+                    Bom.TransInDocType.Code = "TransIn010";//单据类型
+                    Bom.TransferType = 0;//调入类型 0为一步式 1为两步式
+                    Bom.Org = new UFIDA.U9.CBO.Pub.Controller.CommonArchiveDataDTOData();
+                    Bom.Org.ID = long.Parse(PDContext.Current.OrgID);
+                    Bom.BusinessDate = new DateTime();
+                    //Bom.Memo=//备注
+                    Bom.TransInLines = new List<UFIDA.U9.ISV.TransferInISV.IC_TransInLineDTOData>();
+                    Bom.SysState = ObjectState.Inserted;
+
+                    //做一次数据筛选
+                    List<MoItem> nmos = ForLoopRemove(mos);
+
+                    //设置全局变量Q
+                    decimal quanjuQ = 0;
+
+                    //行
+                    foreach (var item in nmos)
                     {
 
-                        UFIDA.U9.ISV.TransferInISV.IC_TransInLineDTOData Bom_line = new UFIDA.U9.ISV.TransferInISV.IC_TransInLineDTOData();
-                        Bom_line.TransInOwnerOrg = new UFIDA.U9.CBO.Pub.Controller.CommonArchiveDataDTOData();
-                        Bom_line.TransInOwnerOrg.ID = long.Parse(PDContext.Current.OrgID);
-                        Bom_line.TransInWh = new UFIDA.U9.CBO.Pub.Controller.CommonArchiveDataDTOData();
-                        Bom_line.TransInWh.ID = item.CompleteWhCode;//调入存储地点
-                        Bom_line.StoreUOMQty = DrQty;//调入数量
-                        Bom_line.CostUOMQty = DrQty;//成本数量
-                        Bom_line.CostUOM = new CommonArchiveDataDTOData();
+                        string ssee = item.ItemMasterCode.ToString();
+                        string ssee2 = item.CompleteWhCode.ToString();
 
-                        Bom_line.CostUOM.ID = item.CostUOM;
+                        string docno = item.MoID.ToString();//生产订单的单号
 
-                        Bom_line.StoreUOM = new CommonArchiveDataDTOData();
 
-                        //Bom_line.StoreUOM.ID = long.Parse(item.StoreUOM);
+                        decimal iqty = decimal.Parse(getActualReqQty(item.ItemMasterCode, ssee2, docno));
+                        //decimal DrQty = 0;
 
-                        Bom_line.ItemInfo = new ItemInfoData();
+                        string kuc = "0";
+                        if (!string.IsNullOrEmpty(item.ItemMasterCode.ToString()) && !string.IsNullOrEmpty(item.CompleteWhCode.ToString()))
+                        {
+                            kuc = getkc(item.ItemMasterCode.ToString(), item.CompleteWhCode.ToString());
+                        }
+                        //kuc
+                        decimal see = decimal.Parse(kuc);
+                        // item.IssuedQty = iqty;
+                        decimal DrQty = iqty - decimal.Parse(kuc);
+                        #region 原来的
+                        //if (decimal.Parse(item.KCKYL) != item.IssuedQty)//生产订单备料对应料品的总数和库存可用量不等
+                        //{
+                        //    DrQty = item.IssuedQty - decimal.Parse(item.KCKYL);
+                        //}
+                        //else
+                        //{
+                        //    DrQty = Math.Round(item.IssuedQty, int.Parse(item.Round_Precision));
+                        //    //DrQty = decimal.Parse(item.IssuedQty);
+                        //}
+                        //quanjuQ = DrQty + quanjuQ;
+                        //if (string.IsNullOrEmpty(item.DescFlexField_PrivateDescSeg2) && quanjuQ <= DrQty)
+                        //{
+                        //    string see = "";
+                        //}
+                        //if (item.PrivateDescSeg15 == "1" && DrQty > 0 && item.SetableStatus == "2" && DQTY > 0 && quanjuQ <= DrQty && string.IsNullOrEmpty(item.DescFlexField_PrivateDescSeg2))
 
-                        Bom_line.ItemInfo.ItemID = item.ItemMasterCode;
+                        #endregion
+                        if (item.PrivateDescSeg15 == "1" && DrQty > 0 && item.SetableStatus == "2")
+                        {
 
-                        Bom_line.SysState = ObjectState.Inserted;
+                            UFIDA.U9.ISV.TransferInISV.IC_TransInLineDTOData Bom_line = new UFIDA.U9.ISV.TransferInISV.IC_TransInLineDTOData();
+                            Bom_line.TransInOwnerOrg = new UFIDA.U9.CBO.Pub.Controller.CommonArchiveDataDTOData();
+                            Bom_line.TransInOwnerOrg.ID = long.Parse(PDContext.Current.OrgID);
+                            Bom_line.TransInWh = new UFIDA.U9.CBO.Pub.Controller.CommonArchiveDataDTOData();
+                            Bom_line.TransInWh.ID = item.CompleteWhCode;//调入存储地点
+                            Bom_line.StoreUOMQty = DrQty;//调入数量
+                            Bom_line.CostUOMQty = DrQty;//成本数量
+                            Bom_line.CostUOM = new CommonArchiveDataDTOData();
 
-                        Bom_line.DescFlexSegments = new UFIDA.U9.Base.FlexField.DescFlexField.DescFlexSegmentsData();
-                        Bom_line.DescFlexSegments.PrivateDescSeg1 = item.MoID;
+                            Bom_line.CostUOM.ID = item.CostUOM;
 
-                        Bom_line.TransInSubLines = new List<UFIDA.U9.ISV.TransferInISV.IC_TransInSubLineDTOData>();
-                        //子行
+                            Bom_line.StoreUOM = new CommonArchiveDataDTOData();
 
-                        List<UFIDA.U9.ISV.TransferInISV.IC_TransInSubLineDTOData> listBomSubline = new List<UFIDA.U9.ISV.TransferInISV.IC_TransInSubLineDTOData>();
-                        UFIDA.U9.ISV.TransferInISV.IC_TransInSubLineDTOData Bom_subLine = new UFIDA.U9.ISV.TransferInISV.IC_TransInSubLineDTOData();
+                            //Bom_line.StoreUOM.ID = long.Parse(item.StoreUOM);
 
-                        Bom_subLine.TransOutOrg = new UFIDA.U9.CBO.Pub.Controller.CommonArchiveDataDTOData();
+                            Bom_line.ItemInfo = new ItemInfoData();
 
-                        Bom_subLine.TransOutWh = new UFIDA.U9.CBO.Pub.Controller.CommonArchiveDataDTOData();
-                        Bom_subLine.TransOutWh.Code = "01";
+                            Bom_line.ItemInfo.ItemID = item.ItemMasterCode;
 
-                        Bom_subLine.StoreUOMQty = DrQty;
+                            Bom_line.SysState = ObjectState.Inserted;
 
-                        Bom_subLine.StoreUOM = new CommonArchiveDataDTOData();
+                            Bom_line.DescFlexSegments = new UFIDA.U9.Base.FlexField.DescFlexField.DescFlexSegmentsData();
+                            Bom_line.DescFlexSegments.PrivateDescSeg1 = item.MoID;
 
-                        //Bom_subLine.StoreUOM.ID = long.Parse(item.StoreUOM);
+                            Bom_line.TransInSubLines = new List<UFIDA.U9.ISV.TransferInISV.IC_TransInSubLineDTOData>();
+                            //子行
 
-                        listBomSubline.Add(Bom_subLine);//加载子行
-                        Bom_line.TransInSubLines = listBomSubline;
-                        listBomLine.Add(Bom_line);//加载行 
+                            List<UFIDA.U9.ISV.TransferInISV.IC_TransInSubLineDTOData> listBomSubline = new List<UFIDA.U9.ISV.TransferInISV.IC_TransInSubLineDTOData>();
+                            UFIDA.U9.ISV.TransferInISV.IC_TransInSubLineDTOData Bom_subLine = new UFIDA.U9.ISV.TransferInISV.IC_TransInSubLineDTOData();
+
+                            Bom_subLine.TransOutOrg = new UFIDA.U9.CBO.Pub.Controller.CommonArchiveDataDTOData();
+
+                            Bom_subLine.TransOutWh = new UFIDA.U9.CBO.Pub.Controller.CommonArchiveDataDTOData();
+                            Bom_subLine.TransOutWh.Code = "01";
+
+                            Bom_subLine.StoreUOMQty = DrQty;
+
+                            Bom_subLine.StoreUOM = new CommonArchiveDataDTOData();
+
+                            //Bom_subLine.StoreUOM.ID = long.Parse(item.StoreUOM);
+
+                            listBomSubline.Add(Bom_subLine);//加载子行
+                            Bom_line.TransInSubLines = listBomSubline;
+                            listBomLine.Add(Bom_line);//加载行 
+                        }
+
                     }
+                    Bom.TransInLines = listBomLine;
+                    listBom.Add(Bom);
+                    transferInSVProxy.TransferInDTOList = listBom;
 
-                }
-                Bom.TransInLines = listBomLine;
-                listBom.Add(Bom);
-                transferInSVProxy.TransferInDTOList = listBom;
-
-                if (Bom.TransInLines.Count == 0)//单据行上面一个都没有
-                {
-                    return;
-                }
-                string seee11 = "";
-                try
-                {
-                    List<CommonArchiveDataDTOData> see = transferInSVProxy.Do();
-
-                    seee11 = DateTime.Now.ToString("F") + see[0].Code.ToString();
-
-                    this._part.Action.CurrentPart.ShowWindowStatus("成功,调入单号：" + seee11);
-                    #endregion
-                    foreach (var item in mos)
+                    if (Bom.TransInLines.Count == 0)//单据行上面一个都没有
                     {
-                        string sqlupdate = "UPDATE MO_MO SET DescFlexField_PrivateDescSeg2 = '" + seee11 + "' WHERE DocNo = '" + item.MoID + "'";
-                        DataAccessor.RunSQL(DataAccessor.GetConn(), sqlupdate, null, out dataSet);
+                        this._part.Model.ErrorMessage.Message = "检查生产订单是否被使用，或者料品是否能被调用，或者是否齐套状态为齐";
+
+                        return;
+                    }
+                    string seee11 = "";
+                    try
+                    {
+                        List<CommonArchiveDataDTOData> see = transferInSVProxy.Do();
+
+                        seee11 = DateTime.Now.ToString("F") + see[0].Code.ToString();
+
+                        this._part.Action.CurrentPart.ShowWindowStatus("成功,调入单号：" + seee11);
+                        #endregion
+                        foreach (var item in mos)
+                        {
+                            string sqlupdate = "UPDATE MO_MO SET DescFlexField_PrivateDescSeg2 = '" + seee11 + "' WHERE DocNo = '" + item.MoID + "'";
+                            DataAccessor.RunSQL(DataAccessor.GetConn(), sqlupdate, null, out dataSet);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        this._part.Model.ErrorMessage.Message = "检查生产订单是否被使用，或者料品是否能被调用，或者是否齐套状态为齐" + ex.ToString();
+                        return;
                     }
                 }
-                catch (Exception ex)
-                {
-                    this._part.Model.ErrorMessage.Message = "检查生产订单是否被使用，或者料品是否能被调用，或者是否齐套状态为齐" + ex;
-                    return;
-                }
-
 
 
             }
@@ -277,7 +278,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
                 //每个元素都与其他这个元素前面的比较，如果前面没有，则添加，否则不添加
                 for (int z = 0; z < i; z++)
                 {
-                    if (items[z].ItemMasterCode == items[i].ItemMasterCode && items[z].MoID == items[i].MoID)
+                    if (items[z].ItemMasterCode == items[i].ItemMasterCode)
                     {
                         flag = true;
                         break;
@@ -319,7 +320,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
 
 
 
-        public string getkc(long item, long whid)
+        public string getkc(string item, string whid)
         {
             string ck = "0";
             string sqlForCPRK = "select  A5.[Name] as [Wh_Name], A.[ItemInfo_ItemCode] as [Item_ItemCode]," +
@@ -346,13 +347,16 @@ namespace YY.U9.Cust.LI.UIPlugIn
             {
                 ck = dataTable.Rows[0]["CanUseQty"] == null ? "0" : dataTable.Rows[0]["CanUseQty"].ToString();
             }
-
+            if (string.IsNullOrEmpty(ck))
+            {
+                ck = "0";
+            }
             return ck;
         }
 
 
 
-        public string getActualReqQty(long item, string moid)
+        public string getActualReqQty(long item, string moid, string docno)
         {
             string ck = "0";
             string sqlForCPRK = "select sum(ActualReqQty) as ActualReqQty" +
@@ -362,7 +366,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
                 " where b.ItemMaster = '" + item.ToString() + "'" +
                 "and a.TotalRcvQty = '0'" +
                 "and(select DescFlexField_PrivateDescSeg15 from CBO_ItemMaster where ID = b.ItemMaster) = '1'" +
-                "and a.DocState != '3' and a.ID='" + moid + "' ";
+                "and a.DocState != '3' and b.SupplyWh='" + moid + "'and a.DocNo='" + docno + "' ";
             DataTable dataTable = new DataTable();
             DataSet dataSet = new DataSet();
             //sqlForCPRK 成品入库
@@ -372,13 +376,14 @@ namespace YY.U9.Cust.LI.UIPlugIn
             {
                 ck = dataTable.Rows[0]["ActualReqQty"] == null ? "0" : dataTable.Rows[0]["ActualReqQty"].ToString();
             }
+
             if (string.IsNullOrEmpty(ck))
             {
                 ck = "0";
             }
+
             return ck;
         }
 
     }
 }
-

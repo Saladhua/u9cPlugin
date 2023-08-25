@@ -306,6 +306,7 @@
     <Compile Include="HJDZ\ShipLinesUpdatingSubscriber.cs" />
     <Compile Include="JUNHUA\MiscShipmentInsertedSubscriber.cs" />
     <Compile Include="JUNHUA\MiscShipmentUpdatingSubscriber.cs" />
+    <Compile Include="KAIZHI\ASNLineInsertedSubscriber.cs" />
     <Compile Include="KAIZHI\PMPOLineInsertedSubscriber.cs" />
     <Compile Include="KAIZHI\SupplierUpDateSubscriber.cs" />
     <Compile Include="TokenManager.cs" />
@@ -317,6 +318,9 @@
     <Compile Include="HJDZ\TransferFormUpdatingSubscriber.cs" />
     <Compile Include="TransferInUpdatingSubscriber.cs" />
     <Compile Include="TransferInInsertedSubscriber.cs" />
+    <Compile Include="YouJian\ApprovalMOSubscriber.cs" />
+    <Compile Include="YouJian\ApprovalRecSubscriber.cs" />
+    <Compile Include="YouJian\ApprovalRMASubscriber.cs" />
     <Compile Include="YouKE\MOSimuDocInsertedSubscriber.cs" />
   </ItemGroup>
   <ItemGroup>

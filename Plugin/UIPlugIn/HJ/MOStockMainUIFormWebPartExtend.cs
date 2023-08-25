@@ -8,6 +8,7 @@ using UFIDA.U9.MFG.MO.DiscreteMOBListUIModel;
 using UFIDA.U9.UI.PDHelper;
 using UFSoft.UBF.UI.ControlModel;
 using UFSoft.UBF.UI.Custom;
+using UFSoft.UBF.UI.Engine.Builder;
 using UFSoft.UBF.UI.IView;
 using UFSoft.UBF.UI.MD.Runtime;
 using UFSoft.UBF.UI.WebControlAdapter;
@@ -100,23 +101,6 @@ namespace YY.U9.Cust.LI.UIPlugIn
                     dt.Rows.Add(dr);
                 }
                 #region 原来的
-                //foreach (IUIRecord record in _part.Model.MOPickList.SelectRecords)
-                //{
-                //    DataRow dr = dt.NewRow();
-                //    dr["MOPickDocNO"] = docNo;
-                //    dr["ItemInfo_ID"] = record["ItemMaster"];
-                //    dr["ItemInfo_Code"] = record["ItemMaster_Code"];
-                //    dr["ItemInfo_Name"] = record["ItemMaster_Name"];
-
-                //    dr["Project_ID"] = record["Project"];
-                //    dr["Project_Name"] = record["Project_Name"];
-                //    dr["Project_Code"] = record["Project_Code"]; 
-
-                //    dr["BOMReqQty"] = record["BOMReqQty"];   
-
-                //    dt.Rows.Add(dr);
-                //}
-
                 #endregion
                 this._part.CurrentSessionState["ResultMo"] = dt;
             }

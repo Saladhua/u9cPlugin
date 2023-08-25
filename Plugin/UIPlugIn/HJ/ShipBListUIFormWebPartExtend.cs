@@ -61,7 +61,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
             //加入Card容器
             IUFCard card = (IUFCard)_part.GetUFControlByName(part.TopLevelContainer, "Card0");
             card.Controls.Add(BtnSettle);
-            CommonFunction.Layout(card, BtnSettle, 12, 0);
+            CommonFunction.Layout(card, BtnSettle, 11, 0);
         }
 
         [Obsolete]
@@ -179,6 +179,8 @@ namespace YY.U9.Cust.LI.UIPlugIn
                         d13 = bd13[0].ToString();
                         var bd14 = shipItems.Where(x => x.ItemCode == item.ItemCode && x.LotCode == item.LotCode).Select(x => x.FPKYL).Distinct().ToList();
                         d14 = bd14[0].ToString();
+                        var bd19 = shipItems.Where(x => x.ItemCode == item.ItemCode && x.LotCode == item.LotCode).Select(x => x.YPYL).Distinct().ToList();
+                        d19 = bd19[0].ToString();
                     }
 
                     #region 原始数据
@@ -193,15 +195,22 @@ namespace YY.U9.Cust.LI.UIPlugIn
                     string updated = "";
                     if (!string.IsNullOrEmpty(item.LotCode))
                     {
-                        updated = "UPDATE SM_ShipLine SET DescFlexField_PrivateDescSeg12 = '" + d13 + "', DescFlexField_PrivateDescSeg13 = '" + d12 + "', DescFlexField_PrivateDescSeg14 = '" + d14 + "'" +
-                        " WHERE ItemInfo_ItemCode = '" + item.ItemCode + "' AND LotInfo_LotMaster = '" + item.LotCode + "' " +
-                        " AND Ship = (select ID FROM SM_Ship WHERE DocNo = '" + item.DocNo + "')";
+                        updated = "UPDATE SM_ShipLine" +
+                            " SET DescFlexField_PrivateDescSeg12 = '" + d13 + "', " +
+                            " DescFlexField_PrivateDescSeg13 = '" + d12 + "'," +
+                            " DescFlexField_PrivateDescSeg19 = '" + d19 + "'," +
+                            " DescFlexField_PrivateDescSeg14 = '" + d14 + "'" +
+                            " WHERE ItemInfo_ItemCode = '" + item.ItemCode + "' AND LotInfo_LotMaster = '" + item.LotCode + "' " +
+                            " AND Ship = (select ID FROM SM_Ship WHERE DocNo = '" + item.DocNo + "')";
                     }
                     else
                     {
-                        updated = "UPDATE SM_ShipLine SET DescFlexField_PrivateDescSeg12 = '" + d13 + "', DescFlexField_PrivateDescSeg13 = '" + d12 + "', DescFlexField_PrivateDescSeg14 = '" + d14 + "'" +
-                        " WHERE ItemInfo_ItemCode = '" + item.ItemCode + "'" +
-                        " AND Ship = (select ID FROM SM_Ship WHERE DocNo = '" + item.DocNo + "')";
+                        updated = "UPDATE SM_ShipLine SET DescFlexField_PrivateDescSeg12 = '" + d13 + "'," +
+                            " DescFlexField_PrivateDescSeg13 = '" + d12 + "'," +
+                            " DescFlexField_PrivateDescSeg19 = '" + d19 + "'," +
+                            " DescFlexField_PrivateDescSeg14 = '" + d14 + "'" +
+                            " WHERE ItemInfo_ItemCode = '" + item.ItemCode + "'" +
+                            " AND Ship = (select ID FROM SM_Ship WHERE DocNo = '" + item.DocNo + "')";
                     }
                     DataAccessor.RunSQL(DataAccessor.GetConn(), updated, null, out dataSet);
                 }
@@ -212,6 +221,8 @@ namespace YY.U9.Cust.LI.UIPlugIn
                 DataAccessor.RunSQL(DataAccessor.GetConn(), updated_P_d13, null, out dataSet);
                 string updated_P_d14 = "exec P_SyncFieldCombineName @FullName = 'UFIDA.U9.SM.Ship.ShipLine',@DescFieldName = 'DescFlexField_PrivateDescSeg14'";
                 DataAccessor.RunSQL(DataAccessor.GetConn(), updated_P_d14, null, out dataSet);
+                string updated_P_d19 = "exec P_SyncFieldCombineName @FullName = 'UFIDA.U9.SM.Ship.ShipLine',@DescFieldName = 'DescFlexField_PrivateDescSeg19'";
+                DataAccessor.RunSQL(DataAccessor.GetConn(), updated_P_d19, null, out dataSet);
                 #endregion
 
                 this._part.Action.CurrentPart.ShowWindowStatus("成功");

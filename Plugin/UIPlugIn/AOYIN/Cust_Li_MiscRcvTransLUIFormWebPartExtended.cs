@@ -101,23 +101,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
                         }
                     }
                     #region 四舍五入
-                    //入库数量就是完工报告的完工数量--完工数量要求和
-                    //SELECT sum(a.RcvQtyByProductUOM) RcvQtyByProductUOM FROM MO_CompleteRpt a 
-                    //INNER JOIN MO_MO b ON a.MO = b.ID
-                    //WHERE b.DocNo = 'SZ4813222101'
-                    //string sqlForRBPUOM = "SELECT sum(a.RcvQtyByProductUOM) RcvQtyByProductUOM FROM MO_CompleteRpt a " +
-                    //" INNER JOIN MO_MO b ON a.MO = b.ID WHERE b.DocNo = '" + moDocNo + "'";
-                    //DataAccessor.RunSQL(DataAccessor.GetConn(), sqlForRBPUOM, null, out dataSet);
-                    //dataTable = dataSet.Tables[0];
-                    //if (dataTable != null && dataTable.Rows.Count > 0)
-                    //{
-                    //    rcvQtyByProductUom = dataTable.Rows[0]["RcvQtyByProductUOM"].ToString();
-                    //}
-                    //2.取料品上面的精度
-                    //料品id
-                    //SELECT Round_Precision FROM CBO_ItemMaster b
-                    //INNER JOIN Base_UOM a ON a.ID = b.InventoryUOM
-                    //WHERE b.Code = '111'
+
                     string sqlForPre = "SELECT Round_Precision FROM CBO_ItemMaster b " +
                         " INNER JOIN Base_UOM a ON a.ID = b.InventoryUOM WHERE b.Code = '" + item["ItemInfo_ItemCode"].ToString() + "'";
                     DataAccessor.RunSQL(DataAccessor.GetConn(), sqlForPre, null, out dataSet);
@@ -157,13 +141,6 @@ namespace YY.U9.Cust.LI.UIPlugIn
                     dataTable = dataSet.Tables[0];
                     if (dataTable != null && dataTable.Rows.Count > 0)
                     {
-                        //issuedQty = dataTable.Rows[0]["IssuedQty"].ToString();
-                        //bOMReqQty = dataTable.Rows[0]["QPA"].ToString();
-                        //rcvQtyByProductUom = dataTable.Rows[0]["TotalRcvQty"].ToString();
-                        //specialIssuedQty = dataTable.Rows[0]["SpecialIssuedQty"].ToString();
-                        //dprivateDescSeg3 = dataTable.Rows[0]["DescFlexField_PrivateDescSeg3"].ToString() == "" ? "0" : dataTable.Rows[0]["DescFlexField_PrivateDescSeg3"].ToString();
-                        //dprivateDescSeg4 = dataTable.Rows[0]["DescFlexField_PrivateDescSeg4"].ToString() == "" ? "0" : dataTable.Rows[0]["DescFlexField_PrivateDescSeg4"].ToString();
-                        //dprivateDescSeg5 = dataTable.Rows[0]["DescFlexField_PrivateDescSeg5"].ToString() == "" ? "0" : dataTable.Rows[0]["DescFlexField_PrivateDescSeg5"].ToString();
                         issuedQty = dataTable.Rows[0]["IssuedQty"].ToString() == "" ? "0" : dataTable.Rows[0]["IssuedQty"].ToString();
                         bOMReqQty = dataTable.Rows[0]["QPA"].ToString() == "" ? "0" : dataTable.Rows[0]["QPA"].ToString();
                         rcvQtyByProductUom = dataTable.Rows[0]["TotalRcvQty"].ToString() == "" ? "0" : dataTable.Rows[0]["TotalRcvQty"].ToString();
@@ -174,11 +151,6 @@ namespace YY.U9.Cust.LI.UIPlugIn
 
 
                     }
-                    //double see1 = Convert.ToDouble(issuedQty);
-                    //double see2 = Convert.ToDouble(dprivateDescSeg3);
-                    //double see3 = Convert.ToDouble(dprivateDescSeg4);
-                    //double see4 = Convert.ToDouble(dprivateDescSeg5);
-                    //rcvQtyByProductUom = "50";bOMReqQty = "1";
                     double r = double.Parse(rcvQtyByProductUom) * double.Parse(bOMReqQty);
                     //double rcvPer = Math.Round(r, Convert.ToInt32(roundPrecision));
                     //差异结果

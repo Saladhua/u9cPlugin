@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Reflection;
 using UFIDA.U9.CBO.Pub.Controller;
 using UFIDA.U9.CBO.SCM.Item;
 using UFIDA.U9.MFG.MO.StartAnalysisUIModel;
+using UFIDA.U9.MO.MO;
+using UFIDA.U9.MO.MOBP.ManufactureSimuBP;
 using UFIDA.U9.UI.PDHelper;
 using UFSoft.UBF.PL.Engine;
 using UFSoft.UBF.UI.ControlModel;
@@ -78,7 +81,8 @@ namespace YY.U9.Cust.LI.UIPlugIn
                     " on a.ID = b.MO" +
                     " where a.DocNo = '" + docno + "'" +
                     " and a.ItemMaster =" +
-                    " (select ID from CBO_ItemMaster where Code = '" + itemcode + "' and Org='" + PDContext.Current.OrgID + "')";
+                    " (select ID from CBO_ItemMaster where Code = '" + itemcode + "' and Org='" + PDContext.Current.OrgID + "')" +
+                    " and a.DescFlexField_PrivateDescSeg2 =''";
                 DataAccessor.RunSQL(DataAccessor.GetConn(), sqlForMoDocNoID, null, out dataSet);
                 dataTable = dataSet.Tables[0];
                 if (dataTable != null && dataTable.Rows.Count > 0)
@@ -143,6 +147,18 @@ namespace YY.U9.Cust.LI.UIPlugIn
                     //设置全局变量Q
                     decimal quanjuQ = 0;
 
+                    List<MoItem> nnmos = new List<MoItem>();
+                    foreach (var item in nmos)
+                    {
+                        MoItem moItem = new MoItem();
+                        string ssee = item.ItemMasterCode.ToString();
+                        string ssee2 = item.CompleteWhCode.ToString();
+                        string docno = item.MoID.ToString();//生产订单的单号
+                        moItem.MoID = item.MoID;//生产订单的单号
+                        moItem.ActualReqQty = decimal.Parse(getActualReqQty(item.ItemMasterCode, ssee2, docno));
+                        moItem.ItemMasterCode = item.ItemMasterCode;
+                        nnmos.Add(moItem);
+                    }
                     //行
                     foreach (var item in nmos)
                     {
@@ -153,8 +169,11 @@ namespace YY.U9.Cust.LI.UIPlugIn
                         string docno = item.MoID.ToString();//生产订单的单号
 
 
-                        decimal iqty = decimal.Parse(getActualReqQty(item.ItemMasterCode, ssee2, docno));
+                        //decimal iqty = decimal.Parse(getActualReqQty(item.ItemMasterCode, ssee2, docno));
+
                         //decimal DrQty = 0;
+
+                        decimal iqty = nnmos.Where(x => x.ItemMasterCode == item.ItemMasterCode).Sum(x => x.ActualReqQty);
 
                         string kuc = "0";
                         if (!string.IsNullOrEmpty(item.ItemMasterCode.ToString()) && !string.IsNullOrEmpty(item.CompleteWhCode.ToString()))
@@ -265,6 +284,8 @@ namespace YY.U9.Cust.LI.UIPlugIn
                     }
                 }
 
+            
+
 
             }
         }
@@ -355,7 +376,18 @@ namespace YY.U9.Cust.LI.UIPlugIn
         }
 
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="moid"></param>
+        /// <param name="docno"></param>
+        /// <returns></returns>
+        /// 原来的例子
+        //select sum(ActualReqQty) as ActualReqQty from MO_MO a
+        //inner join MO_MOPickList b on a.ID = b.MO where b.ItemMaster = '1002304250315751'and a.TotalRcvQty = '0'
+        //and(select DescFlexField_PrivateDescSeg15 from CBO_ItemMaster where ID = b.ItemMaster) = '1'and a.DocState != '3' 
+        //and b.SupplyWh= '1002302240000591'and a.DocNo= '256601'
         public string getActualReqQty(long item, string moid, string docno)
         {
             string ck = "0";
@@ -364,9 +396,8 @@ namespace YY.U9.Cust.LI.UIPlugIn
                 " join MO_MOPickList b" +
                 " on a.ID = b.MO" +
                 " where b.ItemMaster = '" + item.ToString() + "'" +
-                "and a.TotalRcvQty = '0'" +
                 "and(select DescFlexField_PrivateDescSeg15 from CBO_ItemMaster where ID = b.ItemMaster) = '1'" +
-                "and a.DocState != '3' and b.SupplyWh='" + moid + "'and a.DocNo='" + docno + "' ";
+                "and a.DocState != '3' and b.SupplyWh='" + moid + "'";
             DataTable dataTable = new DataTable();
             DataSet dataSet = new DataSet();
             //sqlForCPRK 成品入库

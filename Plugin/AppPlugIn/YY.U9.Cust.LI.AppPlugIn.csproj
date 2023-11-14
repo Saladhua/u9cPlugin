@@ -272,6 +272,10 @@
     <Reference Include="UFIDA.U9.SM.SMSV.Deploy">
       <HintPath>..\..\..\..\..\yonyou\UBFCE\U9.VOB.Product.Component\App\UFIDA.U9.SM.SMSV.Deploy.dll</HintPath>
     </Reference>
+    <Reference Include="UFIDA.U9.SPL.SPLBE, Version=25.5401.37597.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.SPL.SPLBE.dll</HintPath>
+    </Reference>
     <Reference Include="UFIDA.UBF.MD.Entity, Version=25.5401.30981.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>D:\yonyou\U9V60\Portal\ApplicationServer\Libs\UFIDA.UBF.MD.Entity.dll</HintPath>
@@ -301,6 +305,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApiHelper.cs" />
+    <Compile Include="Cl%28创联%29\CLSalePlanInsertedSubscrilber.cs" />
+    <Compile Include="Cl%28创联%29\CLSOInsertedSubscrilber.cs" />
+    <Compile Include="Cl%28创联%29\ForecastOrderInsertedSubscrilber.cs" />
+    <Compile Include="Cl%28创联%29\MoCopyChangeSubscrilber.cs" />
+    <Compile Include="Cl%28创联%29\MOInsertedSubscrilber.cs" />
     <Compile Include="Components\ImplementationSQL.cs" />
     <Compile Include="GetAccessTokenResult.cs" />
     <Compile Include="HJDZ\ShipLinesUpdatingSubscriber.cs" />

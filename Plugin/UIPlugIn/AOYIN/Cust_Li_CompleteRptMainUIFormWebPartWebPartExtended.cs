@@ -115,19 +115,24 @@ namespace YY.U9.Cust.LI.UIPlugIn
                     #endregion
                     //0.013500000 0.008489000 0   1002111170030995    0   0.000002700 0.000000000 1856.000000000
                     //1856.000000000  0   0   1002201180043856    0   1.000000000 0.000000000 1856.000000000
+                    //issuedQty = 0.210000000,
+                    //bOMReqQty = 0.105000000,rcvQtyByProductUom = 2,
+                    //specialIssuedQty = 0.000000000,dprivateDescSeg3 = 0,dprivateDescSeg4 = 0,
+                    //dprivateDescSeg5 = 0,r = 0.21,difference = 0.000000000
+
                     #region 测试使用值
 
                     //issuedQty = 0.000000000,bOMReqQty = 1.000000000,rcvQtyByProductUom = 8400,
                     //specialIssuedQty = 0.000000000,dprivateDescSeg3 = 0,dprivateDescSeg4 = 0,dprivateDescSeg5 = 0,
                     //r = 8400,
 
-                    //issuedQty = "0.000000000";
-                    //bOMReqQty = "1.000000000";
+                    //issuedQty = "0.210000000";
+                    //bOMReqQty = "0.105000000";
                     //specialIssuedQty = "0.000000000";
                     //dprivateDescSeg3 = "0";
                     //dprivateDescSeg4 = "0";
                     //dprivateDescSeg5 = "0";
-                    //rcvQtyByProductUom = "8400";
+                    //rcvQtyByProductUom = "2";
                     //double q = double.Parse(rcvQtyByProductUom) * double.Parse(bOMReqQty);
                     //// double rcvPer1 = Math.Round(q, Convert.ToInt32(roundPrecision));
                     ////Difference = IssuedQty + SpecialIssuedQty - TotalRcvQty * QPA - ProcessLoss - ShuntingLoss - MassLoss;
@@ -148,7 +153,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
                     //    - Decimal.Parse(dprivateDescSeg4) - Decimal.Parse(dprivateDescSeg5);
                     //bool ok11 = Convert.ToDecimal(rcvQtyByProductUom) == Math.Round(Convert.ToDecimal(issuedQty) + Convert.ToDecimal(specialIssuedQty)) ? true : false;
 
-                    //if (difference <= Decimal.Parse((0.0001).ToString()))
+                    //if (difference > Decimal.Parse((0.0001).ToString()))
                     //{ string q1qqqqq23123123123 = "13123123"; }
                     #endregion
 

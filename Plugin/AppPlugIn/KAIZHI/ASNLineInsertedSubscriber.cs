@@ -52,13 +52,17 @@ namespace YY.U9.Cust.LI.AppPlugIn
                 {
                     itemLotParam = item.ItemInfo.ItemID.InventoryInfo.LotParam.Name;//批号参数
                     //itemLotDate = item.ItemInfo.ItemID.InventoryInfo.LotValidDate.ToString();//批号有效期天数
-
+                    if (!string.IsNullOrEmpty(item.LotMater))
+                    {
+                        continue;
+                    }
                     if (itemLotParam == "供应商批号（有效期管控）" || itemLotParam == "生产订单号批号-有效期")//有效期赋值
                     {
                         ValidDate = item.ItemInfo.ItemID.InventoryInfo.LotValidDate;
                         lotElotDate = nowDate;
                         InvalidDate = DateTime.Now.AddDays(ValidDate);
-                        item.LotEnableDate= InvalidDate;
+                        item.LotEnableDate = InvalidDate;
+                        item.LotDisabledDate = item.LotEnableDate.AddDays(ValidDate);
                         item.LotMater = nowDate;
                     }
                     else if (itemLotParam == "供应商批号" || itemLotParam == "生产订单号批号")//没有有效期赋值

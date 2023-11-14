@@ -392,9 +392,11 @@
     <Compile Include="BomMainUIFormWebPartExtended.cs" />
     <Compile Include="AOYIN\Cust_Li_MOStockMainUIFormWebPartExtended.cs" />
     <Compile Include="ceshi\sysceshi.cs" />
+    <Compile Include="CL\DiscreteMOMainUIFormWebPartExtend.cs" />
     <Compile Include="HJ\ArDrawBillUIFormWebPartExtend.cs" />
     <Compile Include="HJ\MOStockMainUIFormWebPartExtend.cs" />
     <Compile Include="HJ\ShipBListUIFormWebPartExtend.cs" />
+    <Compile Include="HJ\StandardSOMainUIFormWebPartExtend.cs" />
     <Compile Include="JUNHUA\MiscRcvUIMainFormWebPartExtended.cs" />
     <Compile Include="JUNHUA\TransferFormUIMainFormWebPartExtended.cs" />
     <Compile Include="KaiZhi\SupplierUIFormWebPartExtended.cs" />

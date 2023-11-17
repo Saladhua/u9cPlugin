@@ -55,10 +55,6 @@ namespace YY.U9.Cust.LI.AppPlugIn
             int maxEValue = -1;
             //枚举赋值
             //插入之后
-            if (so.SOSrcType.Value == 0 && so.DocumentType.IsInSalePlan == true)
-            {
-                return;
-            }
             #region 计入计划勾选使用
             DateTime BusinessDate = DateTime.Now;
             DateTime FirstDayOfMonth = DateTime.Now;
@@ -73,13 +69,48 @@ namespace YY.U9.Cust.LI.AppPlugIn
 
             //可能使用fendbyID直接找
             #endregion
-            if (so.DocumentType.IsInSalePlan == true)
+            //if (so.SOSrcType.Value == 0 && so.DocumentType.IsInSalePlan == true)
+            //{
+            //    return;
+            //}
+
+            //测试SQL
+            //select DemandType from SPL_SalePlanLine a
+            //INNER JOIN SPL_SalePLanPlot  b ON a.SalePlanPlot = b.ID
+            //INNER JOIN SPL_SalePlan c ON c.ID = b.SalePlan
+            //WHERE a.SalePlanPlot =
+            //(select ID from SPL_SalePLanPlot where StartDate = '2023-11-01')
+            //AND DemandType!= -1
+            //AND c.PeriodStartDate = '2023-11-01'
+            //AND c.Cancel_Canceled = 0
+
+            if (so.DocumentType.IsInSalePlan == true && so.DocumentType.IsInSaleAchievement == true)
             {
+                string DemandType = "";
                 BusinessDate = so.BusinessDate;
                 FirstDayOfMonth = new DateTime(BusinessDate.Year, BusinessDate.Month, 1); // 获取当前月份的第一天
-
+                DataTable dataTable = new DataTable();
+                DataSet dataSet = new DataSet();
+                string sql = "select DemandType from SPL_SalePlanLine a" +
+                    " INNER JOIN SPL_SalePLanPlot b ON a.SalePlanPlot = b.ID " +
+                    " INNER JOIN SPL_SalePlan c ON c.ID = b.SalePlan " +
+                    " WHERE a.SalePlanPlot in(select ID from SPL_SalePLanPlot where StartDate = '" + FirstDayOfMonth + "')" +
+                    " AND DemandType!= -1 AND c.PeriodStartDate = '" + FirstDayOfMonth + "' AND c.Cancel_Canceled = 0";
+                DataAccessor.RunSQL(DataAccessor.GetConn(), sql, null, out dataSet);
+                dataTable = dataSet.Tables[0];
+                if (dataTable.Rows != null && dataTable.Rows.Count > 0)
+                {
+                    DemandType = dataTable.Rows[0]["DemandType"].ToString();
+                }
+                foreach (var item in so.SOLines)
+                {
+                    foreach (var i in item.SOShiplines)
+                    {
+                        i.DemandType = UFIDA.U9.CBO.Enums.DemandCodeEnum.GetFromValue(DemandType);
+                    }
+                }
             }
-            else//如果没有勾选计入计划就执行这个代码，如果有就执行上面的代码
+            else if (so.DocumentType.IsInSalePlan == false)//如果没有勾选计入计划就执行这个代码，如果有就执行上面的代码
             {
                 foreach (var item in so.SOLines)
                 {

@@ -53,83 +53,88 @@ namespace YY.U9.Cust.LI.AppPlugIn
 
             foreach (var item in SalePlan.SalePlanPlots)
             {
-                DocLineNo = item.DocLineNo;
-                TDocNo = DocNo + "_" + DocLineNo;
+                //DocLineNo = item.DocLineNo;
+
                 foreach (var it in item.SalePlanLines)
                 {
                     #region 先查询是否有有则直接使用现有的
-                    DataTable dataTable1 = new DataTable();
-                    string sqlFor1 = "select A.Code,A.EValue from UBF_Sys_ExtEnumValue A" +
-                        " left join UBF_Sys_ExtEnumType B on A.ExtEnumType = B.ID " +
-                        " where B.Code = 'UFIDA.U9.CBO.Enums.DemandCodeEnum' " +
-                        " and A.Code = '" + TDocNo + "'";
-                    DataSet dataSet1 = new DataSet();
-                    DataAccessor.RunSQL(DataAccessor.GetConn(), sqlFor1, null, out dataSet1);
-                    dataTable1 = dataSet1.Tables[0];
-                    string ACode = "";
-                    string AEValue = "";
-                    if (dataTable1 != null && dataTable1.Rows.Count > 0)
-                    {
-                        ACode = dataTable1.Rows[0]["Code"].ToString();
-                        AEValue = dataTable1.Rows[0]["EValue"].ToString();
-                    }
+                    //DataTable dataTable1 = new DataTable();
+                    //string sqlFor1 = "select A.Code,A.EValue from UBF_Sys_ExtEnumValue A" +
+                    //    " left join UBF_Sys_ExtEnumType B on A.ExtEnumType = B.ID " +
+                    //    " where B.Code = 'UFIDA.U9.CBO.Enums.DemandCodeEnum' " +
+                    //    " and A.Code = '" + TDocNo + "'";
+                    //DataSet dataSet1 = new DataSet();
+                    //DataAccessor.RunSQL(DataAccessor.GetConn(), sqlFor1, null, out dataSet1);
+                    //dataTable1 = dataSet1.Tables[0];
+                    //string ACode = "";
+                    //string AEValue = "";
+                    //if (dataTable1 != null && dataTable1.Rows.Count > 0)
+                    //{
+                    //    ACode = dataTable1.Rows[0]["Code"].ToString();
+                    //    AEValue = dataTable1.Rows[0]["EValue"].ToString();
+                    //}
                     #endregion
 
-                    if (string.IsNullOrEmpty(AEValue))
+                    //if (!string.IsNullOrEmpty(AEValue))
+                    //{
+                    //    it.DemandType = UFIDA.U9.CBO.Enums.DemandCodeEnum.GetFromValue(AEValue);
+                    //}
+                    //else
+                    //{
+                    DocLineNo = it.SalePlanPlot.DocLineNo;
+                    TDocNo = DocNo + "_" + DocLineNo;
+
+
+
+                    #region 创建需求分类
+                    ExtEnumValue extValue = ExtEnumValue.Finder.Find("ExtEnumType.Code=@TypeCode and Code=@Code",
+                    new OqlParam("TypeCode", "UFIDA.U9.CBO.Enums.DemandCodeEnum"), new OqlParam("Code", TDocNo));
+                    if (extValue != null)
                     {
-                        it.DemandType = UFIDA.U9.CBO.Enums.DemandCodeEnum.GetFromValue(AEValue);                        
+                        it.DemandType = UFIDA.U9.CBO.Enums.DemandCodeEnum.GetFromValue(extValue.EValue);
                     }
                     else
                     {
-                        #region 创建需求分类
-                        ExtEnumValue extValue = ExtEnumValue.Finder.Find("ExtEnumType.Code=@TypeCode and Code=@Code",
-                        new OqlParam("TypeCode", "UFIDA.U9.CBO.Enums.DemandCodeEnum"), new OqlParam("Code", TDocNo));
-                        if (extValue != null)
+                        StringBuilder sql = new StringBuilder(5000);
+                        DataTable dataTable = new DataTable();
+                        DataSet dataSet = new DataSet();
+                        sql.Append(" select MAX(EValue) as Evalue,B.ID from UBF_Sys_ExtEnumValue A");
+                        sql.Append(" left join UBF_Sys_ExtEnumType B on A.ExtEnumType=B.ID");
+                        sql.Append(" where B.Code='UFIDA.U9.CBO.Enums.DemandCodeEnum'");
+                        sql.Append(" group by B.ID");
+                        DataAccessor.RunSQL(DataAccessor.GetConn(), sql.ToString(), null, out dataSet);
+                        dataTable = dataSet.Tables[0];
+                        if (dataTable.Rows != null && dataTable.Rows.Count > 0)
                         {
-                            it.DemandType = UFIDA.U9.CBO.Enums.DemandCodeEnum.GetFromValue(extValue.EValue);
-                        }
-                        else
-                        {
-                            StringBuilder sql = new StringBuilder(5000);
-                            DataTable dataTable = new DataTable();
-                            DataSet dataSet = new DataSet();
-                            sql.Append(" select MAX(EValue) as Evalue,B.ID from UBF_Sys_ExtEnumValue A");
-                            sql.Append(" left join UBF_Sys_ExtEnumType B on A.ExtEnumType=B.ID");
-                            sql.Append(" where B.Code='UFIDA.U9.CBO.Enums.DemandCodeEnum'");
-                            sql.Append(" group by B.ID");
-                            DataAccessor.RunSQL(DataAccessor.GetConn(), sql.ToString(), null, out dataSet);
-                            dataTable = dataSet.Tables[0];
-                            if (dataTable.Rows != null && dataTable.Rows.Count > 0)
+                            if (!string.IsNullOrEmpty(dataTable.Rows[0]["Evalue"].ToString()))
                             {
-                                if (!string.IsNullOrEmpty(dataTable.Rows[0]["Evalue"].ToString()))
-                                {
-                                    maxEValue = int.Parse(dataTable.Rows[0]["Evalue"].ToString());
-                                }
-                                if (!string.IsNullOrEmpty(dataTable.Rows[0]["ID"].ToString()))
-                                {
-                                    extEnumTypeID = long.Parse(dataTable.Rows[0]["ID"].ToString());
-                                }
+                                maxEValue = int.Parse(dataTable.Rows[0]["Evalue"].ToString());
+                            }
+                            if (!string.IsNullOrEmpty(dataTable.Rows[0]["ID"].ToString()))
+                            {
+                                extEnumTypeID = long.Parse(dataTable.Rows[0]["ID"].ToString());
                             }
                         }
-                        if (extEnumTypeID > 0L)
-                        {
-                            ExtEnumType enumType = ExtEnumType.Finder.FindByID(extEnumTypeID);
-                            if (enumType != null)
-                            {
-                                int newEnumVValue = maxEValue + 1;
-                                using (ISession session = Session.Open())
-                                {
-                                    ExtEnumValue newEnumValue = ExtEnumValue.Create(enumType);
-                                    newEnumValue.Code = TDocNo;
-                                    newEnumValue.Name = TDocNo;
-                                    newEnumValue.EValue = newEnumVValue;
-                                    session.Commit();
-                                }
-                                it.DemandType = UFIDA.U9.CBO.Enums.DemandCodeEnum.GetFromValue(newEnumVValue);
-                            }
-                        }
-                        #endregion
                     }
+                    if (extEnumTypeID > 0L)
+                    {
+                        ExtEnumType enumType = ExtEnumType.Finder.FindByID(extEnumTypeID);
+                        if (enumType != null)
+                        {
+                            int newEnumVValue = maxEValue + 1;
+                            using (ISession session = Session.Open())
+                            {
+                                ExtEnumValue newEnumValue = ExtEnumValue.Create(enumType);
+                                newEnumValue.Code = TDocNo;
+                                newEnumValue.Name = TDocNo;
+                                newEnumValue.EValue = newEnumVValue;
+                                session.Commit();
+                            }
+                            it.DemandType = UFIDA.U9.CBO.Enums.DemandCodeEnum.GetFromValue(newEnumVValue);
+                        }
+                    }
+                    #endregion
+                    // }
                 }
             }
         }

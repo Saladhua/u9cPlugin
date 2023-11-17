@@ -90,7 +90,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
                 string sql = "";
                 if (MoDemand == "CL")//标准销售
                 {
-                    sql = "SELECT b.DescFlexField_PrivateDescSeg3,a.ID FROM SM_SO a INNER JOIN SM_SOLine b ON  a.ID=b.SO WHERE a.DocNo='" + MoDocNo + "' AND DocLineNo='" + MoDocNoLine + "'";
+                    sql = "SELECT b.DescFlexField_PrivateDescSeg1,a.ID FROM SM_SO a INNER JOIN SM_SOLine b ON  a.ID=b.SO WHERE a.DocNo='" + MoDocNo + "' AND DocLineNo='" + MoDocNoLine + "'";
                 }
                 else if (MoDemand == "FO")//预测订单
                 {
@@ -102,7 +102,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
                 {
                     if (MoDemand == "CL")
                     {
-                        Des = dataTable.Rows[0]["DescFlexField_PrivateDescSeg3"].ToString();
+                        Des = dataTable.Rows[0]["DescFlexField_PrivateDescSeg1"].ToString();
                         FindSoID = dataTable.Rows[0]["ID"].ToString();
                         SO sO = SO.Finder.FindByID(FindSoID);
                         if (sO.OrderBy.Customer != null)

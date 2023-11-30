@@ -32,7 +32,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
                     #region 在判断备料复制字段是否勾选
                     foreach (var item in this._part.Model.MO.Records)
                     {
-                        Des = item["DescFlexField_PrivateDescSeg4"].ToString();
+                        Des = item["DescFlexField_PrivateDescSeg12"].ToString();
                     }
                     #endregion
 
@@ -53,11 +53,11 @@ namespace YY.U9.Cust.LI.UIPlugIn
                     #region 放到内存
                     DataTable dt = new DataTable();
 
-                        foreach (var item in dotSets)
-                        {
-                            HttpContext.Current.Session["MOID"] = item.ID;
-                        }
-                    
+                    foreach (var item in dotSets)
+                    {
+                        HttpContext.Current.Session["MOID"] = item.ID;
+                    }
+
 
                     #endregion
                 }

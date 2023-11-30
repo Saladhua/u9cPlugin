@@ -29,6 +29,8 @@ namespace YY.U9.Cust.LI.UIPlugIn
         public override void AfterRender(IPart part, EventArgs args)
         {
             base.AfterRender(part, args);
+
+          
             this._part = (part as TransferFormUIMainFormWebPart);
             long n = (long)Math.Floor((new Random()).NextDouble() * 10000000D);
             try

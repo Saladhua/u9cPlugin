@@ -195,6 +195,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>D:\yonyou\U9V60\Portal\ApplicationLib\UFIDA.U9.ISV.MiscShipISV.Deploy.dll</HintPath>
     </Reference>
+    <Reference Include="UFIDA.U9.ISV.MO.MOSV">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\MailService\Libs\UFIDA.U9.ISV.MO.MOSV.dll</HintPath>
+    </Reference>
     <Reference Include="UFIDA.U9.ISV.MO.MOSV.Agent, Version=25.5401.32743.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>D:\yonyou\U9V60\Portal\ApplicationLib\UFIDA.U9.ISV.MO.MOSV.Agent.dll</HintPath>
@@ -226,6 +229,7 @@
     <Reference Include="UFIDA.U9.MO.MOBE">
       <HintPath>..\..\..\..\UFIDA\U9V25\Portal\ApplicationServer\Libs\UFIDA.U9.MO.MOBE.dll</HintPath>
     </Reference>
+    <Reference Include="UFIDA.U9.MO.MOBE.Deploy, Version=25.5401.44025.0, Culture=neutral, PublicKeyToken=null" />
     <Reference Include="UFIDA.U9.MO.MOBP, Version=25.5401.37165.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.MO.MOBP.dll</HintPath>

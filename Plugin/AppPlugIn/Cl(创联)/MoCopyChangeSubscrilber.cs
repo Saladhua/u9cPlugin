@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Web;
+using UFIDA.U9.CBO.MFG.BOM;
 using UFIDA.U9.ISV.MO;
 using UFIDA.U9.MO.MO;
 using UFIDA.U9.SM.ForecastOrder;
@@ -49,6 +50,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
             if (!string.IsNullOrEmpty(MOID))
             {
                 mO = MO.Finder.FindByID(Convert.ToInt64(MOID));
+
             }
             else
             {
@@ -59,179 +61,73 @@ namespace YY.U9.Cust.LI.AppPlugIn
             {
                 return;
             }
-
             decimal ProductQty = mo.ProductQty;
 
+            //新
+            string see = mo.DocNo;
 
             #region 取数-赋值
-            //List<DotSet> dotSets = new List<DotSet>();
 
-            //mo.MOPickLists.Clear();
+            //老
+            string see333=mO.DocNo;
 
-            //int see123213 = mo.MOPickLists.Count;
-
-            //foreach (var item in mO.MOPickLists)
-            //{
-            //    MOPickList mOPickList = new MOPickList();
-            //    mOPickList.ItemCode = item.ItemCode;
-            //    mOPickList.BOMReqQty = item.BOMReqQty;
-            //    mOPickList.ActualReqQty = item.ActualReqQty;
-
-            //    mo.MOPickLists.Add(mOPickList);
-            //}
-            #endregion
-
-
-            #region 新-取数-赋值
-
-            #region 查询
-            UFIDA.U9.ISV.MO.Proxy.QueryMO4ExternalProxy queryMO4ExternalProxy = new UFIDA.U9.ISV.MO.Proxy.QueryMO4ExternalProxy();
-
-            List<MOKeyDTOData> mOKeyDTODatas = new List<MOKeyDTOData>();
-
-            MOKeyDTOData mOKeyDTOData = new MOKeyDTOData();
-
-            mOKeyDTOData.DocNo = mo.DocNo;
-
-            mOKeyDTODatas.Add(mOKeyDTOData);
-
-            queryMO4ExternalProxy.MOKeyDTOs = mOKeyDTODatas;
-
-            List<MODTOData> mODTODatas = queryMO4ExternalProxy.Do();
-
-            MODTOData moData = new MODTOData();
-
-            foreach (var item in mODTODatas)
+            if (mo.DocNo==mO.DocNo)
             {
-                moData = item;
+                return;
+            }
+
+            //mo.CompleteQtyCtlType
+
+            if (mo.SysState == UFSoft.UBF.PL.Engine.ObjectState.Inserted)
+            {
+                mo.MOPickLists.Clear();
+                MO moer = mo;
+                MO mO1 = new MO();
+                foreach (var item in mO.MOPickLists)
+                {
+                    //MOPickList mOPickList = new MOPickList();
+                    //mOPickList = item;
+
+                    item.MO.ID = mo.ID;
+
+
+                    mO1 = CreatSCMPickList(moer, item);
+
+                    //新
+                    string see33 = mO1.DocNo;
+
+                    Session.Current.InList(mO1);
+                }
+
+
+                MO seemo = mO1;
+
+                long see13 = seemo.ID;
+
+
+                foreach (var item in mO1.MOPickLists)
+                {
+                    
+                    long seeqqq = item.MOKey.ID;
+
+                    long seewww = item.MO.ID;
+
+                    MOPickList see123123 = item;
+                }
             }
             #endregion
 
-
-            #region 删除备料行
-            UFIDA.U9.ISV.MO.Proxy.ModifyMO4ExternalProxy modifyMO4ExternalProxy = new UFIDA.U9.ISV.MO.Proxy.ModifyMO4ExternalProxy();
-            List<MOModifyDTOData> mOModifyDTODatas = new List<MOModifyDTOData>();
-            //修改生产订单
-            UFIDA.U9.ISV.MO.MOModifyDTOData moModifyDTO = new UFIDA.U9.ISV.MO.MOModifyDTOData();
-
-            UFIDA.U9.ISV.MO.MOKeyDTOData moKey = new UFIDA.U9.ISV.MO.MOKeyDTOData();
-            moModifyDTO.MOKeyDTO = moKey;
-            List<UFIDA.U9.ISV.MO.MOPickListDTOData> pickDTOList = new List<UFIDA.U9.ISV.MO.MOPickListDTOData>();
-
-            pickDTOList.AddRange(moData.MOPickListDTOs);
-
-            UFIDA.U9.ISV.MO.MOPickListDTOData moPickDTO = null;
-            if (pickDTOList.Count > 0)
-                moPickDTO = pickDTOList[0];
-
-            if (moPickDTO != null)
-            {
-                moPickDTO.CUD = 8;//删除备料
-            }
-
-            moModifyDTO.MODTO = moData; //查询得到的结果作为修改的基础输入
-            #endregion
-            moKey.DocNo = mo.DocNo; //查询得到的单据号
-
-            mOModifyDTODatas.Add(moModifyDTO);
-
-            modifyMO4ExternalProxy.MOModifyDTOs = mOModifyDTODatas;
-
-            bool see = modifyMO4ExternalProxy.Do();
-            #endregion
-
-
-            #region 新增备料行
-            UFIDA.U9.ISV.MO.Proxy.ModifyMO4ExternalProxy modifyMO4ExternalProxy1 = new UFIDA.U9.ISV.MO.Proxy.ModifyMO4ExternalProxy();
-            List<MOModifyDTOData> mOModifyDTODatas1 = new List<MOModifyDTOData>();
-            //修改生产订单
-            UFIDA.U9.ISV.MO.MOModifyDTOData moModifyDTO1 = new UFIDA.U9.ISV.MO.MOModifyDTOData();
-
-            UFIDA.U9.ISV.MO.MOKeyDTOData moKey1 = new UFIDA.U9.ISV.MO.MOKeyDTOData();
-            moModifyDTO1.MOKeyDTO = moKey1;
-            moModifyDTO1.MODTO = moData; //查询得到的结果作为修改的基础输入
-
-            moKey1.DocNo = mo.DocNo; //查询得到的单据号
-
-            moData.ProductQty = mo.ProductQty; //生产数量   
-
-            moData.Department = new UFIDA.U9.CBO.Pub.Controller.CommonArchiveDataDTOData();
-            moData.Department.Code = mo.Department.Code; //生产部门
-
-
-            //修改备料表
-            List<UFIDA.U9.ISV.MO.MOPickListDTOData> pickDTOList1 = new List<UFIDA.U9.ISV.MO.MOPickListDTOData>();
-
-            foreach (var item in mO.MOPickLists)
-            {
-                UFIDA.U9.ISV.MO.MOPickListDTOData moPickDTO1 = null;
-                moPickDTO1 = new UFIDA.U9.ISV.MO.MOPickListDTOData();
-                moPickDTO1.CUD = 2; //新增标志, 默认为修改 2-Inserted;4-Updated;8-Deleted
-                moPickDTO1.OperationNum = item.OperationNum; //工序号
-                moPickDTO1.ItemMaster = new UFIDA.U9.CBO.Pub.Controller.CommonArchiveDataDTOData();
-                moPickDTO1.ItemMaster.Code = item.ItemMaster.Code; //料品
-                moPickDTO1.ActualReqQty = item.ActualReqQty; //备料实际需求数量
-                pickDTOList1.Add(moPickDTO1);
-            }
-
-            moData.MOPickListDTOs = pickDTOList1;
-
-            mOModifyDTODatas1.Add(moModifyDTO1);
-
-            modifyMO4ExternalProxy1.MOModifyDTOs = mOModifyDTODatas1;
-
-            bool see1 = modifyMO4ExternalProxy1.Do();
-            #endregion
-
-
-
-            #region 将新的备料清空
-            //foreach (var item in mo.MOPickLists)
-            //{
-            //    item = new MOPickList();
-            //}
-            #endregion
-
-
-            long seeqe = mo.ID;
-            string se12 = mo.DocNo;
-
-            #region 赋值
-            //foreach (var item in mo.MOPickLists)
-            //{
-            //    string see123 = item.DocNoMO.;
-            //}
-            #endregion
         }
 
 
-
-
-
-        public class DotSet
+        public static MO CreatSCMPickList(MO mo, MOPickList mOPick)
         {
-            /// <summary>
-            /// 料品ID
-            /// </summary>
-            public long ItemID { get; set; }
-            /// <summary>
-            /// 料品Code
-            /// </summary>
-            public string ItemCode { get; set; }
-            /// <summary>
-            /// 料品Name
-            /// </summary>
-            public string ItemName { get; set; }
-            /// <summary>
-            /// BOM需求数量
-            /// </summary>
-            public decimal BOMReqQty { get; set; }
-            /// <summary>
-            /// 实际需求数量
-            /// </summary>
-            public decimal ActualReqQty { get; set; }
-
+            MO moHead = null;
+            //moHead = MO.Create();
+            moHead = mo;
+            mo.MOPickLists.Add(mOPick);
+            return moHead;
         }
-
     }
 }
+

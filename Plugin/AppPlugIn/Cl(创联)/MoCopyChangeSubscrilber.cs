@@ -50,7 +50,6 @@ namespace YY.U9.Cust.LI.AppPlugIn
             if (!string.IsNullOrEmpty(MOID))
             {
                 mO = MO.Finder.FindByID(Convert.ToInt64(MOID));
-
             }
             else
             {
@@ -62,70 +61,49 @@ namespace YY.U9.Cust.LI.AppPlugIn
                 return;
             }
             decimal ProductQty = mo.ProductQty;
-
-            //新
-            string see = mo.DocNo;
-
             #region 取数-赋值
-
-            //老
-            string see333=mO.DocNo;
-
-            if (mo.DocNo==mO.DocNo)
-            {
-                return;
-            }
 
             //mo.CompleteQtyCtlType
 
             if (mo.SysState == UFSoft.UBF.PL.Engine.ObjectState.Inserted)
             {
                 mo.MOPickLists.Clear();
-                MO moer = mo;
-                MO mO1 = new MO();
+
                 foreach (var item in mO.MOPickLists)
                 {
-                    //MOPickList mOPickList = new MOPickList();
-                    //mOPickList = item;
-
-                    item.MO.ID = mo.ID;
-
-
-                    mO1 = CreatSCMPickList(moer, item);
-
-                    //新
-                    string see33 = mO1.DocNo;
-
-                    Session.Current.InList(mO1);
+                    MOPickList mOPickList = MOPickList.Create(mo);
+                    mOPickList.DocLineNO = item.DocLineNO;
+                    mOPickList.ItemMaster = item.ItemMaster;
+                    mOPickList.ActualReqDate = item.ActualReqDate;
+                    mo.MOPickLists.Add(mOPickList);
                 }
+                Session.Current.InList(mo);
 
 
-                MO seemo = mO1;
 
-                long see13 = seemo.ID;
+                //MO moer = mo;
+                //MO mO1 = new MO();
+                //foreach (var item in mO.MOPickLists)
+                //{
+                //    mO1 = CreatSCMPickList(moer, item);
+                //    Session.Current.InList(mO1);
+                //}
 
-
-                foreach (var item in mO1.MOPickLists)
-                {
-                    
-                    long seeqqq = item.MOKey.ID;
-
-                    long seewww = item.MO.ID;
-
-                    MOPickList see123123 = item;
-                }
             }
             #endregion
-
         }
-
 
         public static MO CreatSCMPickList(MO mo, MOPickList mOPick)
         {
             MO moHead = null;
-            //moHead = MO.Create();
+            moHead = MO.Create();
+
             moHead = mo;
+
             mo.MOPickLists.Add(mOPick);
+
+            MOPickList.Create(moHead);
+
             return moHead;
         }
     }

@@ -15,7 +15,7 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>3.5</OldToolsVersion>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <PublishUrl>http://localhost/Yonyou.U9.BZ.UIPlugIn/</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
@@ -65,6 +65,7 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.DataVisualization" />
     <Reference Include="System.Xml" />
     <Reference Include="UBF.System, Version=20.1000.203.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -124,15 +125,66 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\yonyou\U9CE\Portal\UILib\UFIDA.U9.CBO.SCM.SCMPickListUI.WebPart.dll</HintPath>
     </Reference>
+    <Reference Include="UFIDA.U9.CBO.SCMBP, Version=25.5401.44151.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.CBO.SCMBP.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.CBO.SCMBP.Agent, Version=25.5401.42840.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.CBO.SCMBP.Agent.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.CBO.SCMBP.Deploy, Version=25.5401.42840.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.CBO.SCMBP.Deploy.dll</HintPath>
+    </Reference>
     <Reference Include="UFIDA.U9.CS.Base.BaseBE.Deploy, Version=25.5401.15799.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>D:\yonyou\U9V50\Portal\ApplicationLib\UFIDA.U9.CS.Base.BaseBE.Deploy.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.Cust.CL.LI.Cust_FindPlanOrderBP">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.Cust.CL.LI.Cust_FindPlanOrderBP.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.Cust.CL.LI.Cust_FindPlanOrderBP.Agent">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.Cust.CL.LI.Cust_FindPlanOrderBP.Agent.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.Cust.CL.LI.Cust_FindPlanOrderBP.Deploy">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.Cust.CL.LI.Cust_FindPlanOrderBP.Deploy.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.Cust.CLLH.CustMoStateDP1SV">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.Cust.CLLH.CustMoStateDP1SV.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.Cust.CLLH.CustMoStateDP1SV.Agent">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.Cust.CLLH.CustMoStateDP1SV.Agent.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.Cust.CLLH.CustMoStateDP1SV.Deploy">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.Cust.CLLH.CustMoStateDP1SV.Deploy.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.Cust.CLLH.CustSupFindPriceSV">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.Cust.CLLH.CustSupFindPriceSV.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.Cust.CLLH.CustSupFindPriceSV.Agent">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.Cust.CLLH.CustSupFindPriceSV.Agent.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.Cust.CLLH.CustSupFindPriceSV.Deploy">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.Cust.CLLH.CustSupFindPriceSV.Deploy.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.Cust.LI.CL.MoItemBP">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.Cust.LI.CL.MoItemBP.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.Cust.LI.CL.MoItemBP.Agent">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.Cust.LI.CL.MoItemBP.Agent.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.Cust.LI.CL.MoItemBP.Deploy">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.Cust.LI.CL.MoItemBP.Deploy.dll</HintPath>
     </Reference>
     <Reference Include="UFIDA.U9.FI.AP.PayReqFundUI.WebPart">
       <HintPath>F:\yonyou\U9CE\Portal\UILib\UFIDA.U9.FI.AP.PayReqFundUI.WebPart.dll</HintPath>
     </Reference>
     <Reference Include="UFIDA.U9.FI.AR.ARMaintenanceUI.WebPart">
       <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\UILib\UFIDA.U9.FI.AR.ARMaintenanceUI.WebPart.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.FI.ER.ReimburseBillUI.WebPart">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\UILib\UFIDA.U9.FI.ER.ReimburseBillUI.WebPart.dll</HintPath>
     </Reference>
     <Reference Include="UFIDA.U9.ISV.CBO.LotSV.Agent">
       <HintPath>..\..\..\..\..\yonyou\U9CE\MailService\Libs\UFIDA.U9.ISV.CBO.LotSV.Agent.dll</HintPath>
@@ -187,6 +239,9 @@
     <Reference Include="UFIDA.U9.MFG.Complete.CompleteApplyRpt.CompleteApplyDocUI.WebPart">
       <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\UILib\UFIDA.U9.MFG.Complete.CompleteApplyRpt.CompleteApplyDocUI.WebPart.dll</HintPath>
     </Reference>
+    <Reference Include="UFIDA.U9.MFG.ECN.ECNDocUI.WebPart">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\UILib\UFIDA.U9.MFG.ECN.ECNDocUI.WebPart.dll</HintPath>
+    </Reference>
     <Reference Include="UFIDA.U9.MFG.IssueNew.IssueApply.MaterialOutDocUI.WebPart">
       <HintPath>D:\yonyou\U9V60\Portal\UILib\UFIDA.U9.MFG.IssueNew.IssueApply.MaterialOutDocUI.WebPart.dll</HintPath>
     </Reference>
@@ -203,6 +258,12 @@
     </Reference>
     <Reference Include="UFIDA.U9.MFG.MO.ItemWIPSimuBListUI.WebPart">
       <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\UILib\UFIDA.U9.MFG.MO.ItemWIPSimuBListUI.WebPart.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.MFG.MO.MOChangeItemUI.WebPart">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\UILib\UFIDA.U9.MFG.MO.MOChangeItemUI.WebPart.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.MFG.MO.MODivideUI.WebPart">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\UILib\UFIDA.U9.MFG.MO.MODivideUI.WebPart.dll</HintPath>
     </Reference>
     <Reference Include="UFIDA.U9.MFG.MO.MOWorkHourUI.MetaData">
       <HintPath>..\..\..\yonyou\UBFCE\U9.VOB.Product.Metadata\UI\UFIDA.U9.MFG.MO.MOWorkHourUI.MetaData.dll</HintPath>
@@ -221,6 +282,9 @@
     <Reference Include="UFIDA.U9.MFG.MRP.MRPMaintenUI.WebPart, Version=25.5401.36817.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\yonyou\U9CE\Portal\UILib\UFIDA.U9.MFG.MRP.MRPMaintenUI.WebPart.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.MFG.MRP.PlanOrderUI.WebPart">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\UILib\UFIDA.U9.MFG.MRP.PlanOrderUI.WebPart.dll</HintPath>
     </Reference>
     <Reference Include="UFIDA.U9.MFG.SFC.MOOperationRptUI.WebPart, Version=25.5401.37573.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -393,13 +457,20 @@
     <Compile Include="AOYIN\Cust_Li_MOStockMainUIFormWebPartExtended.cs" />
     <Compile Include="ceshi\sysceshi.cs" />
     <Compile Include="CL\DiscreteMOMainUIFormWebPartExtend.cs" />
+    <Compile Include="CL\ECNDocMainUIFormWebPartExtend.cs" />
+    <Compile Include="CL\MOChangeItemMainUIFormWebPartExtend.cs" />
+    <Compile Include="CL\MODivideMainUIFormWebPartExtend.cs" />
+    <Compile Include="CL\PlanOrderMainUIFormWebPartExtend.cs" />
+    <Compile Include="CL\ToPoTryCalcUIForListFormWebPartExtend.cs" />
+    <Compile Include="CL\ToPoTryCalcUIFormWebPartExtend.cs" />
     <Compile Include="HJ\ArDrawBillUIFormWebPartExtend.cs" />
     <Compile Include="HJ\MOStockMainUIFormWebPartExtend.cs" />
     <Compile Include="HJ\ShipBListUIFormWebPartExtend.cs" />
     <Compile Include="HJ\StandardSOMainUIFormWebPartExtend.cs" />
-    <Compile Include="JUNHUA\MiscRcvUIMainFormWebPartExtended.cs" />
-    <Compile Include="JUNHUA\TransferFormUIMainFormWebPartExtended.cs" />
+    <Compile Include="ceshi\JUNHUA\MiscRcvUIMainFormWebPartExtended.cs" />
+    <Compile Include="ceshi\JUNHUA\TransferFormUIMainFormWebPartExtended.cs" />
     <Compile Include="KaiZhi\SupplierUIFormWebPartExtended.cs" />
+    <Compile Include="NK\ReimburseBillMainUIFormWebPartExtended.cs" />
     <Compile Include="TransferFormUIMainFormWebPartExtended.cs" />
     <Compile Include="APRefScmBillUIFormWebPartExtended.cs" />
     <Compile Include="Common.cs" />
@@ -425,6 +496,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <None Include="CL\备料复制配置文件\pzwj.bdxml" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />

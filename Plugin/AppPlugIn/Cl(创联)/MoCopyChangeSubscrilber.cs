@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Web;
+using UFIDA.U9.CBO.Enums;
 using UFIDA.U9.CBO.MFG.BOM;
 using UFIDA.U9.ISV.MO;
 using UFIDA.U9.MO.MO;
@@ -56,7 +57,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
                 return;
             }
 
-            if (mo.DescFlexField.PrivateDescSeg12 == "False")
+            if (mo.DescFlexField.PrivateDescSeg4 == "False")
             {
                 return;
             }
@@ -65,47 +66,67 @@ namespace YY.U9.Cust.LI.AppPlugIn
 
             //mo.CompleteQtyCtlType
 
-            if (mo.SysState == UFSoft.UBF.PL.Engine.ObjectState.Inserted)
+            //成功时序为BeforeDefaultValue
+
+            if (!string.IsNullOrEmpty(MOID))
             {
-                mo.MOPickLists.Clear();
-
-                foreach (var item in mO.MOPickLists)
+                if (mo.SysState == UFSoft.UBF.PL.Engine.ObjectState.Inserted)
                 {
-                    MOPickList mOPickList = MOPickList.Create(mo);
-                    mOPickList.DocLineNO = item.DocLineNO;
-                    mOPickList.ItemMaster = item.ItemMaster;
-                    mOPickList.ActualReqDate = item.ActualReqDate;
-                    mo.MOPickLists.Add(mOPickList);
+                    if (mo.DocState.Value != 0)
+                    {
+                        return;
+                    }
+
+                    foreach (var item in mo.MOPickLists)
+                    {
+                        item.Remove();
+                    }
+
+                    mo.DescFlexField.PrivateDescSeg30 = "备料赋值";
+
+                    foreach (var item in mO.MOPickLists)
+                    {
+                        MOPickList mOPickList = MOPickList.Create(mo);
+                        mOPickList.DocLineNO = item.DocLineNO;
+                        mOPickList.ItemMaster = item.ItemMaster;
+                        mOPickList.ActualReqDate = item.ActualReqDate;
+                        mOPickList.OperationNum = item.OperationNum;
+                        mOPickList.QtyType = UsageQuantityTypeEnum.GetFromValue(1);
+                        mOPickList.QPA = item.QPA;
+                        mOPickList.WasteRate = item.WasteRate;
+                        mOPickList.IsCalcCost = item.IsCalcCost;
+                        mOPickList.SupplyWh = item.SupplyWh;
+                        mOPickList.BOMReqQty = item.BOMReqQty == 0 ? 0 : ProductQty * mOPickList.QPA;
+                        mOPickList.STDReqQty = item.STDReqQty == 0 ? 0 : ProductQty * mOPickList.QPA;
+                        mOPickList.ActualReqQty = item.ActualReqQty == 0 ? 0 : ProductQty * mOPickList.QPA;
+                        //mOPickList.ActualReqQty = item.ActualReqQty;
+                        mOPickList.ReserveQty = item.ReserveQty;
+                        mOPickList.DescFlexField.PrivateDescSeg30 = "是";
+                        mOPickList.DescFlexField.PrivateDescSeg1 = item.DescFlexField.PrivateDescSeg1;
+                        mOPickList.DescFlexField.PrivateDescSeg2 = item.DescFlexField.PrivateDescSeg2;
+                        mOPickList.DescFlexField.PrivateDescSeg3 = item.DescFlexField.PrivateDescSeg3;
+                        mo.MOPickLists.Add(mOPickList);
+                    }
+                    Session.Current.InList(mo);
                 }
-                Session.Current.InList(mo);
-
-
-
-                //MO moer = mo;
-                //MO mO1 = new MO();
-                //foreach (var item in mO.MOPickLists)
-                //{
-                //    mO1 = CreatSCMPickList(moer, item);
-                //    Session.Current.InList(mO1);
-                //}
-
             }
+
             #endregion
         }
 
-        public static MO CreatSCMPickList(MO mo, MOPickList mOPick)
-        {
-            MO moHead = null;
-            moHead = MO.Create();
+        //public static MO CreatSCMPickList(MO mo, MOPickList mOPick)
+        //{
+        //    MO moHead = null;
+        //    moHead = MO.Create();
 
-            moHead = mo;
+        //    moHead = mo;
 
-            mo.MOPickLists.Add(mOPick);
+        //    mo.MOPickLists.Add(mOPick);
 
-            MOPickList.Create(moHead);
+        //    MOPickList.Create(moHead);
 
-            return moHead;
-        }
+        //    return moHead;
+        //}
     }
 }
 

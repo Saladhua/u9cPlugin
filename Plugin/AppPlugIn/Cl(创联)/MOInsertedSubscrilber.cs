@@ -169,7 +169,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
                             SO sO = SO.Finder.FindByID(FindSoID);
                             if (sO.OrderBy.Customer != null)
                             {
-                                Des2 = sO.OrderBy.Customer.Name;
+                                Des2 = sO.OrderBy.Customer.Code;
                                 Des3 = sO.OrderBy.Customer.Saleser.Name;
                             }
 
@@ -181,7 +181,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
                             ForecastOrder forecastOrder = ForecastOrder.Finder.FindByID(FindForID);
                             if (forecastOrder.Customer.Customer != null)
                             {
-                                Des2 = forecastOrder.Customer.Customer.Name;
+                                Des2 = forecastOrder.Customer.Customer.Code;
                                 Des3 = forecastOrder.Customer.Customer.Saleser.Name;
                             }
 

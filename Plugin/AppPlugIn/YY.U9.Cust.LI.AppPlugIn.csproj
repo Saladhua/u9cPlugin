@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>YY.U9.Cust.LI.AppPlugIn</RootNamespace>
     <AssemblyName>YY.U9.Cust.LI.AppPlugIn</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -313,7 +313,9 @@
     <Compile Include="Cl%28创联%29\CLSOInsertedSubscrilber.cs" />
     <Compile Include="Cl%28创联%29\ForecastOrderInsertedSubscrilber.cs" />
     <Compile Include="Cl%28创联%29\MoCopyChangeSubscrilber.cs" />
+    <Compile Include="Cl%28创联%29\MoCopyMoPickListInsertedSubscrilber.cs" />
     <Compile Include="Cl%28创联%29\MOInsertedSubscrilber.cs" />
+    <Compile Include="Cl%28创联%29\MOUpAndInsertedSubscrilber.cs" />
     <Compile Include="Components\ImplementationSQL.cs" />
     <Compile Include="GetAccessTokenResult.cs" />
     <Compile Include="HJDZ\ShipLinesUpdatingSubscriber.cs" />

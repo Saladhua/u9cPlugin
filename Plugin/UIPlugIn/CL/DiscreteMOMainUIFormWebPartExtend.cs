@@ -5,7 +5,6 @@ using System.Web;
 using UFIDA.U9.MFG.MO.DiscreteMOUIModel;
 using UFSoft.UBF.UI.Custom;
 using UFSoft.UBF.UI.IView;
-using UFSoft.UBF.UI.MD.Runtime;
 
 namespace YY.U9.Cust.LI.UIPlugIn
 {
@@ -32,7 +31,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
                     #region 在判断备料复制字段是否勾选
                     foreach (var item in this._part.Model.MO.Records)
                     {
-                        Des = item["DescFlexField_PrivateDescSeg12"].ToString();
+                        Des = item["DescFlexField_PrivateDescSeg4"].ToString();
                     }
                     #endregion
 
@@ -63,6 +62,41 @@ namespace YY.U9.Cust.LI.UIPlugIn
                 }
             }
         }
+
+
+        public override void BeforeDataBinding(IPart part, out bool executeDefault)
+        {
+            this._part = (part as DiscreteMOMainUIFormWebPart);
+            string MoID = "";
+            string Dp5 = "";
+            foreach (var item in _part.Model.MO.Records)
+            {
+                MoID = item["ID"].ToString();
+            }
+            UFIDA.U9.Cust.CLLH.CustMoStateDP1SV.Proxy.MoIDStateProxy moIDState = new UFIDA.U9.Cust.CLLH.CustMoStateDP1SV.Proxy.MoIDStateProxy();
+            moIDState.DocNo = MoID;
+            if (!string.IsNullOrEmpty(MoID))
+            {
+                Dp5 = moIDState.Do();
+            }
+
+            base.BeforeDataBinding(part, out executeDefault);
+
+            if (MoID.Length > 5)
+            {
+                try
+                {
+                    this._part.Model.MO.FocusedRecord["DescFlexField_PrivateDescSeg5"] = Dp5;
+                    this._part.Model.MO.FocusedRecord["DescFlexField_PrivateDescSeg5_Name"] = Dp5;
+                }
+                catch (Exception ex)
+                {
+                    return;
+                }
+
+            }
+        }
+
 
         public class DtoSet
         {

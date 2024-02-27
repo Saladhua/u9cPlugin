@@ -13,6 +13,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
 {
     /// <summary>
     /// 请购转PO单价取值
+    /// 转PO试算提示
     /// </summary>
     class ToPoTryCalcUIFormWebPartExtend : ExtendedPartBase
     {

@@ -11,6 +11,9 @@ using UFSoft.UBF.UI.MD.Runtime.Implement;
 using UFSoft.UBF.UI.WebControlAdapter;
 namespace YY.U9.Cust.LI.UIPlugIn
 {
+    /// <summary>
+    /// 转PO试算提示
+    /// </summary>
      class ToPoTryCalcUIForListFormWebPartExtend : ExtendedPartBase
     {
         private ToPoTryCalcUIForListFormWebPart _part;

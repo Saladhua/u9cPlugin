@@ -84,6 +84,25 @@ namespace YY.U9.Cust.LI.AppPlugIn
             //AND c.PeriodStartDate = '2023-11-01'
             //AND c.Cancel_Canceled = 0
 
+            //1、有来源单据的不需要自动生成需求分类
+            //2、单据类型SO7的不需要自动生成需求分类
+
+            if (so.DocumentType.Code == "SO7")
+            {
+                return;
+            }
+
+            foreach (var item in so.SOLines)
+            {
+                foreach (var i in item.SOShiplines)
+                {
+                    if (string.IsNullOrEmpty(i.SrcDocNo))
+                    {
+                        return;
+                    }
+                }
+            }
+
             if (so.DocumentType.IsInSalePlan == true && so.DocumentType.IsInSaleAchievement == true)
             {
                 string DemandType = "";
@@ -102,13 +121,18 @@ namespace YY.U9.Cust.LI.AppPlugIn
                 {
                     DemandType = dataTable.Rows[0]["DemandType"].ToString();
                 }
-                foreach (var item in so.SOLines)
+                if (!string.IsNullOrEmpty(DemandType))
                 {
-                    foreach (var i in item.SOShiplines)
+                    foreach (var item in so.SOLines)
                     {
-                        i.DemandType = UFIDA.U9.CBO.Enums.DemandCodeEnum.GetFromValue(DemandType);
+                        foreach (var i in item.SOShiplines)
+                        {
+
+                            i.DemandType = UFIDA.U9.CBO.Enums.DemandCodeEnum.GetFromValue(DemandType);
+                        }
                     }
                 }
+
             }
             else if (so.DocumentType.IsInSalePlan == false)//如果没有勾选计入计划就执行这个代码，如果有就执行上面的代码
             {

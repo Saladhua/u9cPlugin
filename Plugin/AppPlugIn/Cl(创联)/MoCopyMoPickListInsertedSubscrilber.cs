@@ -51,7 +51,17 @@ namespace YY.U9.Cust.LI.AppPlugIn
                 {
                     mOPick.Remove();
                 }
+
+                if (mOPick.ItemMaster.ItemFormAttribute.Value == 6)
+                {
+                    mOPick.Remove();
+                }
+
+                if (mOPick.IsFromPhantomExpanding == true || mOPick.IsPhantomPart == true)
+                {
+                    mOPick.Remove();
+                }
             }
-        }   
+        }
     }
 }

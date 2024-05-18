@@ -91,6 +91,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
                         mOPickList.ItemMaster = item.ItemMaster;
                         mOPickList.ActualReqDate = item.ActualReqDate;
                         mOPickList.OperationNum = item.OperationNum;
+                        mOPickList.IssueStyle = item.IssueStyle;
                         mOPickList.QtyType = UsageQuantityTypeEnum.GetFromValue(1);
                         mOPickList.QPA = item.QPA;
                         mOPickList.WasteRate = item.WasteRate;
@@ -101,6 +102,13 @@ namespace YY.U9.Cust.LI.AppPlugIn
                         mOPickList.ActualReqQty = item.ActualReqQty == 0 ? 0 : ProductQty * mOPickList.QPA;
                         //mOPickList.ActualReqQty = item.ActualReqQty;
                         mOPickList.ReserveQty = item.ReserveQty;
+
+                        if (item.ItemMaster.ItemFormAttribute.Value==6)
+                        {
+                            mOPickList.DescFlexField.PrivateDescSeg30 = "是";
+
+                        }
+
                         mOPickList.DescFlexField.PrivateDescSeg30 = "是";
                         mOPickList.DescFlexField.PrivateDescSeg1 = item.DescFlexField.PrivateDescSeg1;
                         mOPickList.DescFlexField.PrivateDescSeg2 = item.DescFlexField.PrivateDescSeg2;

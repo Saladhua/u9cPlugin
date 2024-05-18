@@ -7,11 +7,6 @@ using UFIDA.U9.UI.PDHelper;
 using UFSoft.UBF.UI.ControlModel;
 using UFSoft.UBF.UI.Custom;
 using UFSoft.UBF.UI.IView;
-using UFSoft.UBF.UI.WebControls;
-using UFSoft.UBF.UI.WebControlAdapter;
-using System.Web;
-using UFSoft.UBF.UI.MD.Runtime;
-using System.Collections.Generic;
 
 namespace YY.U9.Cust.LI.UIPlugIn
 {
@@ -21,9 +16,6 @@ namespace YY.U9.Cust.LI.UIPlugIn
 
         IUFButton BtnSettle3;
 
-        //IUFButton BtnSettle4;
-
-        public override void AfterInit(IPart part, System.EventArgs e)
         {
             base.AfterInit(part, e);
             _part = part as PlanOrderMainUIFormWebPart;
@@ -135,34 +127,6 @@ namespace YY.U9.Cust.LI.UIPlugIn
             string mrkc = "";
 
             this._part = (_part as PlanOrderMainUIFormWebPart);
-
-            string whs = "";
-            DataTable dt = new DataTable();
-            bool set = false;//set 用来判断是否重新选了料品筛选
-            //调用模版提供的默认实现.--默认实现可能会调用相应的Action.
-
-            if (HttpContext.Current.Session["Doc_Code"] != null)
-            {
-                string text = HttpContext.Current.Session["Doc_Code"].ToString();
-                ////this.Model.BatchingPlan.AddNewUIRecord();
-                //this.Model.ApAddForPart.Clear();//清理
-                dt = HttpContext.Current.Session["Doc_Code"] as DataTable;
-                for (int i = 0; i < dt.Rows.Count; i++)
-                {
-                    DataRow dr = dt.Rows[i];
-                    whs = whs + "'" + dr["ID"].ToString() + "'" + ",";
-                }
-                set = true;
-            }
-
-
-            //Item = "1002207080050708";
-            //UFIDA.U9.Cust.CL.LI.Cust_FindPlanOrderBP.Proxy.FindOperationProxy operationProxy1 = new FindOperationProxy();
-            //operationProxy1.Item = Item;
-            //operationProxy1.DocNo = DocNo;
-            //operationProxy1.Wh = whs;
-            //UFIDA.U9.Cust.CL.LI.Cust_FindPlanOrderBP.ResultDtoData see2 = operationProxy1.Do();
-            int j = 0;
 
             foreach (var item in this._part.Model.PlanOrder.Records)
             {

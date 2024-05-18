@@ -232,7 +232,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
                             mOOperate.OperateResult = true;
                             mOOperates.Add(mOOperate);
                             complete.MOOperateParamDTOs = mOOperates;
-                            List<MOOperateParamDTOData> see2222 = complete.Do();
+                            //List<MOOperateParamDTOData> see2222 = complete.Do();
                         }
                     }
                 }

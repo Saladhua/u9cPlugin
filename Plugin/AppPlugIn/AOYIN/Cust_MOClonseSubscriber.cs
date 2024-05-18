@@ -45,7 +45,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
                     #region 
                     CompleteMoProxy complete = new CompleteMoProxy();
                     List<MOOperateParamDTOData> mOOperates = new List<MOOperateParamDTOData>();
-                    MOOperateParamDTOData mOOperate = new MOOperateParamDTOData();
+                    MOOperateParamDTOData mOOperate = new MOOperateParamDTOData(); 
                     mOOperate.MODocNo = moitem.DocNo;
                     mOOperates.Add(mOOperate);
                     List<MOOperateParamDTOData> see2222 = complete.Do();

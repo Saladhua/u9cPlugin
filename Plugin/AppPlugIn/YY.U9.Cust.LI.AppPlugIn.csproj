@@ -142,12 +142,23 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>D:\yonyou\U9V60\Portal\bin\UFIDA.U9.CS.Common.FileStorage.dll</HintPath>
     </Reference>
+    <Reference Include="UFIDA.U9.Cust.CustBOMComBE">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.Cust.CustBOMComBE.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.Cust.CustBOMComBE.Deploy">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.Cust.CustBOMComBE.Deploy.dll</HintPath>
+    </Reference>
     <Reference Include="UFIDA.U9.ER.ERBE, Version=25.5401.32574.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>D:\yonyou\U9V60\Portal\ApplicationServer\Libs\UFIDA.U9.ER.ERBE.dll</HintPath>
     </Reference>
-    <Reference Include="UFIDA.U9.InvDoc.InvDocBE">
-      <HintPath>..\..\..\..\UFIDA\U9V25\Portal\ApplicationServer\Libs\UFIDA.U9.InvDoc.InvDocBE.dll</HintPath>
+    <Reference Include="UFIDA.U9.InvDoc.InvDocBE, Version=25.5401.40868.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.InvDoc.InvDocBE.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.InvDoc.InvDocBE.Deploy, Version=25.5401.44259.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.InvDoc.InvDocBE.Deploy.dll</HintPath>
     </Reference>
     <Reference Include="UFIDA.U9.InvDoc.INVDocSV">
       <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.InvDoc.INVDocSV.dll</HintPath>
@@ -242,6 +253,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.MO.MOBP.Deploy.dll</HintPath>
     </Reference>
+    <Reference Include="UFIDA.U9.MRP.MRPBP">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\MailService\Libs\UFIDA.U9.MRP.MRPBP.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.MRP.MRPBP.Agent, Version=25.5401.43455.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationLib\UFIDA.U9.MRP.MRPBP.Agent.dll</HintPath>
+    </Reference>
     <Reference Include="UFIDA.U9.PM.PMBE">
       <HintPath>..\..\..\..\UFIDA\U9V25\Portal\ApplicationServer\Libs\UFIDA.U9.PM.PMBE.dll</HintPath>
     </Reference>
@@ -280,6 +298,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.SPL.SPLBE.dll</HintPath>
     </Reference>
+    <Reference Include="UFIDA.U9.UI.PDHelper">
+      <HintPath>..\UIPlugIn\bin\Debug\UFIDA.U9.UI.PDHelper.dll</HintPath>
+    </Reference>
     <Reference Include="UFIDA.UBF.MD.Entity, Version=25.5401.30981.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>D:\yonyou\U9V60\Portal\ApplicationServer\Libs\UFIDA.UBF.MD.Entity.dll</HintPath>
@@ -309,6 +330,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApiHelper.cs" />
+    <Compile Include="Cl%28创联%29\CLMiscShipmentLInsertedSubscriber.cs" />
+    <Compile Include="Cl%28创联%29\CLMiscShipmentLUpdateSubscriber.cs" />
+    <Compile Include="Cl%28创联%29\ClMoSortInsertedSubscrilber.cs" />
     <Compile Include="Cl%28创联%29\CLSalePlanInsertedSubscrilber.cs" />
     <Compile Include="Cl%28创联%29\CLSOInsertedSubscrilber.cs" />
     <Compile Include="Cl%28创联%29\ForecastOrderInsertedSubscrilber.cs" />
@@ -324,6 +348,7 @@
     <Compile Include="KAIZHI\ASNLineInsertedSubscriber.cs" />
     <Compile Include="KAIZHI\PMPOLineInsertedSubscriber.cs" />
     <Compile Include="KAIZHI\SupplierUpDateSubscriber.cs" />
+    <Compile Include="NK\NKLIPurchaseOrderInsertedSubscrilber.cs" />
     <Compile Include="TokenManager.cs" />
     <Compile Include="Common.cs" />
     <Compile Include="HttpRequestClient.cs" />

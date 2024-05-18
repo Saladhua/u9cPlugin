@@ -43,6 +43,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
             string itemCode = "";//料号
             string itemid = "";//料号
             string docNo = "";//来源单据号
+            string DocLineNo = "";//来源单据行号
             string receivementid = "";//收货单行的ID
             string org = Context.LoginOrg.ID.ToString();
             string date = item.BusinessDate.ToString("yyyy.MM.dd");//日期
@@ -50,8 +51,8 @@ namespace YY.U9.Cust.LI.AppPlugIn
             string ddate = item.DescFlexField.PrivateDescSeg10;//私有字段10签收日期
             foreach (var shipline in item.ShipLines)
             {
-                if (item.Status.Value == 3)// 放到宏巨测试时在添加  && org == "1002208260110532"
-                {
+                //if (item.Status.Value == 3)// 放到宏巨测试时在添加  && org == "1002208260110532"
+                //{
                     hJShipDocNo = shipline.DescFlexField.PrivateDescSeg5;//送货单号
                     hjLogistics=shipline.DescFlexField.PrivateDescSeg8;//物流公司
                     courierDocNo = shipline.DescFlexField.PrivateDescSeg9;//快递单号
@@ -70,7 +71,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
                     {
                         #region 惠州的出货对常州的出货单赋值
                         DataTable dataTable = new DataTable();
-                        string sqlFor = "select b.SrcDocInfo_SrcDocNo from PM_PurchaseOrder a inner join PM_POLine b on a.ID = b.PurchaseOrder " +
+                        string sqlFor = "select b.SrcDocInfo_SrcDocNo,b.SrcDocInfo_SrcDocLineNo from PM_PurchaseOrder a inner join PM_POLine b on a.ID = b.PurchaseOrder " +
                             "where DocNo = (select TOP(1) b.SrcDocNo from SM_SO a inner join SM_SOLine b" +
                             " on a.ID = b.SO where a.DocNo = '" + srcDocNo + "')";
                         DataSet dataSet = new DataSet();
@@ -79,13 +80,14 @@ namespace YY.U9.Cust.LI.AppPlugIn
                         if (dataTable != null && dataTable.Rows.Count > 0)
                         {
                             docNo = dataTable.Rows[0]["SrcDocInfo_SrcDocNo"].ToString();
+                            DocLineNo = dataTable.Rows[0]["SrcDocInfo_SrcDocLineNo"].ToString();
                         }
                         string update1 = "update SM_ShipLine  set DescFlexField_PrivateDescSeg5='" + hJShipDocNo + "'," +
                             " DescFlexField_PrivateDescSeg6='" + date + "'," +
                             " DescFlexField_PrivateDescSeg8='" + hjLogistics + "'," +
                             " DescFlexField_PrivateDescSeg9='" + courierDocNo + "'," +
                             " DescFlexField_PrivateDescSeg10='" + hjReceiptedDate + "'" +
-                            "where SrcDocNo = '" + docNo + "' and Org = '1002208260110060' and ItemInfo_ItemCode = '" + itemCode + "'";
+                            "where SrcDocNo = '" + docNo + "' and Org = '1002208260110060'  and DocLineNo = '"+ DocLineNo + "'  and ItemInfo_ItemCode = '" + itemCode + "'";
                         DataAccessor.RunSQL(DataAccessor.GetConn(), update1, null);
                         //2023 - 4 - 新增出货单头增加赋值两个字段
                         string docnonew = "";
@@ -120,7 +122,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
                         #endregion
 
                     }
-                }
+                //}
             }
         }
     }

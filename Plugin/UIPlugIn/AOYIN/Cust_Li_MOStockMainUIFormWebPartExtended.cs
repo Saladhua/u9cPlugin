@@ -123,8 +123,9 @@ namespace YY.U9.Cust.AY.UIPlugIn
                 {
                     roundPrecision = dataTable.Rows[0]["Round_Precision"].ToString();
                 }
-                if (string.IsNullOrEmpty(roundPrecision) || string.IsNullOrEmpty(rcvQtyByProductUom))
+                if (string.IsNullOrEmpty(rcvQtyByProductUom))
                 {
+                    item["DescFlexField_PrivateDescSeg8"] = "0";
                     return;
                 }
                 double rcvPer = Math.Round(double.Parse(rcvQtyByProductUom) * double.Parse(roundPrecision), Convert.ToInt32(roundPrecision));

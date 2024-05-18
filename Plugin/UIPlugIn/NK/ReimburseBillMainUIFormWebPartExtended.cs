@@ -13,7 +13,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
     {
         private ReimburseBillMainUIFormWebPart _part;
 
-        IUFButton BtnSettle;
+        IUFButton BtnSettle3;
         /// <summary>
         /// 初始化后扩展
         /// </summary>
@@ -24,16 +24,16 @@ namespace YY.U9.Cust.LI.UIPlugIn
             base.AfterInit(part, e);
             _part = part as ReimburseBillMainUIFormWebPart;
             //实例化按钮
-            BtnSettle = new UFWebButtonAdapter();
+            BtnSettle3 = new UFWebButtonAdapter();
             new UFWebButtonAdapter();
-            BtnSettle.Text = "快速分拆";
-            BtnSettle.ID = "BtnSettle";
-            BtnSettle.AutoPostBack = true;
-            BtnSettle.Click += new EventHandler(BtnAR_Click);
+            BtnSettle3.Text = "快速分拆";
+            BtnSettle3.ID = "BtnSettle3";
+            BtnSettle3.AutoPostBack = true;
+            BtnSettle3.Click += new EventHandler(BtnAR_Click);
             //加入Card容器
             IUFCard card = (IUFCard)part.GetUFControlByName(part.TopLevelContainer, "Card0");
-            card.Controls.Add(BtnSettle);
-            CommonFunction.Layout(card, BtnSettle, 18, 0);
+            card.Controls.Add(BtnSettle3);
+            CommonFunction.Layout(card, BtnSettle3, 18, 0);
         }
         [Obsolete]
         public void BtnAR_Click(object sender, EventArgs e)
@@ -49,7 +49,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
 
             //NavigateManager.ShowModelWebpart(this._part.Action.CurrentPart, "7d576ca6-fb91-4c22-9903-43cc99d508bd", _part.TaskId.ToString());
 
-            NavigateManager.ShowModelWebpart(_part, "7d576ca6-fb91-4c22-9903-43cc99d508bd", _part.TaskId.ToString(), 992, 420, null, true, true);
+            NavigateManager.ShowModelWebpart(_part, "7d576ca6-fb91-4c22-9903-43cc99d508bd", _part.TaskId.ToString(), 992, 470, null, true, true);
         }
     }
 }

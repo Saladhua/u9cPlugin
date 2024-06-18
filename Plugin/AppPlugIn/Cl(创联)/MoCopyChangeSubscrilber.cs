@@ -102,6 +102,12 @@ namespace YY.U9.Cust.LI.AppPlugIn
                         mOPickList.ActualReqQty = item.ActualReqQty == 0 ? 0 : ProductQty * mOPickList.QPA;
                         //mOPickList.ActualReqQty = item.ActualReqQty;
                         mOPickList.ReserveQty = item.ReserveQty;
+                        mOPickList.IsSubstitute = item.IsSubstitute;
+                        mOPickList.SubstitutedItem = item.SubstitutedItem;
+                        mOPickList.SubstitutedPick = item.SubstitutedPick;
+                        mOPickList.ReplaceRatio = item.ReplaceRatio;
+                        mOPickList.ReplaceSequence = item.ReplaceSequence;
+                        mOPickList.SubstituteStyle = item.SubstituteStyle;
 
                         if (item.ItemMaster.ItemFormAttribute.Value==6)
                         {

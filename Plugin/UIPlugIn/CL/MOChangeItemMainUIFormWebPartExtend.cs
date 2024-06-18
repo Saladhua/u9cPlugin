@@ -77,7 +77,16 @@ namespace YY.U9.Cust.LI.UIPlugIn
                 mOChange.NewMO = NewMO;
                 mOChange.MO = MO;
                 mOChange.Item = ItemID;
-                mOChange.Do();
+                bool see = mOChange.Do();
+
+                if (see)
+                {
+                    this._part.Model.ErrorMessage.Message = "成功";
+                }
+                else
+                {
+                    this._part.Model.ErrorMessage.Message = "失败";
+                }
             }
         }
     }

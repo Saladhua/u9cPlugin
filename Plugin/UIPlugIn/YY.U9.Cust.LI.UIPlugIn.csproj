@@ -362,6 +362,9 @@
     <Reference Include="UFIDA.U9.SCM.SD.ShipUI.WebPart">
       <HintPath>D:\yonyou\U9V60\Portal\UILib\UFIDA.U9.SCM.SD.ShipUI.WebPart.dll</HintPath>
     </Reference>
+    <Reference Include="UFIDA.U9.SCM.SD.SOUI.WebPart">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\UILib\UFIDA.U9.SCM.SD.SOUI.WebPart.dll</HintPath>
+    </Reference>
     <Reference Include="UFIDA.U9.UI.PDHelper, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\UFIDA\UBFV201\U9.VOB.Product.UBF\UBFStudio\Runtime\UFIDA.U9.UI.PDHelper.dll</HintPath>
@@ -480,6 +483,7 @@
     <Compile Include="BomMainUIFormWebPartExtended.cs" />
     <Compile Include="AOYIN\Cust_Li_MOStockMainUIFormWebPartExtended.cs" />
     <Compile Include="ceshi\sysceshi.cs" />
+    <Compile Include="CL\CLMOStockMainUIFormWebPartExtend.cs" />
     <Compile Include="CL\DiscreteMOMainUIFormWebPartExtend.cs" />
     <Compile Include="CL\ECNDocMainUIFormWebPartExtend.cs" />
     <Compile Include="CL\MOChangeItemMainUIFormWebPartExtend.cs" />
@@ -495,6 +499,7 @@
     <Compile Include="ceshi\JUNHUA\MiscRcvUIMainFormWebPartExtended.cs" />
     <Compile Include="ceshi\JUNHUA\TransferFormUIMainFormWebPartExtended.cs" />
     <Compile Include="KaiZhi\SupplierUIFormWebPartExtended.cs" />
+    <Compile Include="NK\APRefScmBillUIFormNaKeWebPartExtended.cs" />
     <Compile Include="NK\ReimburseBillMainUIFormWebPartExtended.cs" />
     <Compile Include="TransferFormUIMainFormWebPartExtended.cs" />
     <Compile Include="APRefScmBillUIFormWebPartExtended.cs" />

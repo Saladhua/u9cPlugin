@@ -17,6 +17,23 @@ namespace YY.U9.Cust.LI.AppPlugIn
     {
         private static readonly ILogger logger = LoggerManager.GetLogger(typeof(ShipLinesUpdatingSubscriber));
 
+
+
+        #region 最后一版测试结果
+        //select CooperateRcvDocNo, SrcRcv,* from SM_Ship A1
+        //left join SM_ShipLine A2
+        //on A1.ID=A2.Ship
+        //where A1.DocNo='30SM2405300007'
+
+
+
+        //select CooperateRcvDocNo, SrcRcv,* from SM_Ship A1
+        //left join SM_ShipLine A2
+        //on A1.ID=A2.Ship
+        //where A1.DocNo='10SM2405300032'
+        #endregion
+
+
         public void Notify(params object[] args)
         {
             #region 从事件参数中取得当前业务实体
@@ -49,79 +66,120 @@ namespace YY.U9.Cust.LI.AppPlugIn
             string date = item.BusinessDate.ToString("yyyy.MM.dd");//日期
             string ddocno = item.DescFlexField.PrivateDescSeg3;//私有字段3签收单号
             string ddate = item.DescFlexField.PrivateDescSeg10;//私有字段10签收日期
+            long CooperateRcvLineID = 0;//收货单
             foreach (var shipline in item.ShipLines)
             {
                 //if (item.Status.Value == 3)// 放到宏巨测试时在添加  && org == "1002208260110532"
                 //{
-                    hJShipDocNo = shipline.DescFlexField.PrivateDescSeg5;//送货单号
-                    hjLogistics=shipline.DescFlexField.PrivateDescSeg8;//物流公司
-                    courierDocNo = shipline.DescFlexField.PrivateDescSeg9;//快递单号
-                    hjReceiptedDate = shipline.DescFlexField.PrivateDescSeg10;//送货单签收日期
-                    //srcDocNo = shipline.DescFlexField.PubDescSeg3;//备注 来源单据号
-                    itemCode = shipline.ItemInfo.ItemCode;//料号
-                    itemid = shipline.ItemInfo.ItemID.ID.ToString();//料号id
-                    srcDocNo = shipline.SrcDocNo;
-                    //select b.SrcDocInfo_SrcDocNo from PM_PurchaseOrder a inner join PM_POLine b on a.ID = b.PurchaseOrder
-                    //where DocNo = (select TOP(1) b.SrcDocNo from SM_SO a inner join SM_SOLine b
-                    //on a.ID = b.SO where a.DocNo = '30SO2302100001') and b.ItemInfo_ItemID = '1002211110149074'
-                    //2023-4,获取私有字段3和10赋值
-                    //ddocno = shipline.DescFlexField.PrivateDescSeg3;//签收单号
-                    //ddate = shipline.DescFlexField.PrivateDescSeg10;//签收日期
-                    if (org == "1002208260110532" || org == "1002208260110297")
-                    {
-                        #region 惠州的出货对常州的出货单赋值
-                        DataTable dataTable = new DataTable();
-                        string sqlFor = "select b.SrcDocInfo_SrcDocNo,b.SrcDocInfo_SrcDocLineNo from PM_PurchaseOrder a inner join PM_POLine b on a.ID = b.PurchaseOrder " +
-                            "where DocNo = (select TOP(1) b.SrcDocNo from SM_SO a inner join SM_SOLine b" +
-                            " on a.ID = b.SO where a.DocNo = '" + srcDocNo + "')";
-                        DataSet dataSet = new DataSet();
-                        DataAccessor.RunSQL(DataAccessor.GetConn(), sqlFor, null, out dataSet);
-                        dataTable = dataSet.Tables[0];
-                        if (dataTable != null && dataTable.Rows.Count > 0)
-                        {
-                            docNo = dataTable.Rows[0]["SrcDocInfo_SrcDocNo"].ToString();
-                            DocLineNo = dataTable.Rows[0]["SrcDocInfo_SrcDocLineNo"].ToString();
-                        }
-                        string update1 = "update SM_ShipLine  set DescFlexField_PrivateDescSeg5='" + hJShipDocNo + "'," +
-                            " DescFlexField_PrivateDescSeg6='" + date + "'," +
-                            " DescFlexField_PrivateDescSeg8='" + hjLogistics + "'," +
-                            " DescFlexField_PrivateDescSeg9='" + courierDocNo + "'," +
-                            " DescFlexField_PrivateDescSeg10='" + hjReceiptedDate + "'" +
-                            "where SrcDocNo = '" + docNo + "' and Org = '1002208260110060'  and DocLineNo = '"+ DocLineNo + "'  and ItemInfo_ItemCode = '" + itemCode + "'";
-                        DataAccessor.RunSQL(DataAccessor.GetConn(), update1, null);
-                        //2023 - 4 - 新增出货单头增加赋值两个字段
-                        string docnonew = "";
-                        string sqlFor4 = "select b.DocNo,b.ID from SM_ShipLine a inner join SM_Ship b on a.Ship= b.ID where a.SrcDocNo='" + docNo + "' " +
-                            " and a.Org = '1002208260110060'";
-                        string update3 = "";
-                        DataAccessor.RunSQL(DataAccessor.GetConn(), sqlFor4, null, out dataSet);
-                        dataTable = dataSet.Tables[0];
-                        if (dataTable != null)
-                        {
-                            for (int i = 0; i < dataTable.Rows.Count; i++)
-                            {
-                                docnonew = dataTable.Rows[i]["DocNo"].ToString();
-                                update3 = "update SM_Ship set DescFlexField_PrivateDescSeg3='" + ddocno + "',DescFlexField_PrivateDescSeg10='" + ddate + "' " +
-                                    "  where DocNo='" + docnonew + "' and Org='1002208260110060';";
-                                DataAccessor.RunSQL(DataAccessor.GetConn(), update3, null);
-                            }
-                        }
-                        #endregion
-                        #region 惠州的出货对常州的收货单赋值
-                        string sqlForRcv = "select b.SrcDoc_SrcDocNo  from PM_Receivement a inner join PM_RcvLine b on a.ID = b.Receivement where SrcPO_SrcDocNo = " +
-                            " (select TOP(1) b.SrcDocNo from SM_SO a inner join SM_SOLine b on a.ID = b.SO where a.DocNo = '" + srcDocNo + "')";
-                        DataAccessor.RunSQL(DataAccessor.GetConn(), sqlForRcv, null, out dataSet);
-                        dataTable = dataSet.Tables[0];
-                        if (dataTable != null && dataTable.Rows.Count > 0)
-                        {
-                            receivementid = dataTable.Rows[0]["SrcDoc_SrcDocNo"].ToString();
-                        }
-                        string update2 = "update PM_RcvLine  set DescFlexSegments_PrivateDescSeg14='" + hJShipDocNo + "',DescFlexSegments_PrivateDescSeg15 = '" + date + "'" +
-                            " where SrcDoc_SrcDocNo = '" + receivementid + "'  and ItemInfo_ItemCode = '" + itemCode + "'";
-                        DataAccessor.RunSQL(DataAccessor.GetConn(), update2, null);
-                        #endregion
 
+                CooperateRcvLineID = shipline.CooperateRcvLineID;//收货单号
+
+
+                hJShipDocNo = shipline.DescFlexField.PrivateDescSeg5;//送货单号
+                hjLogistics = shipline.DescFlexField.PrivateDescSeg8;//物流公司
+                courierDocNo = shipline.DescFlexField.PrivateDescSeg9;//快递单号
+                hjReceiptedDate = shipline.DescFlexField.PrivateDescSeg10;//送货单签收日期
+                //srcDocNo = shipline.DescFlexField.PubDescSeg3;//备注 来源单据号
+                itemCode = shipline.ItemInfo.ItemCode;//料号
+                itemid = shipline.ItemInfo.ItemID.ID.ToString();//料号id
+                srcDocNo = shipline.SrcDocNo;
+                //select b.SrcDocInfo_SrcDocNo from PM_PurchaseOrder a inner join PM_POLine b on a.ID = b.PurchaseOrder
+                //where DocNo = (select TOP(1) b.SrcDocNo from SM_SO a inner join SM_SOLine b
+                //on a.ID = b.SO where a.DocNo = '30SO2302100001') and b.ItemInfo_ItemID = '1002211110149074'
+                //2023-4,获取私有字段3和10赋值hao
+                //ddocno = shipline.DescFlexField.PrivateDescSeg3;//签收单号
+                //ddate = shipline.DescFlexField.PrivateDescSeg10;//签收日期
+
+                //新加组织
+                //1002304210036295
+                //1002304210037948
+                if (org == "1002208260110532" || org == "1002208260110297" || org == "1002304210036295" || org == "1002304210037948")// || org == "1002208260110297")
+                {
+                    #region 惠州的出货对常州的出货单赋值
+                    DataTable dataTable = new DataTable();
+                    //string sqlFor = "select b.SrcDocInfo_SrcDocNo,b.SrcDocInfo_SrcDocLineNo from PM_PurchaseOrder a inner join PM_POLine b on a.ID = b.PurchaseOrder " +
+                    //    "where DocNo = (select TOP(1) b.SrcDocNo from SM_SO a inner join SM_SOLine b" +
+                    //    " on a.ID = b.SO where a.DocNo = '" + srcDocNo + "') and b.ItemInfo_ItemCode='" + itemCode + "'";
+                    DataSet dataSet = new DataSet();
+                    //DataAccessor.RunSQL(DataAccessor.GetConn(), sqlFor, null, out dataSet);
+                    //dataTable = dataSet.Tables[0];
+                    //if (dataTable != null && dataTable.Rows.Count > 0)
+                    //{
+                    //int kk = dataTable.Rows.Count;
+                    //for (int b = 0; b < kk; b++)
+                    //{
+                    // try
+                    //{
+                    //docNo = dataTable.Rows[0]["SrcDocInfo_SrcDocNo"].ToString();
+                    //DocLineNo = dataTable.Rows[0]["SrcDocInfo_SrcDocLineNo"].ToString();
+                    // }
+                    // catch (System.Exception)
+                    //{
+                    //  return;
+                    //}
+                    //string odlDP10 = "";
+
+                    //if (shipline.OriginalData != null)
+                    //{
+                    //    odlDP10 = shipline.OriginalData.DescFlexField.PrivateDescSeg10.ToString();
+                    //}
+
+
+                    //if (odlDP10 != hjReceiptedDate && !string.IsNullOrEmpty(odlDP10))
+                    //{
+                    //    hjReceiptedDate = odlDP10;
+                    //}
+                    if (CooperateRcvLineID != 0)
+                    {
+                        string update1 = "update SM_ShipLine  set DescFlexField_PrivateDescSeg5='" + hJShipDocNo + "'," +
+                         " DescFlexField_PrivateDescSeg6='" + date + "'," +
+                         " DescFlexField_PrivateDescSeg8='" + hjLogistics + "'," +
+                         " DescFlexField_PrivateDescSeg9='" + courierDocNo + "'," +
+                         " DescFlexField_PrivateDescSeg10='" + hjReceiptedDate + "'" +
+                         " where SrcRcvLine='" + CooperateRcvLineID + "'";
+                        //"SrcDocNo = '" + docNo + "' and Org = '1002208260110060' " +
+                        ////" and SrcDocLineNo = '" + DocLineNo + "' " +
+                        //" and ItemInfo_ItemCode = '" + itemCode + "'";
+                        DataAccessor.RunSQL(DataAccessor.GetConn(), update1, null);
                     }
+
+                    //2023 - 4 - 新增出货单头增加赋值两个字段
+                    string docnonew = "";
+                    string sqlFor4 = "select b.DocNo,b.ID from SM_ShipLine a inner join SM_Ship b on a.Ship= b.ID where a.SrcDocNo='" + docNo + "' " +
+                        " and a.Org = '1002208260110060' and a.DocLineNo= '" + DocLineNo + "' and a.ItemInfo_ItemCode='" + itemCode + "'";
+                    string update3 = "";
+                    DataAccessor.RunSQL(DataAccessor.GetConn(), sqlFor4, null, out dataSet);
+                    dataTable = dataSet.Tables[0];
+                    if (dataTable != null)
+                    {
+                        for (int i = 0; i < dataTable.Rows.Count; i++)
+                        {
+                            docnonew = dataTable.Rows[i]["DocNo"].ToString();
+                            update3 = "update SM_Ship set DescFlexField_PrivateDescSeg3='" + ddocno + "',DescFlexField_PrivateDescSeg10='" + ddate + "' " +
+                                "  where DocNo='" + docnonew + "' and Org='1002208260110060';";
+                            DataAccessor.RunSQL(DataAccessor.GetConn(), update3, null);
+                        }
+                    }
+                    // }
+                    //}
+
+                    #endregion
+                    #region 惠州的出货对常州的收货单赋值
+                    string sqlForRcv = "select b.SrcDoc_SrcDocNo  from PM_Receivement a inner join PM_RcvLine b on a.ID = b.Receivement where SrcPO_SrcDocNo = " +
+                        " (select TOP(1) b.SrcDocNo from SM_SO a inner join SM_SOLine b on a.ID = b.SO where a.DocNo = '" + srcDocNo + "')";
+                    DataAccessor.RunSQL(DataAccessor.GetConn(), sqlForRcv, null, out dataSet);
+                    dataTable = dataSet.Tables[0];
+                    if (dataTable != null && dataTable.Rows.Count > 0)
+                    {
+                        receivementid = dataTable.Rows[0]["SrcDoc_SrcDocNo"].ToString();
+                    }
+
+                    string update2 = "update PM_RcvLine  set DescFlexSegments_PrivateDescSeg14='" + hJShipDocNo + "',DescFlexSegments_PrivateDescSeg15 = '" + date + "'" +
+                        " where SrcDoc_SrcDocNo = '" + receivementid + "'  and ItemInfo_ItemCode = '" + itemCode + "'";
+                    DataAccessor.RunSQL(DataAccessor.GetConn(), update2, null);
+                    #endregion
+
+                }
                 //}
             }
         }

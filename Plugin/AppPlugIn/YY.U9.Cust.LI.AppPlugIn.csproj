@@ -189,6 +189,15 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\yonyou\U9V60\Portal\ApplicationServer\Libs\UFIDA.U9.IssueNew.IssueBE.dll</HintPath>
     </Reference>
+    <Reference Include="UFIDA.U9.ISV.AP.APImportSV">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.ISV.AP.APImportSV.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.ISV.AP.APImportSV.Agent">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.ISV.AP.APImportSV.Agent.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.ISV.AP.APImportSV.Deploy">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.ISV.AP.APImportSV.Deploy.dll</HintPath>
+    </Reference>
     <Reference Include="UFIDA.U9.ISV.CBO.LotSV">
       <HintPath>..\..\..\..\..\yonyou\U9CE\MailService\Libs\UFIDA.U9.ISV.CBO.LotSV.dll</HintPath>
     </Reference>
@@ -301,6 +310,12 @@
     <Reference Include="UFIDA.U9.UI.PDHelper">
       <HintPath>..\UIPlugIn\bin\Debug\UFIDA.U9.UI.PDHelper.dll</HintPath>
     </Reference>
+    <Reference Include="UFIDA.U9C.Cust.Nrknor.DeductDocBE">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9C.Cust.Nrknor.DeductDocBE.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9C.Cust.Nrknor.DeductDocBE.Deploy">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9C.Cust.Nrknor.DeductDocBE.Deploy.dll</HintPath>
+    </Reference>
     <Reference Include="UFIDA.UBF.MD.Entity, Version=25.5401.30981.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>D:\yonyou\U9V60\Portal\ApplicationServer\Libs\UFIDA.UBF.MD.Entity.dll</HintPath>
@@ -348,6 +363,7 @@
     <Compile Include="KAIZHI\ASNLineInsertedSubscriber.cs" />
     <Compile Include="KAIZHI\PMPOLineInsertedSubscriber.cs" />
     <Compile Include="KAIZHI\SupplierUpDateSubscriber.cs" />
+    <Compile Include="NK\NKLIDeductDocUpdateSubscrilber.cs" />
     <Compile Include="NK\NKLIPurchaseOrderInsertedSubscrilber.cs" />
     <Compile Include="TokenManager.cs" />
     <Compile Include="Common.cs" />

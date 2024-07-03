@@ -125,13 +125,13 @@ namespace YY.U9.Cust.LI.UIPlugIn
 
             string DocNo = "";
 
-            string yjlyl = "";
-            string yjhjl = "";
+            string yjlyl = "0";
+            string yjhjl = "0";
             string qgsl = "0";
             string ckkc = "0"; //仓库库存字段默认带出范围内仓库库存
-            string dtyl = "";
-            string aqkc = "";
-            string mrkc = "";
+            string dtyl = "0";
+            string aqkc = "0";
+            string mrkc = "0";
 
             this._part = (_part as PlanOrderMainUIFormWebPart);
             string whs = "";
@@ -196,13 +196,22 @@ namespace YY.U9.Cust.LI.UIPlugIn
                     operationProxy.DefWh = DefWh;
                     UFIDA.U9.Cust.CL.LI.Cust_FindPlanOrderBP.ResultDtoData see1 = operationProxy.Do();
 
-                    yjlyl = see1.Yjlyl;
-                    yjhjl = see1.Yjjhl;
-                    qgsl = see1.Qgsl;
+                    yjlyl = see1.Yjlyl == "" ? "0" : see1.Yjlyl;
+                    yjhjl = see1.Yjjhl == "" ? "0" : see1.Yjjhl;
+                    qgsl = see1.Qgsl == "" ? "0" : see1.Qgsl;
                     ckkc = see1.CKKC;
-                    dtyl = see1.Dtyl;
-                    aqkc = see1.Aqkc;
+                    dtyl = see1.Dtyl == "" ? "0" : see1.Dtyl;
+                    aqkc = see1.Aqkc == "" ? "0" : see1.Aqkc;
                     mrkc = see1.Mrkc;
+
+                    if (string.IsNullOrEmpty(ckkc) || ckkc == null)
+                    {
+                        ckkc = "0";
+                    }
+                    if (string.IsNullOrEmpty(mrkc) || mrkc == null)
+                    {
+                        mrkc = "0";
+                    }
                     try
                     {
                         //字段有小数位按计量单位小数位保留，没有小数去掉多余的0
@@ -222,10 +231,12 @@ namespace YY.U9.Cust.LI.UIPlugIn
                         }
                         //仓库库存 + 预计进货量 - 安全库存 - 预计领用量 + 请购数量
                         //string yjkll = (decimal.Parse(yjlyl) + decimal.Parse(yjhjl) + decimal.Parse(qgsl) + decimal.Parse(D2) + decimal.Parse(D8)).ToString();
-                        string yjkll = (decimal.Parse(mrkc) + decimal.Parse(yjhjl) - decimal.Parse(yjlyl) + decimal.Parse(qgsl) - decimal.Parse(aqkc)).ToString();
+                        string yjkll = "0";
+                        yjkll = (decimal.Parse(mrkc) + decimal.Parse(yjhjl) - decimal.Parse(yjlyl) + decimal.Parse(qgsl) - decimal.Parse(aqkc)).ToString();
                         item["DescFlexField_PrivateDescSeg7"] = Math.Round(decimal.Parse(yjkll), 4).ToString("0.####");// yjkll;
                         item["DescFlexField_PrivateDescSeg1"] = see1.Dtjz;
                         item["DescFlexField_PrivateDescSeg6"] = Math.Round(decimal.Parse(dtyl), 4).ToString("0.####");
+
                         item["DescFlexField_PrivateDescSeg8"] = Math.Round(decimal.Parse(ckkc), 4).ToString("0.####");
                     }
                     catch (Exception ex)

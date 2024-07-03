@@ -478,6 +478,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AOYIN\CreateDemandDocUIFormWebPartExtended.cs" />
     <Compile Include="AOYIN\Cust_Li_CompleteRptMainUIFormWebPartWebPartExtended.cs" />
     <Compile Include="AOYIN\Cust_Li_MiscRcvTransLUIFormWebPartExtended.cs" />
     <Compile Include="BomMainUIFormWebPartExtended.cs" />
@@ -499,7 +500,9 @@
     <Compile Include="ceshi\JUNHUA\MiscRcvUIMainFormWebPartExtended.cs" />
     <Compile Include="ceshi\JUNHUA\TransferFormUIMainFormWebPartExtended.cs" />
     <Compile Include="KaiZhi\SupplierUIFormWebPartExtended.cs" />
-    <Compile Include="NK\APRefScmBillUIFormNaKeWebPartExtended.cs" />
+    <Compile Include="NK\APRefScmBillUIFormNaKeWebPartExtended.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
     <Compile Include="NK\ReimburseBillMainUIFormWebPartExtended.cs" />
     <Compile Include="TransferFormUIMainFormWebPartExtended.cs" />
     <Compile Include="APRefScmBillUIFormWebPartExtended.cs" />

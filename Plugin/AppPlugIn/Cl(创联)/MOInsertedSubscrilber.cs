@@ -6,6 +6,7 @@ using UFIDA.U9.SM.SO;
 using UFIDA.UBF.MD.Business;
 using UFSoft.UBF.Business;
 using UFSoft.UBF.PL;
+using UFSoft.UBF.PL.Engine;
 using UFSoft.UBF.Util.DataAccess;
 using UFSoft.UBF.Util.Log;
 
@@ -45,7 +46,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
                 ///string MoDemand = mo.DemandCode.Name;
                 string MoDemand = "";
                 string TDocNo = mo.DocNo;
-                if (mo.MOSourceDocType.Value == 3 && !string.IsNullOrEmpty(TDocNo))
+                if (mo.MOSourceDocType.Value == 3 && !string.IsNullOrEmpty(TDocNo) && mo.SysState == ObjectState.Inserted)
                 {
                     long extEnumTypeID = 0L;
 
@@ -150,19 +151,56 @@ namespace YY.U9.Cust.LI.AppPlugIn
                     DataTable dataTable = new DataTable();
                     DataSet dataSet = new DataSet();
                     string sql = "";
-                    if (MoDemand == "CL")//标准销售
-                    {
-                        sql = "SELECT b.DescFlexField_PrivateDescSeg1,a.ID FROM SM_SO a INNER JOIN SM_SOLine b ON  a.ID=b.SO WHERE a.DocNo='" + MoDocNo + "' AND DocLineNo='" + MoDocNoLine + "'";
-                    }
-                    else if (MoDemand == "FO")//预测订单
-                    {
-                        sql = "SELECT b.DescFlexField_PrivateDescSeg1,a.ID FROM SM_ForecastOrder a INNER JOIN SM_ForecastOrderLine b ON a.ID=b.ForecastOrder WHERE a.DocNo='" + MoDocNo + "' AND DocLineNo='" + MoDocNoLine + "'";
-                    }
+                    //if (MoDemand == "CL")//标准销售
+                    //{
+                    //sql = "SELECT b.DescFlexField_PrivateDescSeg1,a.ID FROM SM_SO a INNER JOIN SM_SOLine b ON  a.ID=b.SO WHERE a.DocNo='" + MoDocNo + "' AND DocLineNo='" + MoDocNoLine + "'";
+                    //}
+                    // else if (MoDemand == "FO")//预测订单
+                    //{
+                    sql = "SELECT b.DescFlexField_PrivateDescSeg1,a.ID FROM SM_ForecastOrder a INNER JOIN SM_ForecastOrderLine b ON a.ID=b.ForecastOrder WHERE a.DocNo='" + MoDocNo + "' AND DocLineNo='" + MoDocNoLine + "'";
+                    //}
                     DataAccessor.RunSQL(DataAccessor.GetConn(), sql, null, out dataSet);
                     dataTable = dataSet.Tables[0];
                     if (dataTable.Rows != null && dataTable.Rows.Count > 0)
                     {
-                        if (MoDemand == "CL")
+                        //if (MoDemand == "CL")
+                        //{
+                        Des = dataTable.Rows[0]["DescFlexField_PrivateDescSeg1"].ToString();
+                        FindForID = dataTable.Rows[0]["ID"].ToString();
+                        ForecastOrder forecastOrder = ForecastOrder.Finder.FindByID(FindForID);
+                        if (forecastOrder.Customer.Customer != null)
+                        {
+                            Des2 = forecastOrder.Customer.Customer.Code;
+                            Des3 = forecastOrder.Customer.Customer.Saleser.Name;
+                        }
+                        if (string.IsNullOrEmpty(Des))//预测订单找到，但是客户备注为空
+                        {
+                            DataTable dataTable2 = new DataTable();
+                            DataSet dataSet2 = new DataSet();
+                            string sql2 = "SELECT b.DescFlexField_PrivateDescSeg1,a.ID FROM SM_SO a INNER JOIN SM_SOLine b ON  a.ID=b.SO WHERE a.DocNo='" + MoDocNo + "' AND DocLineNo='" + MoDocNoLine + "'"; ;
+                            DataAccessor.RunSQL(DataAccessor.GetConn(), sql2, null, out dataSet2);
+                            dataTable2 = dataSet2.Tables[0];
+                            if (dataTable2.Rows != null && dataTable2.Rows.Count > 0)
+                            {
+                                Des = dataTable.Rows[0]["DescFlexField_PrivateDescSeg1"].ToString();
+                                FindSoID = dataTable.Rows[0]["ID"].ToString();
+                                SO sO = SO.Finder.FindByID(FindSoID);
+                                if (sO.OrderBy.Customer != null)
+                                {
+                                    Des2 = sO.OrderBy.Customer.Code;
+                                    Des3 = sO.OrderBy.Customer.Saleser.Name;
+                                }
+                            }
+                        }
+                    }
+                    else//预测订单没有找到，去找销售订单
+                    {
+                        DataTable dataTable2 = new DataTable();
+                        DataSet dataSet2 = new DataSet();
+                        string sql2 = "SELECT b.DescFlexField_PrivateDescSeg1,a.ID FROM SM_SO a INNER JOIN SM_SOLine b ON  a.ID=b.SO WHERE a.DocNo='" + MoDocNo + "' AND DocLineNo='" + MoDocNoLine + "'"; ;
+                        DataAccessor.RunSQL(DataAccessor.GetConn(), sql2, null, out dataSet2);
+                        dataTable2 = dataSet2.Tables[0];
+                        if (dataTable2.Rows != null && dataTable2.Rows.Count > 0)
                         {
                             Des = dataTable.Rows[0]["DescFlexField_PrivateDescSeg1"].ToString();
                             FindSoID = dataTable.Rows[0]["ID"].ToString();
@@ -172,21 +210,25 @@ namespace YY.U9.Cust.LI.AppPlugIn
                                 Des2 = sO.OrderBy.Customer.Code;
                                 Des3 = sO.OrderBy.Customer.Saleser.Name;
                             }
-
-                        }
-                        else if (MoDemand == "FO")
-                        {
-                            Des = dataTable.Rows[0]["DescFlexField_PrivateDescSeg1"].ToString();
-                            FindForID = dataTable.Rows[0]["ID"].ToString();
-                            ForecastOrder forecastOrder = ForecastOrder.Finder.FindByID(FindForID);
-                            if (forecastOrder.Customer.Customer != null)
-                            {
-                                Des2 = forecastOrder.Customer.Customer.Code;
-                                Des3 = forecastOrder.Customer.Customer.Saleser.Name;
-                            }
-
                         }
                     }
+
+                    #region 废弃
+
+                    //else if (MoDemand == "FO")
+                    //{
+                    // Des = dataTable.Rows[0]["DescFlexField_PrivateDescSeg1"].ToString();
+                    // FindForID = dataTable.Rows[0]["ID"].ToString();
+                    // ForecastOrder forecastOrder = ForecastOrder.Finder.FindByID(FindForID);
+                    // if (forecastOrder.Customer.Customer != null)
+                    // {
+                    //     Des2 = forecastOrder.Customer.Customer.Code;
+                    //     Des3 = forecastOrder.Customer.Customer.Saleser.Name;
+                    // }
+
+                    // }
+
+                    #endregion
 
                     mo.DescFlexField.PrivateDescSeg1 = Des;
                     mo.DescFlexField.PrivateDescSeg2 = Des2;
@@ -197,10 +239,10 @@ namespace YY.U9.Cust.LI.AppPlugIn
                     DataAccessor.RunSQL(DataAccessor.GetConn(), newsql, null, out dataSet);
                 }
 
-            }
-            catch (System.Exception)
-            {
 
+            }
+            catch (System.Exception ex)
+            {
                 return;
             }
         }

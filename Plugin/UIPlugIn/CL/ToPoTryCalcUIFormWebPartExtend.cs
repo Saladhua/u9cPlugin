@@ -67,8 +67,6 @@ namespace YY.U9.Cust.LI.UIPlugIn
                     IsOK = custSupFindPriceSVProxy.Do();
                 }
                 DocLineNo = item["PRDocLineNo"] == null ? "" : item["PRDocLineNo"].ToString();
-
-
                 if (IsOK == false)
                 {
                     Message = Message + "行号" + DocLineNo + "供应商单价为0" + "，\t\t";

@@ -46,6 +46,7 @@
     <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml.Linq" />
@@ -104,6 +105,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>D:\yonyou\U9V60\Portal\ApplicationLib\UFIDA.U9.CBO.PubBP.Deploy.dll</HintPath>
     </Reference>
+    <Reference Include="UFIDA.U9.CBO.PubSV">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.CBO.PubSV.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.CBO.PubSV.Agent">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.CBO.PubSV.Agent.dll</HintPath>
+    </Reference>
     <Reference Include="UFIDA.U9.CBO.PubSV.Deploy, Version=25.5401.15310.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>D:\yonyou\U9V60\Portal\ApplicationLib\UFIDA.U9.CBO.PubSV.Deploy.dll</HintPath>
@@ -147,6 +154,12 @@
     </Reference>
     <Reference Include="UFIDA.U9.Cust.CustBOMComBE.Deploy">
       <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.Cust.CustBOMComBE.Deploy.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.Cust.CustMoPickList">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.Cust.CustMoPickList.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.Cust.CustMoPickList.Deploy">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.Cust.CustMoPickList.Deploy.dll</HintPath>
     </Reference>
     <Reference Include="UFIDA.U9.ER.ERBE, Version=25.5401.32574.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -356,6 +369,7 @@
     <Compile Include="Cl%28创联%29\MOInsertedSubscrilber.cs" />
     <Compile Include="Cl%28创联%29\MOUpAndInsertedSubscrilber.cs" />
     <Compile Include="Components\ImplementationSQL.cs" />
+    <Compile Include="GaoDeng\GDCusfMOPickListUpdateSubScrilber.cs" />
     <Compile Include="GetAccessTokenResult.cs" />
     <Compile Include="HJDZ\ShipLinesUpdatingSubscriber.cs" />
     <Compile Include="JUNHUA\MiscShipmentInsertedSubscriber.cs" />
@@ -378,6 +392,10 @@
     <Compile Include="YouJian\ApprovalRecSubscriber.cs" />
     <Compile Include="YouJian\ApprovalRMASubscriber.cs" />
     <Compile Include="YouKE\MOSimuDocInsertedSubscriber.cs" />
+    <Compile Include="中能创\ZNCPayReqFundHeadUpdateSubscriber.cs" />
+    <Compile Include="中能创\ZNCPRUpdateSubscriber.cs" />
+    <Compile Include="中能创\ZNCPurchaseOrderUpdateSubscriber.cs" />
+    <Compile Include="中能创\ZNCSupplierUpdateSubscriber.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="YY.U9.Cust.LI.sub.xml">
@@ -392,7 +410,9 @@
     <None Include="HJDZ\宏巨电子.md" />
     <None Include="JUNHUA\君华.md" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="中能创\学习\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

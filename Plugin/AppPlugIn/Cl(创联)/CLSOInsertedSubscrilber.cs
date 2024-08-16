@@ -60,6 +60,19 @@ namespace YY.U9.Cust.LI.AppPlugIn
             DateTime FirstDayOfMonth = DateTime.Now;
 
             #endregion
+
+            foreach (var item in so.SOLines)
+            {
+                foreach (var i in item.SOShiplines)
+                {
+                    if (!string.IsNullOrEmpty(i.SrcDocNo))
+                    {
+                        string see = i.SrcDocNo;
+                        return;
+                    }
+                }
+            } 
+
             #region 实际SQL
             //select* from SPL_SalePlan
 
@@ -92,16 +105,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
                 return;
             }
 
-            foreach (var item in so.SOLines)
-            {
-                foreach (var i in item.SOShiplines)
-                {
-                    if (string.IsNullOrEmpty(i.SrcDocNo))
-                    {
-                        return;
-                    }
-                }
-            }
+
 
             if (so.DocumentType.IsInSalePlan == true && so.DocumentType.IsInSaleAchievement == true)
             {

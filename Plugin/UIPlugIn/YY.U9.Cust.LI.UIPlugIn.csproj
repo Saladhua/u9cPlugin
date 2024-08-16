@@ -201,8 +201,14 @@
     <Reference Include="UFIDA.U9.FI.AR.ARMaintenanceUI.WebPart">
       <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\UILib\UFIDA.U9.FI.AR.ARMaintenanceUI.WebPart.dll</HintPath>
     </Reference>
+    <Reference Include="UFIDA.U9.FI.AR.ReceivalUI.WebPart">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\UILib\UFIDA.U9.FI.AR.ReceivalUI.WebPart.dll</HintPath>
+    </Reference>
     <Reference Include="UFIDA.U9.FI.ER.ReimburseBillUI.WebPart">
       <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\UILib\UFIDA.U9.FI.ER.ReimburseBillUI.WebPart.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.FI.TI.InvoiceUI.WebPart">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\UILib\UFIDA.U9.FI.TI.InvoiceUI.WebPart.dll</HintPath>
     </Reference>
     <Reference Include="UFIDA.U9.ISV.CBO.LotSV.Agent">
       <HintPath>..\..\..\..\..\yonyou\U9CE\MailService\Libs\UFIDA.U9.ISV.CBO.LotSV.Agent.dll</HintPath>
@@ -324,6 +330,26 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\yonyou\U9CE\MailService\Libs\UFIDA.U9.MO.MOBP.Deploy.dll</HintPath>
     </Reference>
+    <Reference Include="UFIDA.U9.PPR.PPRBP">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.PPR.PPRBP.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.PPR.PPRBP.Agent, Version=25.5401.42823.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.PPR.PPRBP.Agent.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.PPR.PPRBP.Deploy, Version=25.5401.42823.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.PPR.PPRBP.Deploy.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.PPR.PPRSV">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.PPR.PPRSV.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.PPR.PPRSV.Agent">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.PPR.PPRSV.Agent.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.PPR.PPRSV.Deploy">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.PPR.PPRSV.Deploy.dll</HintPath>
+    </Reference>
     <Reference Include="UFIDA.U9.SCM.INV.MiscRcvUI.WebPart, Version=25.5401.40803.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\yonyou\U9CE\Portal\UILib\UFIDA.U9.SCM.INV.MiscRcvUI.WebPart.dll</HintPath>
@@ -359,6 +385,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\yonyou\U9CE\Portal\UILib\UFIDA.U9.SCM.PM.ReceivementUI.WebPart.dll</HintPath>
     </Reference>
+    <Reference Include="UFIDA.U9.SCM.PM.RFQUI.WebPart">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\UILib\UFIDA.U9.SCM.PM.RFQUI.WebPart.dll</HintPath>
+    </Reference>
     <Reference Include="UFIDA.U9.SCM.SD.ShipUI.WebPart">
       <HintPath>D:\yonyou\U9V60\Portal\UILib\UFIDA.U9.SCM.SD.ShipUI.WebPart.dll</HintPath>
     </Reference>
@@ -368,6 +397,15 @@
     <Reference Include="UFIDA.U9.UI.PDHelper, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\UFIDA\UBFV201\U9.VOB.Product.UBF\UBFStudio\Runtime\UFIDA.U9.UI.PDHelper.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.VP.VPBP">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.VP.VPBP.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.VP.VPBP.Agent">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.VP.VPBP.Agent.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.VP.VPBP.Deploy">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.VP.VPBP.Deploy.dll</HintPath>
     </Reference>
     <Reference Include="UFSoft.UBF.AopFrame, Version=1.0.0.1, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -499,10 +537,13 @@
     <Compile Include="HJ\StandardSOMainUIFormWebPartExtend.cs" />
     <Compile Include="ceshi\JUNHUA\MiscRcvUIMainFormWebPartExtended.cs" />
     <Compile Include="ceshi\JUNHUA\TransferFormUIMainFormWebPartExtended.cs" />
+    <Compile Include="KaiZhi\RFQMainUIFormWebPartExtended.cs" />
     <Compile Include="KaiZhi\SupplierUIFormWebPartExtended.cs" />
     <Compile Include="NK\APRefScmBillUIFormNaKeWebPartExtended.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
+    <Compile Include="NK\InvoiceBListUIFormWebPartExtended.cs" />
+    <Compile Include="NK\ReceivalMainUIFormWebPartExtended.cs" />
     <Compile Include="NK\ReimburseBillMainUIFormWebPartExtended.cs" />
     <Compile Include="TransferFormUIMainFormWebPartExtended.cs" />
     <Compile Include="APRefScmBillUIFormWebPartExtended.cs" />

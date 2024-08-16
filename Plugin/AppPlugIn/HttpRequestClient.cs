@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 
 namespace YY.U9.Cust.LI.AppPlugIn
@@ -16,9 +17,9 @@ namespace YY.U9.Cust.LI.AppPlugIn
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(requestUrl);
             request.Method = "POST";
-            request.ContentType = "application/json; charset=utf-8";
-            request.Headers.Add("token", token);
-            request.Headers.Add("transid", transid);
+            request.ContentType = "application/xml";
+            //request.Headers.Add("token", token);
+            //request.Headers.Add("transid", transid);
             request.UseDefaultCredentials = true;
             request.ServicePoint.Expect100Continue = false;
             request.Timeout = 1000 * 60 * 2;
@@ -115,5 +116,8 @@ namespace YY.U9.Cust.LI.AppPlugIn
                 return string.Empty;
             }
         }
+
+ 
+
     }
 }

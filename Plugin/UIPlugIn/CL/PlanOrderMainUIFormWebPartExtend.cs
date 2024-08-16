@@ -9,6 +9,7 @@ using UFSoft.UBF.UI.ControlModel;
 using UFSoft.UBF.UI.Custom;
 using UFSoft.UBF.UI.IView;
 using UFSoft.UBF.UI.WebControlAdapter;
+using UFSoft.UBF.Util.DataAccess;
 
 namespace YY.U9.Cust.LI.UIPlugIn
 {
@@ -123,6 +124,8 @@ namespace YY.U9.Cust.LI.UIPlugIn
             //获取料品
             string Item = "";
 
+            string ItemCode = "";
+
             string DocNo = "";
 
             string yjlyl = "0";
@@ -174,6 +177,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
                 try
                 {
                     Item = item["Item"] == null ? "" : item["Item"].ToString();
+                    ItemCode = item["ItemCode"] == null ? "" : item["ItemCode"].ToString();
                     DocNo = item["DocNo"] == null ? "" : item["DocNo"].ToString();
                 }
                 catch (Exception ex)
@@ -183,9 +187,11 @@ namespace YY.U9.Cust.LI.UIPlugIn
                     continue;
                 }
 
+                //计划区域维护的仓库
+                //会用变动他加我加，他减我减
                 string DefWh = "'1002310200118356','1002310200118359','1002310200118360','1002310200118434','1002310200118437'," +
                     "'1002310200118438','1002310200118452','1002310200118521','1002310200118523','1002310200118527','1002310200118568'," +
-                    "'1002310200118577','1002310200118591','1002310200118603','1002310200118607','1002310200118648','1002310200118649','1002310200118704',";//默认存储地点
+                    "'1002310200118577','1002310200118591','1002310200118603','1002310200118607','1002310200118648','1002310200118649','1002310200118704','1002310200118605','1002310200118667',";//默认存储地点
 
                 if (!string.IsNullOrEmpty(Item))
                 {
@@ -214,6 +220,19 @@ namespace YY.U9.Cust.LI.UIPlugIn
                     }
                     try
                     {
+                        string yjkll = "0";
+                        DataTable dataTable = new DataTable();
+                        DataSet dataSet = new DataSet();
+                        string sqlForMoDocNoID = "exec Cust_GongXuMingxi @SPECS=NULL,@ItemName=NULL,@Org=N'10',@ItemCode=N' (ItemCode = N''" + ItemCode + "'') '";
+                        DataAccessor.RunSQL(DataAccessor.GetConn(), sqlForMoDocNoID, null, out dataSet);
+                        dataTable = dataSet.Tables[0];
+                        if (dataTable != null && dataTable.Rows.Count > 0)
+                        {
+
+                            yjlyl = (decimal.Parse(dataTable.Rows[0]["yjgdlll"].ToString()) + decimal.Parse(dataTable.Rows[0]["yjwxll"].ToString())).ToString();
+                            yjkll = (decimal.Parse(dataTable.Rows[0]["kykcl"].ToString())).ToString();
+                            mrkc = (decimal.Parse(dataTable.Rows[0]["xykcl"].ToString())).ToString(); 
+                        }
                         //字段有小数位按计量单位小数位保留，没有小数去掉多余的0
                         item["DescFlexField_PrivateDescSeg3"] = Math.Round(decimal.Parse(yjlyl), 4).ToString("0.####");
                         item["DescFlexField_PrivateDescSeg2"] = Math.Round(decimal.Parse(mrkc), 4).ToString("0.####"); //mrkc;
@@ -229,10 +248,14 @@ namespace YY.U9.Cust.LI.UIPlugIn
                         {
                             D8 = "0";
                         }
-                        //仓库库存 + 预计进货量 - 安全库存 - 预计领用量 + 请购数量
+                        //预计可用量 = 仓库库存（私有字段2） + 请购数量（私有字段5） + 预计进货量（私有字段4） - 安全库存 - 预计领用量（私有字段3）
+                        #region 旧的
+                        //(废弃)仓库库存 + (废弃)预计进货量 - (废弃)安全库存 - (废弃)预计领用量 + 请购数量(废弃)
+                        #endregion 
                         //string yjkll = (decimal.Parse(yjlyl) + decimal.Parse(yjhjl) + decimal.Parse(qgsl) + decimal.Parse(D2) + decimal.Parse(D8)).ToString();
-                        string yjkll = "0";
-                        yjkll = (decimal.Parse(mrkc) + decimal.Parse(yjhjl) - decimal.Parse(yjlyl) + decimal.Parse(qgsl) - decimal.Parse(aqkc)).ToString();
+
+                        //string newaqkc = item["Item_InventoryInfo_SafetyStockQty"] == null ? "0" : item["Item_InventoryInfo_SafetyStockQty"].ToString();
+                        //yjkll = (decimal.Parse(mrkc) + decimal.Parse(qgsl) + decimal.Parse(yjhjl) - decimal.Parse(newaqkc) - decimal.Parse(yjlyl)).ToString();
                         item["DescFlexField_PrivateDescSeg7"] = Math.Round(decimal.Parse(yjkll), 4).ToString("0.####");// yjkll;
                         item["DescFlexField_PrivateDescSeg1"] = see1.Dtjz;
                         item["DescFlexField_PrivateDescSeg6"] = Math.Round(decimal.Parse(dtyl), 4).ToString("0.####");

@@ -177,6 +177,15 @@
     <Reference Include="UFIDA.U9.Cust.CLLH.CustSupFindPriceSV.Deploy">
       <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.Cust.CLLH.CustSupFindPriceSV.Deploy.dll</HintPath>
     </Reference>
+    <Reference Include="UFIDA.U9.Cust.CustNKFindAPRefScmBillSV">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.Cust.CustNKFindAPRefScmBillSV.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.Cust.CustNKFindAPRefScmBillSV.Agent">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.Cust.CustNKFindAPRefScmBillSV.Agent.dll</HintPath>
+    </Reference>
+    <Reference Include="UFIDA.U9.Cust.CustNKFindAPRefScmBillSV.Deploy">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.Cust.CustNKFindAPRefScmBillSV.Deploy.dll</HintPath>
+    </Reference>
     <Reference Include="UFIDA.U9.Cust.LI.CL.MoItemBP">
       <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.Cust.LI.CL.MoItemBP.dll</HintPath>
     </Reference>

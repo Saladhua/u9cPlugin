@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using UFIDA.U9.Cust.CustNKFindAPRefScmBillSV;
 using UFIDA.U9.FI.AP.PayReqFundUIModel;
+using UFIDA.U9.UI.PDHelper;
 using UFSoft.UBF.UI.ControlModel;
 using UFSoft.UBF.UI.Custom;
 using UFSoft.UBF.UI.IView;
@@ -111,11 +109,15 @@ namespace YY.U9.Cust.LI.UIPlugIn
             foreach (IUIRecord record in _part.Model.RefScmBillView.Records)
             {
                 DocNo = record["SrcBillNum"].ToString();
-                ContractsNumber = FindDesPri24(DocNo);
+                UFIDA.U9.Cust.CustNKFindAPRefScmBillSV.Proxy.FindAPRefScmBillSVProxy findAPRefScmBillSVProxy = new UFIDA.U9.Cust.CustNKFindAPRefScmBillSV.Proxy.FindAPRefScmBillSVProxy();
+                findAPRefScmBillSVProxy.OrgID = PDContext.Current.OrgID;
+                findAPRefScmBillSVProxy.DocNo = DocNo;
+                RetrunDataData retrunDataData = findAPRefScmBillSVProxy.Do();
+                ContractsNumber = retrunDataData.PayReqFundHeadDesPri24;
                 record["PayReqFundHead_DescFlexField_PrivateDescSeg24"] = decimal.Parse(ContractsNumber).ToString("#0.####");
-                RuKuNum = FindDesPri25(DocNo);
+                RuKuNum = retrunDataData.PayReqFundHeadDesPri25;
                 record["PayReqFundHead_DescFlexField_PrivateDescSeg25"] = decimal.Parse(RuKuNum).ToString("#0.####");
-                InvoicesNum = FindDesPri30(DocNo);
+                InvoicesNum = retrunDataData.PayReqFundHeadDesPri30;
                 record["PayReqFundHead_DescFlexField_PrivateDescSeg30"] = decimal.Parse(InvoicesNum).ToString("#0.####");
             }
         }

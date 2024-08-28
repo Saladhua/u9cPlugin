@@ -69,11 +69,12 @@ namespace YY.U9.Cust.LI.UIPlugIn
             string KCKUL = "";
             string FPKYL = "";
             string ZZSL = "";
+            string FGGDWLL = "";
             string LineID = "";
 
             foreach (var item in this._part.Model.SO_SOLines.Records)
             {
-                ItemMaster_Code1 = item["ItemInfo_ItemID"].ToString();
+                ItemMaster_Code1 = item["ItemInfo_ItemID"].ToString();//ItemMaster_Code1=ItemInfo_ItemID;
                 string Code1 = item["ItemInfo_ItemID_Code1"].ToString();
                 LineID = item["ID"].ToString();
                 KCKUL = GetKCKYLUom(ItemMaster_Code1);
@@ -87,7 +88,9 @@ namespace YY.U9.Cust.LI.UIPlugIn
                 decimal Wjl = Convert.ToDecimal(GetOrderByQtyPUSumShipQtyPU(Code1));//Convert.ToDecimal(Ddsl) - Convert.ToDecimal(Chsl);
                 item["DescFlexField_PrivateDescSeg8"] = Wjl.ToString();
                 //item["DescFlexField_PrivateDescSeg7"] = (Convert.ToDecimal(KCKUL) + Convert.ToDecimal(ZZSL) - Wjl - Convert.ToDecimal(Ddsl)).ToString();--12/19--本次订单数量取消
-                item["DescFlexField_PrivateDescSeg7"] = (Convert.ToDecimal(KCKUL) + Convert.ToDecimal(ZZSL) - Wjl).ToString();
+                //DescFlexField_PrivateDescSeg7--待下单数量--修改公式：新公式为待下单数量=库存数量+在制数量 -下单未发货-返工工单未领料
+                FGGDWLL = GetFGGDWLL(ItemMaster_Code1);
+                item["DescFlexField_PrivateDescSeg7"] = (Convert.ToDecimal(KCKUL) + Convert.ToDecimal(ZZSL) - Wjl - Convert.ToDecimal(FGGDWLL)).ToString();
             }
         }
 
@@ -287,7 +290,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
             string sqlForShipLine = "select sum(A.OrderByQtyPU-A.SOLineSumInfo_SumShipQtyPU) AS WSH from SM_SOLine A inner" +
                 " join SM_SO B on A.SO = B.ID" +
                 " where A.ItemInfo_ItemID in (select id from CBO_ItemMaster where Code1 = '" + ID + "' and Org = '" + PDContext.Current.OrgID + "')" +
-                " and B.Org = '" + PDContext.Current.OrgID + "'and A.Status in('1', '2', '3','0')";
+                " and B.Org = '" + PDContext.Current.OrgID + "'and A.Status in('1', '2', '3','0') and B.Cancel_Canceled !=1";
             DataAccessor.RunSQL(DataAccessor.GetConn(), sqlForShipLine, null, out dataSet);
             dataTable = dataSet.Tables[0];
             if (dataTable != null && dataTable.Rows.Count > 0)
@@ -304,6 +307,44 @@ namespace YY.U9.Cust.LI.UIPlugIn
             #endregion
 
             return SSQPU;
+        }
+
+        /// <summary>
+        /// 返工工单未领料
+        /// 1.返工工单状态-未完工
+        /// 2.返工工单未领料--1.返工工单备料的料品等于返工工单的料品 2.返工工单备料的实际需求数量-己发放数量
+        /// select SUM(A2.ActualReqQty-A2.IssuedQty) AS FGGDWLL from MO_MO A1 left join MO_MOPickList A2
+        /// ON A1.ID=A2.MO where A2.ItemMaster = '1002211230025299'
+        /// and A1.MODocType= (select ID from MO_MODocType where Code= '2' and Org = '1002208260110060')
+        /// and A1.DocState in ('0','1','2','4')
+        /// </summary>
+        /// <param name="ItemID"></param>
+        /// <returns></returns>
+        public string GetFGGDWLL(string ItemID)
+        {
+            string FGGDWLL = "0";
+            #region 执行SQL1
+            DataTable dataTable = new DataTable();
+            DataSet dataSet = new DataSet();
+            string sqlForShipLine = "select SUM(A2.ActualReqQty-A2.IssuedQty) AS FGGDWLL from MO_MO A1 left join MO_MOPickList A2" +
+                " ON A1.ID = A2.MO where A2.ItemMaster = '" + ItemID + "' " +
+                " and A1.MODocType = (select ID from MO_MODocType where Code = '2' and Org = '" + PDContext.Current.OrgID + "') " +
+                " and A1.DocState in ('0', '1', '2', '4')";
+            DataAccessor.RunSQL(DataAccessor.GetConn(), sqlForShipLine, null, out dataSet);
+            dataTable = dataSet.Tables[0];
+            if (dataTable != null && dataTable.Rows.Count > 0)
+            {
+                for (int i = 0; i < dataTable.Rows.Count; i++)
+                {
+                    FGGDWLL = dataTable.Rows[i]["FGGDWLL"].ToString();
+                }
+                if (string.IsNullOrEmpty(FGGDWLL))
+                {
+                    FGGDWLL = "0";
+                }
+            }
+            #endregion 
+            return FGGDWLL;
         }
 
         /// <summary>

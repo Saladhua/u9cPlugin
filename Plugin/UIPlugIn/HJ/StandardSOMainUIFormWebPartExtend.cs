@@ -131,8 +131,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
             #endregion
 
             return Wen;
-        }
-
+        } 
         /// <summary>
         /// 复判可用量取数
         /// </summary>

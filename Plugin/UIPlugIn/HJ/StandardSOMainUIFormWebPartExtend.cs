@@ -250,7 +250,6 @@ namespace YY.U9.Cust.LI.UIPlugIn
 
             return JieGuo;
         }
-
         public string GetSumShipQtyPU(string ID)
         {
             string SSQPU = "0";
@@ -275,7 +274,6 @@ namespace YY.U9.Cust.LI.UIPlugIn
 
             return SSQPU;
         }
-
         /// <summary>
         /// 求和的未收数量
         /// </summary>

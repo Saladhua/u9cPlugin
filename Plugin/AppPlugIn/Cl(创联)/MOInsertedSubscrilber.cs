@@ -129,6 +129,8 @@ namespace YY.U9.Cust.LI.AppPlugIn
 
                 string Des3 = "";//销售业务员
 
+                string Des6 = "";//计划出货日期
+
                 DataTable dataTable1e = new DataTable();
                 DataSet dataSet1e = new DataSet();
                 string sqle = "select A.Code from UBF_Sys_ExtEnumValue A left join UBF_Sys_ExtEnumType B on A.ExtEnumType = B.ID" +
@@ -157,7 +159,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
                     //}
                     // else if (MoDemand == "FO")//预测订单
                     //{
-                    sql = "SELECT b.DescFlexField_PrivateDescSeg1,a.ID FROM SM_ForecastOrder a INNER JOIN SM_ForecastOrderLine b ON a.ID=b.ForecastOrder WHERE a.DocNo='" + MoDocNo + "' AND DocLineNo='" + MoDocNoLine + "'";
+                    sql = "SELECT b.DescFlexField_PrivateDescSeg1,a.ID,b.ID AS LineID FROM SM_ForecastOrder a INNER JOIN SM_ForecastOrderLine b ON a.ID=b.ForecastOrder WHERE a.DocNo='" + MoDocNo + "' AND DocLineNo='" + MoDocNoLine + "'";
                     //}
                     DataAccessor.RunSQL(DataAccessor.GetConn(), sql, null, out dataSet);
                     dataTable = dataSet.Tables[0];
@@ -167,28 +169,47 @@ namespace YY.U9.Cust.LI.AppPlugIn
                         //{
                         Des = dataTable.Rows[0]["DescFlexField_PrivateDescSeg1"].ToString();
                         FindForID = dataTable.Rows[0]["ID"].ToString();
+                        string LineID = dataTable.Rows[0]["LineID"].ToString();
                         ForecastOrder forecastOrder = ForecastOrder.Finder.FindByID(FindForID);
                         if (forecastOrder.Customer.Customer != null)
                         {
                             Des2 = forecastOrder.Customer.Customer.Code;
                             Des3 = forecastOrder.Customer.Customer.Saleser.Name;
                         }
+                        foreach (var item in forecastOrder.ForecastOrderLines)
+                        {
+                            if (item.ID.ToString() == LineID)
+                            {
+                                Des6 = item.ShipPlanDate.ToString();//预测订单取预测订单行的计划出货日期 
+                            }
+                        }
                         if (string.IsNullOrEmpty(Des))//预测订单找到，但是客户备注为空
                         {
                             DataTable dataTable2 = new DataTable();
                             DataSet dataSet2 = new DataSet();
-                            string sql2 = "SELECT b.DescFlexField_PrivateDescSeg1,a.ID FROM SM_SO a INNER JOIN SM_SOLine b ON  a.ID=b.SO WHERE a.DocNo='" + MoDocNo + "' AND DocLineNo='" + MoDocNoLine + "'"; ;
+                            string sql2 = "SELECT b.DescFlexField_PrivateDescSeg1,a.ID,b.ID AS LineID FROM SM_SO a INNER JOIN SM_SOLine b ON  a.ID=b.SO WHERE a.DocNo='" + MoDocNo + "' AND DocLineNo='" + MoDocNoLine + "'"; ;
                             DataAccessor.RunSQL(DataAccessor.GetConn(), sql2, null, out dataSet2);
                             dataTable2 = dataSet2.Tables[0];
                             if (dataTable2.Rows != null && dataTable2.Rows.Count > 0)
                             {
                                 Des = dataTable.Rows[0]["DescFlexField_PrivateDescSeg1"].ToString();
                                 FindSoID = dataTable.Rows[0]["ID"].ToString();
+                                LineID = dataTable.Rows[0]["LineID"].ToString();
                                 SO sO = SO.Finder.FindByID(FindSoID);
                                 if (sO.OrderBy.Customer != null)
                                 {
                                     Des2 = sO.OrderBy.Customer.Code;
                                     Des3 = sO.OrderBy.Customer.Saleser.Name;
+                                }
+                                foreach (var item in sO.SOLines)
+                                {
+                                    if (item.ID.ToString() == LineID)
+                                    {
+                                        foreach (var item2 in item.SOShiplines)
+                                        {
+                                            Des6 = item2.RequireDate.ToString();//预测订单取预测订单行的计划出货日期 
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -197,18 +218,29 @@ namespace YY.U9.Cust.LI.AppPlugIn
                     {
                         DataTable dataTable2 = new DataTable();
                         DataSet dataSet2 = new DataSet();
-                        string sql2 = "SELECT b.DescFlexField_PrivateDescSeg1,a.ID FROM SM_SO a INNER JOIN SM_SOLine b ON  a.ID=b.SO WHERE a.DocNo='" + MoDocNo + "' AND DocLineNo='" + MoDocNoLine + "'"; ;
+                        string sql2 = "SELECT b.DescFlexField_PrivateDescSeg1,a.ID,b.ID AS LineID FROM SM_SO a INNER JOIN SM_SOLine b ON  a.ID=b.SO WHERE a.DocNo='" + MoDocNo + "' AND DocLineNo='" + MoDocNoLine + "'"; ;
                         DataAccessor.RunSQL(DataAccessor.GetConn(), sql2, null, out dataSet2);
                         dataTable2 = dataSet2.Tables[0];
                         if (dataTable2.Rows != null && dataTable2.Rows.Count > 0)
                         {
                             Des = dataTable.Rows[0]["DescFlexField_PrivateDescSeg1"].ToString();
                             FindSoID = dataTable.Rows[0]["ID"].ToString();
+                            string LineID = dataTable.Rows[0]["LineID"].ToString();
                             SO sO = SO.Finder.FindByID(FindSoID);
                             if (sO.OrderBy.Customer != null)
                             {
                                 Des2 = sO.OrderBy.Customer.Code;
                                 Des3 = sO.OrderBy.Customer.Saleser.Name;
+                            }
+                            foreach (var item in sO.SOLines)
+                            {
+                                if (item.ID.ToString() == LineID)
+                                {
+                                    foreach (var item2 in item.SOShiplines)
+                                    {
+                                        Des6 = item2.RequireDate.ToString();//预测订单取预测订单行的计划出货日期 
+                                    }
+                                }
                             }
                         }
                     }
@@ -233,6 +265,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
                     mo.DescFlexField.PrivateDescSeg1 = Des;
                     mo.DescFlexField.PrivateDescSeg2 = Des2;
                     mo.DescFlexField.PrivateDescSeg3 = Des3;
+                    mo.DescFlexField.PrivateDescSeg6 = Des6;
 
                     string newsql = "exec P_SyncFieldCombineName @FullName='UFIDA.U9.MO.MO.MO',@DescFieldName='DescFlexField_PrivateDescSeg1'";
 

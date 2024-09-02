@@ -221,18 +221,18 @@ namespace YY.U9.Cust.LI.UIPlugIn
                     try
                     {
                         string yjkll = "0";
-                        DataTable dataTable = new DataTable();
-                        DataSet dataSet = new DataSet();
-                        string sqlForMoDocNoID = "exec Cust_GongXuMingxi @SPECS=NULL,@ItemName=NULL,@Org=N'10',@ItemCode=N' (ItemCode = N''" + ItemCode + "'') '";
-                        DataAccessor.RunSQL(DataAccessor.GetConn(), sqlForMoDocNoID, null, out dataSet);
-                        dataTable = dataSet.Tables[0];
-                        if (dataTable != null && dataTable.Rows.Count > 0)
-                        {
+                        //DataTable dataTable = new DataTable();
+                        //DataSet dataSet = new DataSet();
+                        //string sqlForMoDocNoID = "exec Cust_GongXuMingxi @SPECS=NULL,@ItemName=NULL,@Org=N'10',@ItemCode=N' (ItemCode = N''" + ItemCode + "'') '";
+                        //DataAccessor.RunSQL(DataAccessor.GetConn(), sqlForMoDocNoID, null, out dataSet);
+                        //dataTable = dataSet.Tables[0];
+                        //if (dataTable != null && dataTable.Rows.Count > 0)
+                        //{
 
-                            yjlyl = (decimal.Parse(dataTable.Rows[0]["yjgdlll"].ToString()) + decimal.Parse(dataTable.Rows[0]["yjwxll"].ToString())).ToString();
-                            yjkll = (decimal.Parse(dataTable.Rows[0]["kykcl"].ToString())).ToString();
-                            mrkc = (decimal.Parse(dataTable.Rows[0]["xykcl"].ToString())).ToString(); 
-                        }
+                        //    yjlyl = (decimal.Parse(dataTable.Rows[0]["yjgdlll"].ToString()) + decimal.Parse(dataTable.Rows[0]["yjwxll"].ToString())).ToString();
+                        //    yjkll = (decimal.Parse(dataTable.Rows[0]["kykcl"].ToString())).ToString();
+                        //    mrkc = (decimal.Parse(dataTable.Rows[0]["xykcl"].ToString())).ToString(); 
+                        //}
                         //字段有小数位按计量单位小数位保留，没有小数去掉多余的0
                         item["DescFlexField_PrivateDescSeg3"] = Math.Round(decimal.Parse(yjlyl), 4).ToString("0.####");
                         item["DescFlexField_PrivateDescSeg2"] = Math.Round(decimal.Parse(mrkc), 4).ToString("0.####"); //mrkc;
@@ -254,12 +254,11 @@ namespace YY.U9.Cust.LI.UIPlugIn
                         #endregion 
                         //string yjkll = (decimal.Parse(yjlyl) + decimal.Parse(yjhjl) + decimal.Parse(qgsl) + decimal.Parse(D2) + decimal.Parse(D8)).ToString();
 
-                        //string newaqkc = item["Item_InventoryInfo_SafetyStockQty"] == null ? "0" : item["Item_InventoryInfo_SafetyStockQty"].ToString();
-                        //yjkll = (decimal.Parse(mrkc) + decimal.Parse(qgsl) + decimal.Parse(yjhjl) - decimal.Parse(newaqkc) - decimal.Parse(yjlyl)).ToString();
+                        string newaqkc = item["Item_InventoryInfo_SafetyStockQty"] == null ? "0" : item["Item_InventoryInfo_SafetyStockQty"].ToString();
+                        yjkll = (decimal.Parse(mrkc) + decimal.Parse(qgsl) + decimal.Parse(yjhjl) - decimal.Parse(newaqkc) - decimal.Parse(yjlyl)).ToString();
                         item["DescFlexField_PrivateDescSeg7"] = Math.Round(decimal.Parse(yjkll), 4).ToString("0.####");// yjkll;
                         item["DescFlexField_PrivateDescSeg1"] = see1.Dtjz;
                         item["DescFlexField_PrivateDescSeg6"] = Math.Round(decimal.Parse(dtyl), 4).ToString("0.####");
-
                         item["DescFlexField_PrivateDescSeg8"] = Math.Round(decimal.Parse(ckkc), 4).ToString("0.####");
                     }
                     catch (Exception ex)

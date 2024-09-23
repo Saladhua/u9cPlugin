@@ -537,6 +537,7 @@
     <Compile Include="CL\MOChangeItemMainUIFormWebPartExtend.cs" />
     <Compile Include="CL\MODivideMainUIFormWebPartExtend.cs" />
     <Compile Include="CL\PlanOrderMainUIFormWebPartExtend.cs" />
+    <Compile Include="CL\POMainListUIFormWebPartExtended.cs" />
     <Compile Include="CL\PurDiscountPolicyMainUIFormWebPartExtend.cs" />
     <Compile Include="CL\ToPoTryCalcUIForListFormWebPartExtend.cs" />
     <Compile Include="CL\ToPoTryCalcUIFormWebPartExtend.cs" />
@@ -560,6 +561,8 @@
     <Compile Include="CommonFunction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="YOUKE\ItemWIPSimuBListUIFormWebPartExtended.cs" />
+    <Compile Include="中能创\DiscreteMOBListUIFormWebPartExtended.cs" />
+    <Compile Include="公用方法--测试\U9Common.cs" />
     <Compile Include="普罗迈\PuLMMOCloseUIFormWebPartExtended.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -583,7 +586,9 @@
     <None Include="CL\备料复制配置文件\pzwj.bdxml" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="KeHua\" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

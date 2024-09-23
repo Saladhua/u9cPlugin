@@ -144,9 +144,15 @@ namespace YY.U9.Cust.LI.AppPlugIn
 
                 MoDemand = MoDemandCode.Substring(0, 2);
 
-                MoDocNoLine = MoDemandCode.Substring(MoDemandCode.Length - 2);
+                int lastIndexOfColon = MoDemandCode.LastIndexOf('_');
+                if (lastIndexOfColon != -1)
+                {
+                    MoDocNoLine = MoDemandCode.Substring(lastIndexOfColon + 1); // 截取从最后一个冒号之后的所有字符  
+                }
+                int firstIndexOfColon = MoDemandCode.IndexOf('_');
 
-                MoDocNo = MoDemandCode.Substring(0, MoDemandCode.Length - 3);
+
+                MoDocNo = MoDemandCode.Substring(0, lastIndexOfColon);
 
                 if (!string.IsNullOrEmpty(MoDemandVal.ToString()))//生产订单的需求分类的值不能为空
                 {

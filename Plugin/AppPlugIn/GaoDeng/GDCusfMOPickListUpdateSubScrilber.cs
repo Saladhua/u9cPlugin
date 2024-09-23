@@ -118,9 +118,9 @@ namespace YY.U9.Cust.LI.AppPlugIn
                         mOPickListDTO.ItemMaster.ID = item.Item.ID;
                         mOPickListDTO.ItemMaster.Code = item.Item.Code;
                         mOPickListDTO.ItemMaster.Name = item.Item.Name;
-                        mOPickListDTO.BOMReqQty = decimal.Parse(item.BOMQty == null ? "0" : item.BOMQty);
+                        //mOPickListDTO.BOMReqQty = decimal.Parse(item.BOMQty == null ? "0" : item.BOMQty);
                         mOPickListDTO.ActualReqQty = decimal.Parse(item.ActualReqQty == null ? "0" : item.ActualReqQty);
-                        mOPickListDTO.IssuedQty = decimal.Parse(item.IssuedQty == "" ? "0" : item.IssuedQty);
+                        //mOPickListDTO.IssuedQty = decimal.Parse(item.IssuedQty == "" ? "0" : item.IssuedQty);
                         //item3.SpecialIssuedQty = item.OriSpecialIssuedQty.ToString();
                         mOPickListDTO.IssueStyle = item.IssueStyle.Value;
                         try
@@ -152,9 +152,9 @@ namespace YY.U9.Cust.LI.AppPlugIn
                                     item3.ItemMaster.Code = item.Item.Code;
                                     item3.ItemMaster.Name = item.Item.Name;
 
-                                    item3.BOMReqQty = decimal.Parse(item.BOMQty == null ? "0" : item.BOMQty);
+                                    //item3.BOMReqQty = decimal.Parse(item.BOMQty == null ? "0" : item.BOMQty);
                                     item3.ActualReqQty = decimal.Parse(item.ActualReqQty == null ? "0" : item.ActualReqQty);
-                                    item3.IssuedQty = decimal.Parse(item.IssuedQty == "" ? "0" : item.IssuedQty);
+                                    //item3.IssuedQty = decimal.Parse(item.IssuedQty == "" ? "0" : item.IssuedQty);
                                     //item3.SpecialIssuedQty = item.OriSpecialIssuedQty.ToString();
                                     item3.IssueStyle = item.IssueStyle.Value;
                                     //if (item.WH != null)
@@ -204,6 +204,8 @@ namespace YY.U9.Cust.LI.AppPlugIn
                                 }
                                 else
                                 {
+                                    //item3.BOMReqQty = decimal.Parse(item.BOMQty == null ? "0" : item.BOMQty);
+                                    item3.ActualReqQty = decimal.Parse(item.ActualReqQty == null ? "0" : item.ActualReqQty);
                                     item3.IssuedQty = changeqty;
 
                                 }
@@ -213,6 +215,8 @@ namespace YY.U9.Cust.LI.AppPlugIn
                                 }
                                 else
                                 {
+                                    //item3.BOMReqQty = decimal.Parse(item.BOMQty == null ? "0" : item.BOMQty);
+                                    item3.ActualReqQty = decimal.Parse(item.ActualReqQty == null ? "0" : item.ActualReqQty);
                                     item3.ActualReqQty = changeActualReqQty;
 
                                 }

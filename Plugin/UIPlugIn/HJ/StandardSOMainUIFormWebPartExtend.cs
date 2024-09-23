@@ -131,7 +131,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
             #endregion
 
             return Wen;
-        } 
+        }
         /// <summary>
         /// 复判可用量取数
         /// </summary>
@@ -177,7 +177,8 @@ namespace YY.U9.Cust.LI.UIPlugIn
             DataTable dataTable = new DataTable();
             DataSet dataSet = new DataSet();
             string sqlForShipLine = "select sum(ProductQty-TotalRcvQty) AS WRKSL from MO_MO where ItemMaster= '" + ItemCode + "' " +
-                " and DocState!= 3 and Org='" + PDContext.Current.OrgID + "' ";
+                " and DocState!= 3 and Org='" + PDContext.Current.OrgID + "' " +
+                " and MODocType not in (select ID from MO_MODocType where Code in ('7','MES6') and Org='" + PDContext.Current.OrgID + "')";
             DataAccessor.RunSQL(DataAccessor.GetConn(), sqlForShipLine, null, out dataSet);
             dataTable = dataSet.Tables[0];
             if (dataTable != null && dataTable.Rows.Count > 0)

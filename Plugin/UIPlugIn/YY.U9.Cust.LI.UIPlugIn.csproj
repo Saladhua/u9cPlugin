@@ -204,6 +204,9 @@
     <Reference Include="UFIDA.U9.Cust.YK.LI.Common.Deploy">
       <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\ApplicationServer\Libs\UFIDA.U9.Cust.YK.LI.Common.Deploy.dll</HintPath>
     </Reference>
+    <Reference Include="UFIDA.U9.FI.AP.APMaintenanceUI.WebPart">
+      <HintPath>..\..\..\..\..\yonyou\U9CE\Portal\UILib\UFIDA.U9.FI.AP.APMaintenanceUI.WebPart.dll</HintPath>
+    </Reference>
     <Reference Include="UFIDA.U9.FI.AP.PayReqFundUI.WebPart">
       <HintPath>F:\yonyou\U9CE\Portal\UILib\UFIDA.U9.FI.AP.PayReqFundUI.WebPart.dll</HintPath>
     </Reference>
@@ -531,6 +534,7 @@
     <Compile Include="BomMainUIFormWebPartExtended.cs" />
     <Compile Include="AOYIN\Cust_Li_MOStockMainUIFormWebPartExtended.cs" />
     <Compile Include="ceshi\sysceshi.cs" />
+    <Compile Include="CL\CLPurchaseOrderMainUIFormWebPartExtend.cs" />
     <Compile Include="CL\CLMOStockMainUIFormWebPartExtend.cs" />
     <Compile Include="CL\DiscreteMOMainUIFormWebPartExtend.cs" />
     <Compile Include="CL\ECNDocMainUIFormWebPartExtend.cs" />
@@ -549,6 +553,9 @@
     <Compile Include="ceshi\JUNHUA\TransferFormUIMainFormWebPartExtended.cs" />
     <Compile Include="KaiZhi\RFQMainUIFormWebPartExtended.cs" />
     <Compile Include="KaiZhi\SupplierUIFormWebPartExtended.cs" />
+    <Compile Include="KeHua\KHAPMainUIFormWebPartExtended.cs" />
+    <Compile Include="KeHua\KHPurchaseOrderMainUIFormWebPartExtend.cs" />
+    <Compile Include="LogWriter.cs" />
     <Compile Include="NK\APRefScmBillUIFormNaKeWebPartExtended.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
@@ -586,9 +593,7 @@
     <None Include="CL\备料复制配置文件\pzwj.bdxml" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="KeHua\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

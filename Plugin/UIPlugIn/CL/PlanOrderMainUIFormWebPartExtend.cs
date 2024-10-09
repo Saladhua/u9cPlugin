@@ -257,7 +257,13 @@ namespace YY.U9.Cust.LI.UIPlugIn
                         string newaqkc = item["Item_InventoryInfo_SafetyStockQty"] == null ? "0" : item["Item_InventoryInfo_SafetyStockQty"].ToString();
                         yjkll = (decimal.Parse(mrkc) + decimal.Parse(qgsl) + decimal.Parse(yjhjl) - decimal.Parse(newaqkc) - decimal.Parse(yjlyl)).ToString();
                         item["DescFlexField_PrivateDescSeg7"] = Math.Round(decimal.Parse(yjkll), 4).ToString("0.####");// yjkll;
-                        item["DescFlexField_PrivateDescSeg1"] = see1.Dtjz;
+                        int newdtjzcount = see1.Dtjz.Length;
+                        string newdtjz = see1.Dtjz;
+                        if (newdtjzcount > 1000)
+                        {
+                            newdtjz = see1.Dtjz.Substring(0, 1000);
+                        }
+                        item["DescFlexField_PrivateDescSeg1"] = newdtjz;
                         item["DescFlexField_PrivateDescSeg6"] = Math.Round(decimal.Parse(dtyl), 4).ToString("0.####");
                         item["DescFlexField_PrivateDescSeg8"] = Math.Round(decimal.Parse(ckkc), 4).ToString("0.####");
                     }

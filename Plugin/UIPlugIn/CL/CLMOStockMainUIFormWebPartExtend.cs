@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Web;
 using UFIDA.U9.MFG.MO.DiscreteMOUIModel;
 using UFSoft.UBF.UI.Custom;
 using UFSoft.UBF.UI.IView;
@@ -21,9 +18,16 @@ namespace YY.U9.Cust.LI.UIPlugIn
         {
             this._part = (part as MOStockMainUIFormWebPart);
 
-            _part.Model.MO_MOPickLists.Records.Sort(_part.Model.MO_MOPickLists.FieldDocLineNO, RecordOrderType.ASC);
 
-            base.BeforeRender(part, args);  
+            string MOSrcDocType = this._part.Model.MO.FocusedRecord["SrcDoc_MOSrcDocType"].ToString();
+
+            if (MOSrcDocType == "1")
+            {
+                _part.Model.MO_MOPickLists.Records.Sort(_part.Model.MO_MOPickLists.FieldDocLineNO, RecordOrderType.ASC);
+            }
+
+
+            base.BeforeRender(part, args);
         }
 
     }

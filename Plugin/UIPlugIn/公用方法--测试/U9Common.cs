@@ -14,7 +14,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
         /// </summary>
         /// <param name="sql"></param>
         /// <returns></returns>
-        public static DataTable GetDataTable(string sql)
+        public  static DataTable GetDataTable(string sql)
         {
             #region 用法
             //string sql = string.Format("select ID from U9CCustNrknor_DeductDoc where BeginDate>='{0}' and EndDate<='{1}' and DocVersion='{2}' and Org={3} and ID!={4}", item.BeginDate.ToString("yyyy-MM-dd"), item.EndDate.ToString("yyyy-MM-dd"), item.DocVersion, PDContext.Current.OrgID, item.ID);

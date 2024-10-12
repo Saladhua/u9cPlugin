@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
 using UFIDA.U9.Cust.CustNKFindAPRefScmBillSV;
 using UFIDA.U9.FI.AP.PayReqFundUIModel;
 using UFIDA.U9.UI.PDHelper;
@@ -28,11 +29,11 @@ namespace YY.U9.Cust.LI.UIPlugIn
                 return;
             //增加列
             IUFDataGrid grid = (IUFDataGrid)_part.GetUFControlByName(_part.TopLevelContainer, "DataGrid0");
-            //DateTime dt = new DateTime();
+            DateTime dt = new DateTime();
 
-            //dt = DateTime.Now;
+            dt = DateTime.Now;
 
-            //logger.Error("123新请款开始时间：" + dt.ToString("yyyy-MM-dd:hh:mm:ss"));
+            logger.Error("列表行开始时间：" + dt.ToString("yyyy-MM-dd:hh:mm:ss"));
             foreach (IUIField fld in _part.Model.RefScmBillView.Fields)
             {
                 if (fld.Name.Equals("PayReqFundHead_DescFlexField_PrivateDescSeg25"))
@@ -218,15 +219,21 @@ namespace YY.U9.Cust.LI.UIPlugIn
                 }
 
             }
-            //DateTime dt2 = new DateTime();
+            DateTime dt2 = new DateTime();
 
-            //dt2 = DateTime.Now;
+            dt2 = DateTime.Now;
 
-            //logger.Error("123新请款结束时间：" + dt2.ToString("yyyy-MM-dd:hh:mm:ss"));
+            logger.Error("列表行结束时间：" + dt2.ToString("yyyy-MM-dd:hh:mm:ss"));
         }
 
         public override void BeforeRender(IPart part, EventArgs args)
         {
+            DateTime dt = new DateTime();
+
+            dt = DateTime.Now;
+
+            logger.Error("请款SQL开始时间：" + dt.ToString("yyyy-MM-dd:hh:mm:ss"));
+
             this._part = (part as APRefScmBillUIFormWebPart);
 
             if (_part == null)
@@ -263,19 +270,27 @@ namespace YY.U9.Cust.LI.UIPlugIn
                 refSDto.canPrePayPUAmount = item["CanPrePayPUAmount"].ToString();
                 refSDtos.Add(refSDto);
             }
-            DataTable dataTable = new DataTable();
-            DataSet dataSet = new DataSet();
+            //string sql = string.Format("select ID from U9CCustNrknor_DeductDoc where BeginDate>='{0}' and EndDate<='{1}' and DocVersion='{2}' and Org={3} and ID!={4}", item.BeginDate.ToString("yyyy-MM-dd"), item.EndDate.ToString("yyyy-MM-dd"), item.DocVersion, PDContext.Current.OrgID, item.ID);
+            //DataTable dt = GetDataTable(sql);
+            //return dt;
+
+            //DataTable dataTable = new DataTable();
+            //DataSet dataSet = new DataSet();
+
             string sql_1 = "SELECT   PM_PurchaseOrder.DocNo,PM_PurchaseOrder.ID,PM_POLine.DocLineNo,PM_POLine.TotalRecievedQtyCU,PM_POLine.TotalConfirmedQtyCU,ItemInfo_ItemID,ItemInfo_ItemCode" +
-               "  ,(SELECT TOP(1) AccrueDate FROM AP_APBillLine INNER JOIN AP_APBillHead ON AP_APBillHead.ID = AP_APBillLine.APBillHead WHERE SrcBillPOID" +
-               "  = PM_PurchaseOrder.ID order by  AP_APBillHead.ModifiedOn ASC ) as AccrueDate," +
-               "  (SELECT SUM(PUAmount) AS Sum_PUAmount FROM AP_PayReqFundDetail WHERE SrcBillID = PM_PurchaseOrder.ID " +
-                "   ) as sum_PUAmount" +
-               "  FROM PM_POLine " +
-               "  INNER JOIN PM_PurchaseOrder ON PM_POLine.PurchaseOrder=PM_PurchaseOrder.ID" +
-               "  WHERE PM_PurchaseOrder.DocNo in (" + docno.Substring(0, docno.Length - 1) + ")AND ItemInfo_ItemCode in ( " + itemcode.Substring(0, itemcode.Length - 1) + ")" +
-               "  Order By DocLineNo DESC";
-            DataAccessor.RunSQL(DataAccessor.GetConn(), sql_1, null, out dataSet);
-            dataTable = dataSet.Tables[0];
+           "  ,(SELECT TOP(1) AccrueDate FROM AP_APBillLine INNER JOIN AP_APBillHead ON AP_APBillHead.ID = AP_APBillLine.APBillHead WHERE SrcBillPOID" +
+           "  = PM_PurchaseOrder.ID order by  AP_APBillHead.ModifiedOn ASC ) as AccrueDate," +
+           "  (SELECT SUM(PUAmount) AS Sum_PUAmount FROM AP_PayReqFundDetail WHERE SrcBillID = PM_PurchaseOrder.ID " +
+            "   ) as sum_PUAmount" +
+           "  FROM PM_POLine " +
+           "  INNER JOIN PM_PurchaseOrder ON PM_POLine.PurchaseOrder=PM_PurchaseOrder.ID" +
+           "  WHERE PM_PurchaseOrder.DocNo in (" + docno.Substring(0, docno.Length - 1) + ")AND ItemInfo_ItemCode in ( " + itemcode.Substring(0, itemcode.Length - 1) + ")" +
+           "  Order By DocLineNo DESC";
+            //DataAccessor.RunSQL(DataAccessor.GetConn(), sql_1, null, out dataSet);
+            //dataTable = dataSet.Tables[0];
+
+
+            DataTable dataTable = U9Common.GetDataTable(sql_1);
 
             int n = 0;
             if (dataTable.Rows != null && dataTable.Rows.Count > 0)
@@ -397,6 +412,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
                 " A2.SrcBillPONum FROM AP_APBillHead A1 left join AP_APBillLine A2 ON A1.ID = A2.APBillHead " +
                 " WHERE A2.SrcBillPONum  in (" + SrcBillNum.Substring(0, SrcBillNum.Length - 1) + ")";
             DataAccessor.RunSQL(DataAccessor.GetConn(), sql_s30, null, out dataSets30);
+            dataTables30 = dataSets30.Tables[0];
             int s30 = 0;
             if (dataTables30.Rows != null && dataTables30.Rows.Count > 0)
             {
@@ -427,6 +443,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
                 " left join PM_RcvLine B2 on B1.ID = B2.Receivement where B2.SrcDoc_SrcDocNo = A2.SrcPO_SrcDocNo and B2.Status = 5) AS RcvQtyTU, A2.SrcPO_SrcDocNo " +
                 " from PM_Receivement A1 left join PM_RcvLine A2 on A1.ID = A2.Receivement where A2.SrcDoc_SrcDocNo in (" + SrcBillNum.Substring(0, SrcBillNum.Length - 1) + ") and A2.Status = 5  ";
             DataAccessor.RunSQL(DataAccessor.GetConn(), sql_s25, null, out dataSets25);
+            dataTables25 = dataSets25.Tables[0];
             int s25 = 0;
             if (dataTables25.Rows != null && dataTables25.Rows.Count > 0)
             {
@@ -448,7 +465,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
             }
             #endregion
 
-
+            logger.Error("sql_1：" + sql_1 + "," + "sql_s24：" + sql_s24 + "sql_s30：" + sql_s30 + "sql_s25：" + sql_s25);
             foreach (IUIRecord record in _part.Model.RefScmBillView.Records)
             {
                 try
@@ -459,12 +476,11 @@ namespace YY.U9.Cust.LI.UIPlugIn
 
                         string se = refScmBillViewDtos.Where(x => x.SrcBillNum == DocNo).Select(x => x.DP24).ToString();
 
-                        record["PayReqFundHead_DescFlexField_PrivateDescSeg24"] = refScmBillViewDtos.Where(x => x.SrcBillNum == DocNo).Select(x => x.DP24).Sum() / refScmBillViewDtos.Where(x => x.SrcBillNum == DocNo).Count();
+                        record["PayReqFundHead_DescFlexField_PrivateDescSeg24"] = refScmBillViewDtos.Where(x => x.SrcBillNum == DocNo).Select(x => x.DP24).FirstOrDefault();
 
+                        record["PayReqFundHead_DescFlexField_PrivateDescSeg25"] = refScmBillViewDtos.Where(x => x.SrcBillNum == DocNo).Select(x => x.DP25).FirstOrDefault();
 
-                        record["PayReqFundHead_DescFlexField_PrivateDescSeg25"] = refScmBillViewDtos.Where(x => x.SrcBillNum == DocNo).Select(x => x.DP25).Sum() / refScmBillViewDtos.Where(x => x.SrcBillNum == DocNo).Count();
-
-                        record["PayReqFundHead_DescFlexField_PrivateDescSeg30"] = refScmBillViewDtos.Where(x => x.SrcBillNum == DocNo).Select(x => x.DP30).Sum() / refScmBillViewDtos.Where(x => x.SrcBillNum == DocNo).Count();
+                        record["PayReqFundHead_DescFlexField_PrivateDescSeg30"] = refScmBillViewDtos.Where(x => x.SrcBillNum == DocNo).Select(x => x.DP30).FirstOrDefault();
                     }
                 }
                 catch (Exception ex)
@@ -473,6 +489,11 @@ namespace YY.U9.Cust.LI.UIPlugIn
                 }
             }
 
+            DateTime dt2 = new DateTime();
+
+            dt2 = DateTime.Now;
+
+            logger.Error("请款SQL结束时间：" + dt2.ToString("yyyy-MM-dd:hh:mm:ss"));
 
         }
 

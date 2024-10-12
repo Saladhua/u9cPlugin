@@ -12,7 +12,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
     /// <summary>
     /// 期初委外订单
     /// 对于3个私有子段进行计算
-    ///1.委外订单增加“销售备注”--私有字段6，创建和保存的时候触发，根据需求分类取预测订单表头的销售备注，如果获取不到，就取销售订单表头的销售备注
+    ///1.委外订单增加“销售备注”--私有字段6，创建和保存的时候触发，根据需求分类取预测订单行的销售备注，如果获取不到，就取销售订单行的销售备注(错误)
     ///2.委外订单增加“客户”--私有字段7，创建和保存的时候触发，根据需求分类取预测订单表头的客户，如果获取不到，就取销售订单表头的客户
     ///3.委外订单增加“销售业务员”--私有字段8，创建和保存的时候触发，根据需求分类取预测订单表头的业务员，如果获取不到，就取销售订单表头的业务员
     /// </summary>
@@ -32,8 +32,8 @@ namespace YY.U9.Cust.LI.UIPlugIn
             {
                 string BizType = this._part.Model.PurchaseOrder.FocusedRecord["BizType"].ToString();//业务类型
 
-                string PurDocNo= this._part.Model.PurchaseOrder.FocusedRecord["DocNo"].ToString();//单号
-             
+                string PurDocNo = this._part.Model.PurchaseOrder.FocusedRecord["DocNo"].ToString();//单号
+
                 if (BizType != "326")
                 {
                     return;
@@ -65,52 +65,39 @@ namespace YY.U9.Cust.LI.UIPlugIn
 
                             string desc8 = "";//销售业务员
 
+                            string DocNoLineNo = "1";
+
                             int firstIndexOfColon = DocNo.IndexOf('_');
 
-                            DocNo = DocNo.Substring(0, firstIndexOfColon);
-
-                            string sqlforyuc = "SELECT " +
-                                " B.Note, " +
-                                " (SELECT Name FROM CBO_Customer_Trl C WHERE ID = A.Customer_Customer) AS CustomerName," +
-                                " (SELECT Name FROM CBO_Operators_Trl C WHERE ID = A.OrderOperator) AS OperatorsName" +
-                                " FROM SM_ForecastOrder A LEFT JOIN SM_ForecastOrder_Trl B ON A.ID = B.ID WHERE A.DocNo = '" + DocNo + "'";
-
-                            DataTable dt2 = U9Common.GetDataTable(sqlforyuc);
-
-                            if (dt2.Rows != null && dt2.Rows.Count > 0)
+                            int lastIndexOfColon = DocNo.LastIndexOf('_');
+                            if (lastIndexOfColon != -1)
                             {
-                                desc6 = dt2.Rows[0]["Note"].ToString();//销售备注
-
-                                desc7 = dt2.Rows[0]["CustomerName"].ToString();//客户
-
-                                desc8 = dt2.Rows[0]["OperatorsName"].ToString();//销售业务员
-
-                                item["DescFlexSegments_PrivateDescSeg6"] = desc6;
-
-                                item["DescFlexSegments_PrivateDescSeg7"] = desc7;
-
-                                item["DescFlexSegments_PrivateDescSeg8"] = desc8;
-
-                                logger.Error("外协订单单据号："+ PurDocNo + "" + "成功，对应单号:"+ DocNo + "");
+                                DocNoLineNo = DocNo.Substring(lastIndexOfColon + 1); // 截取从最后一个冒号之后的所有字符  
                             }
-                            else//如果预测订单没找到，就销售订单
+
+                            if (firstIndexOfColon > 0)
                             {
-                                string sqlforxs = " SELECT" +
-                                    " B.Memo," +
-                                    " (SELECT Name FROM CBO_Customer_Trl C WHERE ID = A.OrderBy_Customer) AS CustomerName," +
-                                    " (SELECT Name FROM CBO_Operators_Trl C WHERE ID = A.Seller) AS SellerName" +
-                                    " FROM" +
-                                    " SM_SO A LEFT JOIN SM_SO_Trl B ON A.ID = B.ID  WHERE A.DocNo = '" + DocNo + "'";
 
-                                DataTable dt3 = U9Common.GetDataTable(sqlforxs);
+                                DocNo = DocNo.Substring(0, firstIndexOfColon);
 
-                                if (dt3.Rows != null && dt3.Rows.Count > 0)
+                                string sqlforyuc = "SELECT" +
+                                    " C.DescFlexField_PrivateDescSeg1 AS Note," +
+                                    " (SELECT Name FROM CBO_Customer_Trl C WHERE ID = A.Customer_Customer) AS CustomerName," +
+                                    " (SELECT Name FROM CBO_Operators_Trl C WHERE ID = A.OrderOperator) AS OperatorsName" +
+                                    " FROM SM_ForecastOrder A              " +
+                                    " LEFT JOIN SM_ForecastOrder_Trl B ON A.ID = B.ID        " +
+                                    " LEFT JOIN SM_ForecastOrderLine C ON C.ForecastOrder = A.ID" +
+                                    " WHERE A.DocNo = '" + DocNo + "' AND C.DocLineNo = '" + DocNoLineNo + "'";
+
+                                DataTable dt2 = U9Common.GetDataTable(sqlforyuc);
+
+                                if (dt2.Rows != null && dt2.Rows.Count > 0)
                                 {
-                                    desc6 = dt3.Rows[0]["Memo"].ToString();//销售备注
+                                    desc6 = dt2.Rows[0]["Note"].ToString();//销售备注
 
-                                    desc7 = dt3.Rows[0]["CustomerName"].ToString();//客户
+                                    desc7 = dt2.Rows[0]["CustomerName"].ToString();//客户
 
-                                    desc8 = dt3.Rows[0]["SellerName"].ToString();//销售业务员
+                                    desc8 = dt2.Rows[0]["OperatorsName"].ToString();//销售业务员
 
                                     item["DescFlexSegments_PrivateDescSeg6"] = desc6;
 
@@ -119,6 +106,37 @@ namespace YY.U9.Cust.LI.UIPlugIn
                                     item["DescFlexSegments_PrivateDescSeg8"] = desc8;
 
                                     logger.Error("外协订单单据号：" + PurDocNo + "" + "成功，对应单号:" + DocNo + "");
+                                }
+                                else//如果预测订单没找到，就销售订单
+                                {
+                                    string sqlforxs = "SELECT " +
+                                        " D.Description," +
+                                        " (SELECT Name FROM CBO_Customer_Trl C WHERE ID = A.OrderBy_Customer) AS CustomerName," +
+                                        " (SELECT Name FROM CBO_Operators_Trl C WHERE ID = A.Seller) AS SellerName " +
+                                        " FROM SM_SO A " +
+                                        " LEFT JOIN SM_SOLine B ON B.SO = A.ID " +
+                                        " LEFT JOIN SM_SOMemo C ON C.SOLine = B.ID " +
+                                        " LEFT JOIN SM_SOMemo_Trl D ON D.ID = C.ID " +
+                                        " WHERE A.DocNo = '"+ DocNo + "' AND B.DocLineNo = '" + DocNoLineNo + "'";
+
+                                    DataTable dt3 = U9Common.GetDataTable(sqlforxs);
+
+                                    if (dt3.Rows != null && dt3.Rows.Count > 0)
+                                    {
+                                        desc6 = dt3.Rows[0]["Description"].ToString();//销售备注
+
+                                        desc7 = dt3.Rows[0]["CustomerName"].ToString();//客户
+
+                                        desc8 = dt3.Rows[0]["SellerName"].ToString();//销售业务员
+
+                                        item["DescFlexSegments_PrivateDescSeg6"] = desc6;
+
+                                        item["DescFlexSegments_PrivateDescSeg7"] = desc7;
+
+                                        item["DescFlexSegments_PrivateDescSeg8"] = desc8;
+
+                                        logger.Error("外协订单单据号：" + PurDocNo + "" + "成功，对应单号:" + DocNo + "");
+                                    }
                                 }
                             }
                         }

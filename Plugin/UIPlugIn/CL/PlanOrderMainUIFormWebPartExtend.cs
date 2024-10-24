@@ -73,16 +73,34 @@ namespace YY.U9.Cust.LI.UIPlugIn
         /// 有
         /// </summary>
         /// <param name="Part"></param>
-        /// <param name="executeDefault"></param>
+        /// <param name="executeDefault"></param> 
         public override void BeforeDataBinding(IPart Part, out bool executeDefault)
         {
+
             if (_part.Model.PlanOrder != null)
             {
                 int see = this._part.Model.PlanOrder.Records.Count;
             }
+
+
             base.BeforeDataBinding(Part, out executeDefault);
             GetData7();
+ 
         }
+
+
+        //public override void AfterLoad(IPart part, EventArgs args)
+        //{
+        //    if (_part.Model.PlanOrder != null)
+        //    {
+        //        int see = this._part.Model.PlanOrder.Records.Count;
+        //    }
+
+        //    GetData7();
+
+        //    base.AfterLoad(part, args);
+        //    this._part.BtnSave_Click(this._part.Action, args);
+        //}
 
         ///// <summary>
         ///// 有

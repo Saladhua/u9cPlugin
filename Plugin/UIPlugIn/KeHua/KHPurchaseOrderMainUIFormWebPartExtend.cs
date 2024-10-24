@@ -89,7 +89,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
 
             if (webButton != null)
             {
-                if (webButton.Action == "SaveClick")//保存时 
+                if (webButton.Action == "SaveClick" || webButton.Action == "SubmitClick")//保存时 
                 {
                     if (this._part.Model.PurchaseOrder.FocusedRecord["DocumentType_Code"] != null)
                     {

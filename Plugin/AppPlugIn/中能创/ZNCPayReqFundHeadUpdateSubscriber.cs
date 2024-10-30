@@ -165,11 +165,13 @@ namespace YY.U9.Cust.LI.AppPlugIn
                 formData.Append("\"fd_CultureName\":");
                 formData.Append("\"" + "zh-CN" + "\",");
 
-                formData.Append("\"fd_OrgCode\":");
-                formData.Append("\"" + payReqFundHead.Org.Code + "\",");
+                //formData.Append("\"fd_OrgCode\":");
+                //formData.Append("\"" + payReqFundHead.Org.Code + "\",");
+                //--不传
 
-                formData.Append("\"fd_UserCode\":");
-                formData.Append("\"" + PDContext.Current.UserCode + "\",");
+                //formData.Append("\"fd_UserCode\":");
+                //formData.Append("\"" + PDContext.Current.UserCode + "\",");
+                //--不传
 
                 formData.Append("\"fd_u9_OrgCode\":");
                 formData.Append("\"" + payReqFundHead.Org.Code + "\",");
@@ -253,33 +255,33 @@ namespace YY.U9.Cust.LI.AppPlugIn
 
                 }
                 #endregion
-
-                formData.Append("\"fd_qingKUanMX.fd_gongYingShang\":");
+                
+                formData.Append("\"fd_detail_Entries.fd_gongYingShang\":");
                 formData.Append("[" + fd_qingKUanMX_fd_gongYingShang.Substring(0, fd_qingKUanMX_fd_gongYingShang.Length - 1) + "],");
 
-                formData.Append("\"fd_qingKUanMX.fd_xuanDan\":");
+                formData.Append("\"fd_detail_Entries.fd_xuanDan\":");
                 formData.Append("[" + fd_qingKUanMX_fd_xuanDan.Substring(0, fd_qingKUanMX_fd_xuanDan.Length - 1) + "],");
 
-                formData.Append("\"fd_qingKUanMX.fd_zheKouQianQingKuanJinE\":");
+                formData.Append("\"fd_detail_Entries.fd_zheKouQianQingKuanJinE\":");
                 formData.Append("[" + fd_qingKUanMX_fd_zheKouQianQingKuanJinE.Substring(0, fd_qingKUanMX_fd_zheKouQianQingKuanJinE.Length - 1) + "],");
 
-                formData.Append("\"fd_qingKUanMX.fd_zheKouHouQingKuanJinE\":");
+                formData.Append("\"fd_detail_Entries.fd_zheKouHouQingKuanJinE\":");
                 formData.Append("[" + fd_qingKUanMX_fd_zheKouHouQingKuanJinE.Substring(0, fd_qingKUanMX_fd_zheKouHouQingKuanJinE.Length - 1) + "],");
 
-                formData.Append("\"fd_qingKUanMX.fd_fuKuanBenBiJinE\":");
+                formData.Append("\"fd_detail_Entries.fd_fuKuanBenBiJinE\":");
                 formData.Append("[" + fd_qingKUanMX_fd_fuKuanBenBiJinE.Substring(0, fd_qingKUanMX_fd_fuKuanBenBiJinE.Length - 1) + "],");
 
-                formData.Append("\"fd_qingKUanMX.fd_jieSuanFangShi\":");
+                formData.Append("\"fd_detail_Entries.fd_jieSuanFangShi\":");
                 formData.Append("[" + fd_qingKUanMX_fd_jieSuanFangShi.Substring(0, fd_qingKUanMX_fd_jieSuanFangShi.Length - 1) + "],");
 
-                formData.Append("\"fd_qingKUanMX.fd_gYsYinXingZhangHa\":");
+                formData.Append("\"fd_detail_Entries.fd_gYsYinXingZhangHa\":");
                 formData.Append("[" + fd_qingKUanMX_fd_gYsYinXingZhangHa.Substring(0, fd_qingKUanMX_fd_gYsYinXingZhangHa.Length - 1) + "],");
 
-                formData.Append("\"fd_qingKUanMX.fd_gYsKaiHuXing\":");
+                formData.Append("\"fd_detail_Entries.fd_gYsKaiHuXing\":");
                 formData.Append("[" + fd_qingKUanMX_fd_gYsKaiHuXing.Substring(0, fd_qingKUanMX_fd_gYsKaiHuXing.Length - 1) + "],");
 
-                formData.Append("\"fd_qingKUanMX.fd_qingKuanShengYuJinE\":");
-                formData.Append("[" + fd_qingKUanMX_fd_qingKuanShengYuJinE.Substring(0, fd_qingKUanMX_fd_qingKuanShengYuJinE.Length - 1) + "],");
+                formData.Append("\"fd_detail_Entries.fd_qingKuanShengYuJinE\":");
+                formData.Append("[" + fd_qingKUanMX_fd_qingKuanShengYuJinE.Substring(0, fd_qingKUanMX_fd_qingKuanShengYuJinE.Length - 1) + "]");
 
                 formData.Append("}</formValues>");
 

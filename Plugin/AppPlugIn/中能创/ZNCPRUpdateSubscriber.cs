@@ -152,11 +152,13 @@ namespace YY.U9.Cust.LI.AppPlugIn
                 formData.Append("\"fd_CultureName\":");
                 formData.Append("\"" + "zh-CN" + "\",");
 
-                formData.Append("\"fd_OrgCode\":");
-                formData.Append("\"" + pR.Org.Code + "\",");
+                //formData.Append("\"fd_OrgCode\":");
+                //formData.Append("\"" + pR.Org.Code + "\",");
+                //--不传
 
-                formData.Append("\"fd_UserCode\":");
-                formData.Append("\"" + PDContext.Current.UserCode + "\",");
+                //formData.Append("\"fd_UserCode\":");
+                //formData.Append("\"" + PDContext.Current.UserCode + "\",");
+                //--不传
 
                 formData.Append("\"fd_u9_OrgCode\":");
                 formData.Append("\"" + pR.Org.Code + "\",");

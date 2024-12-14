@@ -5,7 +5,7 @@ using UFSoft.UBF.Business;
 using UFSoft.UBF.Util.DataAccess;
 using UFSoft.UBF.Util.Log;
 
-namespace YY.U9.Cust.JH.AppPlugIn
+namespace YY.U9.Cust.LI.AppPlugIn
 {
     /// <summary>
     /// 杂发单--新增

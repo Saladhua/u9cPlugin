@@ -104,7 +104,19 @@ namespace YY.U9.Cust.LI.AppPlugIn
                 formData.Append("\"" + Description + "\",");
 
                 formData.Append("\"fd_DaoHuoRiQi\":");
-                formData.Append("\"" + purchaseOrder.MaturityDate + "\",");
+
+                string NeedPODate = "";
+
+                foreach (var item in purchaseOrder.POLines)
+                {
+                    foreach (var pOShiplines in item.POShiplines)
+                    {
+                        if (pOShiplines != null)
+                        NeedPODate = pOShiplines.NeedPODate.ToString("yyyy-MM-dd");
+                    }
+                }
+
+                formData.Append("\"" + NeedPODate + "\",");
 
                 formData.Append("\"fd_FuKuanTiaoJian\":");
                 string paymentTerm = "";

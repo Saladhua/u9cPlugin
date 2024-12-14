@@ -12,7 +12,7 @@ using UFSoft.UBF.Exceptions;
 using UFSoft.UBF.Util.DataAccess;
 using UFSoft.UBF.Util.Log;
 
-namespace YY.U9.Cust.JH.AppPlugIn
+namespace YY.U9.Cust.LI.AppPlugIn
 {
     /// <summary>
     /// 杂发单--更新
@@ -48,6 +48,12 @@ namespace YY.U9.Cust.JH.AppPlugIn
                     return;
                 }
                 string itemmaster = item.ItemInfo.ItemID.ID.ToString();
+
+                if (item.LotInfo == null)
+                {
+                    return;
+                }
+
                 long see123 = item.LotInfo.LotMaster.ID;
                 long see7 = item.ID;
                 #region 

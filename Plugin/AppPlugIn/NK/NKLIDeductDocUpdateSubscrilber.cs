@@ -67,8 +67,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
                     ImportAPBillHeadDTOData head = SetAPData(item, record.DocNo);
                     heads.Add(head);
                 }
-            }
-
+            } 
             //foreach (record.DeductDocLine item in this.Model.DeductDoc_DeductDocLine.Records)
             //{
             //    //本期实际扣款大于0才发生扣款

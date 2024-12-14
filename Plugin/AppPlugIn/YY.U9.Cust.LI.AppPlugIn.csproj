@@ -377,6 +377,8 @@
     <Compile Include="KAIZHI\ASNLineInsertedSubscriber.cs" />
     <Compile Include="KAIZHI\PMPOLineInsertedSubscriber.cs" />
     <Compile Include="KAIZHI\SupplierUpDateSubscriber.cs" />
+    <Compile Include="kehua\ARBillHeadPriceRecalSubscriber.cs" />
+    <Compile Include="kehua\KHAPBillHeadInsertedSubscriber.cs" />
     <Compile Include="NK\NKLIDeductDocUpdateSubscrilber.cs" />
     <Compile Include="NK\NKLIPurchaseOrderInsertedSubscrilber.cs" />
     <Compile Include="TokenManager.cs" />
@@ -411,6 +413,7 @@
     <None Include="JUNHUA\君华.md" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="HuaXuan\" />
     <Folder Include="中能创\学习\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

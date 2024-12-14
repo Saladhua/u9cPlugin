@@ -48,6 +48,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
 
             Storage = mo.TotalRcvQty + mo.TotalScrapQty;//入库数量=累计入库+累计报废
 
+            string MoID = mo.ID.ToString();
 
             #region 原来的
             //if (!string.IsNullOrEmpty(mo.DescFlexField.PrivateDescSeg5))
@@ -83,6 +84,8 @@ namespace YY.U9.Cust.LI.AppPlugIn
             //}
             #endregion
 
+            string D5 = "";
+
             if (mo.DocState.Value == 0)
             {
                 mo.DescFlexField.PrivateDescSeg5 = "开立";
@@ -113,6 +116,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
             }
             else if (mo.DocState.Value == 3 && IssQty != 0 && Storage < mo.ProductQty)//手动关闭且领料数量>0且入库数量<生产数量
             {
+                //mo.DescFlexField.PrivateDescSeg5 = "异常关闭";
                 mo.DescFlexField.PrivateDescSeg5 = "异常关闭";
             }
 

@@ -52,12 +52,13 @@ namespace YY.U9.Cust.LI.UIPlugIn
             BtnSettle4.Text = "报价记录查询";
             BtnSettle4.ID = "BtnSettle4";
             BtnSettle4.AutoPostBack = true;
-            BtnSettle4.Click += new EventHandler(BtnAR_Click);
+            BtnSettle4.Click += new EventHandler(BtnAC_Click);
             //加入Card容器
             IUFCard card2 = (IUFCard)part.GetUFControlByName(part.TopLevelContainer, "Card0");
             card2.Controls.Add(BtnSettle4);
             CommonFunction.Layout(card2, BtnSettle4, 14, 0);
         }
+
         [Obsolete]
         public void BtnAR_Click(object sender, EventArgs e)
         {
@@ -78,38 +79,51 @@ namespace YY.U9.Cust.LI.UIPlugIn
 
             foreach (var item in this._part.Model.RequestForQuotation.Records)
             {
-
-
                 ID = item["ID"].ToString();
-
             }
 
+            //foreach (var item in this._part.Model.RequestForQuotation_RFQLines.Records)
+            //{
+            //    DocLineNo = item["DocLineNo"].ToString();
 
-            foreach (var item in this._part.Model.RequestForQuotation_RFQLines.SelectRecords)
+            //    LineID = item["ID"].ToString();
+
+            //    Status = item["Status"].ToString();
+            //}
+            if (double.Parse(ID) > 0)
             {
-                DocLineNo = item["DocLineNo"].ToString();
-
-                LineID = item["ID"].ToString();
-
-                Status = item["Status"].ToString();
+                this._part.CurrentState["RFQID"] = ID;
             }
+
 
             #region 操作发布--好使
-            List<long> longs = new List<long>();
+            //if (double.Parse(ID) > 0)
+            //{
+            //    List<long> longs = new List<long>();
 
-            long id = long.Parse(ID);
+            //    long id = long.Parse(ID);
 
-            longs.Add(id);
+            //    longs.Add(id);
 
-
-            UFIDA.U9.PPR.RFQ.Proxy.RFQApprovedProxy rFQApprovedProxy = new UFIDA.U9.PPR.RFQ.Proxy.RFQApprovedProxy();
-            rFQApprovedProxy.RFQDocKey = long.Parse(ID);
-            rFQApprovedProxy.ActivityType = 12;
-            rFQApprovedProxy.IsApproved = false;
-            rFQApprovedProxy.Do();
+            //    UFIDA.U9.PPR.RFQ.Proxy.RFQApprovedProxy rFQApprovedProxy = new UFIDA.U9.PPR.RFQ.Proxy.RFQApprovedProxy();
+            //    rFQApprovedProxy.RFQDocKey = long.Parse(ID);
+            //    rFQApprovedProxy.ActivityType = 12;
+            //    rFQApprovedProxy.IsApproved = false;
+            //    rFQApprovedProxy.Do();
+            //}
             #endregion
 
-
+            NavigateManager.ShowModelWebpart(_part, "ea003f06-b0c8-4f6e-9428-124c1d425613", _part.TaskId.ToString(), 300, 300, null, true, true);
+        }
+        [Obsolete]
+        public void BtnAC_Click(object sender, EventArgs e)
+        {
+            //收集界面错误信息
+            if (this._part.Model.ErrorMessage.hasErrorMessage)
+            {
+                this._part.Model.ClearErrorMessage();
+            }
+            this._part.OnDataCollect(this);
 
             NavigateManager.ShowModelWebpart(_part, "ea003f06-b0c8-4f6e-9428-124c1d425613", _part.TaskId.ToString(), 992, 470, null, true, true);
         }

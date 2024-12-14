@@ -30,7 +30,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
         {
             base.AfterRender(part, args);
 
-          
+
             this._part = (part as TransferFormUIMainFormWebPart);
             long n = (long)Math.Floor((new Random()).NextDouble() * 10000000D);
             try
@@ -113,6 +113,24 @@ namespace YY.U9.Cust.LI.UIPlugIn
 
                     string itemTrans = item["TransferFormL"].ToString();
 
+
+                    string whid = item["WH"].ToString();
+
+                    string sql = "select IsLot from CBO_Wh where ID='" + whid + "'";
+
+                    DataTable dt = U9Common.GetDataTable(sql);
+
+                    string IsLot = "False";
+
+                    if (dt.Rows != null && dt.Rows.Count > 0)
+                    {
+                        IsLot = dt.Rows[0]["IsLot"].ToString();
+                    }
+                    if (IsLot == "False")
+                    {
+                        return;
+                    }
+ 
                     //批次号
                     string lotcode = "";
                     //单重
@@ -213,6 +231,10 @@ namespace YY.U9.Cust.LI.UIPlugIn
                             }
                         }
                         #endregion
+                    }
+                    else
+                    {
+                        return;
                     }
                     #endregion
 

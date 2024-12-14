@@ -273,9 +273,9 @@ namespace YY.U9.Cust.LI.AppPlugIn
                     mo.DescFlexField.PrivateDescSeg3 = Des3;
                     mo.DescFlexField.PrivateDescSeg6 = Des6;
 
-                    string newsql = "exec P_SyncFieldCombineName @FullName='UFIDA.U9.MO.MO.MO',@DescFieldName='DescFlexField_PrivateDescSeg1'";
+                    //string newsql = "exec P_SyncFieldCombineName @FullName='UFIDA.U9.MO.MO.MO',@DescFieldName='DescFlexField_PrivateDescSeg1'";
 
-                    DataAccessor.RunSQL(DataAccessor.GetConn(), newsql, null, out dataSet);
+                    //DataAccessor.RunSQL(DataAccessor.GetConn(), newsql, null, out dataSet);
                 }
 
 

@@ -123,6 +123,8 @@ namespace YY.U9.Cust.LI.AppPlugIn
                         //mOPickListDTO.IssuedQty = decimal.Parse(item.IssuedQty == "" ? "0" : item.IssuedQty);
                         //item3.SpecialIssuedQty = item.OriSpecialIssuedQty.ToString();
                         mOPickListDTO.IssueStyle = item.IssueStyle.Value;
+                        mOPickListDTO.IsCalcCost = true;
+                        mOPickListDTO.ConsignProcessItemSrc = 2;
                         try
                         {
                             string se = item.WH.Name;

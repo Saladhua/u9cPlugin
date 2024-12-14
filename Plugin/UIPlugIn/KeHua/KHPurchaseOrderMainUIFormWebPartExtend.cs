@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using UFIDA.U9.PM.PurchaseOrderUIModel;
+using UFIDA.U9.UI.PDHelper;
 using UFSoft.UBF.UI.ControlModel;
 using UFSoft.UBF.UI.Custom;
 using UFSoft.UBF.UI.IView;
@@ -28,6 +29,12 @@ namespace YY.U9.Cust.LI.UIPlugIn
             base.AfterRender(part, args);
 
             this._part = (part as PurchaseOrderMainUIFormWebPart);
+
+
+            if (PDContext.Current.OrgRef.CodeColumn != "10")
+            {
+                return;
+            } 
 
             if (this._part.Model.PurchaseOrder.FocusedRecord["DocumentType_Code"] != null)
             {

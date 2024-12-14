@@ -85,7 +85,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
 
             base.BeforeDataBinding(Part, out executeDefault);
             GetData7();
- 
+
         }
 
 

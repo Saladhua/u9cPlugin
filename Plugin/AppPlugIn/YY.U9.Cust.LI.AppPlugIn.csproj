@@ -372,6 +372,15 @@
     <Compile Include="GaoDeng\GDCusfMOPickListUpdateSubScrilber.cs" />
     <Compile Include="GetAccessTokenResult.cs" />
     <Compile Include="HJDZ\ShipLinesUpdatingSubscriber.cs" />
+    <Compile Include="HuaXuan\HxBomMasterSubsciber.cs" />
+    <Compile Include="HuaXuan\HxIssueDocSubsciber.cs" />
+    <Compile Include="HuaXuan\HxItemMasterSubsciber.cs" />
+    <Compile Include="HuaXuan\HxMOSubsciber.cs" />
+    <Compile Include="HuaXuan\HxPurchaseOrderCloseSubsciber.cs" />
+    <Compile Include="HuaXuan\HxPurchaseOrderSubsciber.cs" />
+    <Compile Include="HuaXuan\HxRcvRptDocSubsciber.cs" />
+    <Compile Include="HuaXuan\HxReceivementSubsciber.cs" />
+    <Compile Include="HuaXuan\HxShpiSubsciber.cs" />
     <Compile Include="JUNHUA\MiscShipmentInsertedSubscriber.cs" />
     <Compile Include="JUNHUA\MiscShipmentUpdatingSubscriber.cs" />
     <Compile Include="KAIZHI\ASNLineInsertedSubscriber.cs" />
@@ -413,7 +422,6 @@
     <None Include="JUNHUA\君华.md" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="HuaXuan\" />
     <Folder Include="中能创\学习\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

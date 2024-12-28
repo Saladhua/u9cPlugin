@@ -18,7 +18,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
     [UFSoft.UBF.Eventing.Configuration.Failfast]
     class ZNCPayReqFundHeadUpdateSubscriber : UFSoft.UBF.Eventing.IEventSubscriber
     {
-        private static readonly ILogger logger = LoggerManager.GetLogger(typeof(MOSimuDocInsertedSubscriber));
+        private static readonly ILogger logger = LoggerManager.GetLogger(typeof(ZNCPayReqFundHeadUpdateSubscriber));
 
         //OA 系统地址
         public readonly static string S_PROFILE_CODE = "Z002";

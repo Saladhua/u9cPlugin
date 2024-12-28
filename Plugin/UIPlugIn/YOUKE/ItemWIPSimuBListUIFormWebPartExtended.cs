@@ -89,21 +89,27 @@ namespace YY.U9.Cust.LI.UIPlugIn
                 {
                     for (int i = 0; i < dataTable.Rows.Count; i++)
                     {
-                        MoItem moItem = new MoItem();
-                        moItem.MoID = docno;
-                        moItem.ItemMasterCode = long.Parse(dataTable.Rows[i]["ItemMaster"].ToString());
-                        try
+                        string p15 = dataTable.Rows[i]["PrivateDescSeg15"].ToString();
+
+                        if (p15 == "1")
                         {
-                            moItem.CompleteWhCode = long.Parse(dataTable.Rows[i]["SupplyWh"].ToString());
+                            MoItem moItem = new MoItem();
+                            moItem.MoID = docno;
+                            moItem.ItemMasterCode = long.Parse(dataTable.Rows[i]["ItemMaster"].ToString());
+                            try
+                            {
+                                moItem.CompleteWhCode = long.Parse(dataTable.Rows[i]["SupplyWh"].ToString());
+                            }
+                            catch (Exception ex)
+                            {
+                                //this._part.Model.ErrorMessage.Message = "单号" + docno + "下备料" + itemcode + "供应地点为空";
+                                continue;
+                            }
+                            moItem.PrivateDescSeg15 = dataTable.Rows[i]["PrivateDescSeg15"].ToString();//dataTable.Rows[i]["PrivateDescSeg15"].ToString();//"1"
+                            moItem.DescFlexField_PrivateDescSeg2 = dataTable.Rows[i]["DescFlexField_PrivateDescSeg2"].ToString();
+                            moItem.SetableStatus = SetableStatus;
+                            Mmos.Add(moItem);
                         }
-                        catch (Exception ex)
-                        {
-                            this._part.Model.ErrorMessage.Message = "单号" + docno + "下备料" + itemcode + "供应地点为空";
-                        }
-                        moItem.PrivateDescSeg15 = dataTable.Rows[i]["PrivateDescSeg15"].ToString();//dataTable.Rows[i]["PrivateDescSeg15"].ToString();//"1"
-                        moItem.DescFlexField_PrivateDescSeg2 = dataTable.Rows[i]["DescFlexField_PrivateDescSeg2"].ToString();
-                        moItem.SetableStatus = SetableStatus;
-                        Mmos.Add(moItem);
                     }
                 }
                 //string sqlupdate = "UPDATE MO_MO SET DescFlexField_PrivateDescSeg2 = '" + DateTime.Now.ToString("F") + "' WHERE DocNo = '" + docno + "'";
@@ -176,9 +182,11 @@ namespace YY.U9.Cust.LI.UIPlugIn
                         decimal iqty = nnmos.Where(x => x.ItemMasterCode == item.ItemMasterCode).Sum(x => x.ActualReqQty);
 
                         string kuc = "0";
+                        string kucy = "0";
                         if (!string.IsNullOrEmpty(item.ItemMasterCode.ToString()) && !string.IsNullOrEmpty(item.CompleteWhCode.ToString()))
                         {
                             kuc = getkc(item.ItemMasterCode.ToString(), item.CompleteWhCode.ToString());
+                            kucy = getkc(item.ItemMasterCode.ToString(), "1002302100001184");
                         }
                         //kuc
                         decimal see = decimal.Parse(kuc);
@@ -202,16 +210,15 @@ namespace YY.U9.Cust.LI.UIPlugIn
                         //if (item.PrivateDescSeg15 == "1" && DrQty > 0 && item.SetableStatus == "2" && DQTY > 0 && quanjuQ <= DrQty && string.IsNullOrEmpty(item.DescFlexField_PrivateDescSeg2))
 
                         #endregion
-                        if (item.PrivateDescSeg15 == "1" && DrQty > 0 && item.SetableStatus == "2")
+                        if (item.PrivateDescSeg15 == "1" && item.SetableStatus == "2" && iqty > decimal.Parse(kucy))
                         {
-
                             UFIDA.U9.ISV.TransferInISV.IC_TransInLineDTOData Bom_line = new UFIDA.U9.ISV.TransferInISV.IC_TransInLineDTOData();
                             Bom_line.TransInOwnerOrg = new UFIDA.U9.CBO.Pub.Controller.CommonArchiveDataDTOData();
                             Bom_line.TransInOwnerOrg.ID = long.Parse(PDContext.Current.OrgID);
                             Bom_line.TransInWh = new UFIDA.U9.CBO.Pub.Controller.CommonArchiveDataDTOData();
                             Bom_line.TransInWh.ID = item.CompleteWhCode;//调入存储地点
-                            Bom_line.StoreUOMQty = DrQty;//调入数量
-                            Bom_line.CostUOMQty = DrQty;//成本数量
+                            Bom_line.StoreUOMQty = iqty;//调入数量
+                            Bom_line.CostUOMQty = iqty;//成本数量
                             Bom_line.CostUOM = new CommonArchiveDataDTOData();
 
                             Bom_line.CostUOM.ID = item.CostUOM;
@@ -258,9 +265,8 @@ namespace YY.U9.Cust.LI.UIPlugIn
 
                     if (Bom.TransInLines.Count == 0)//单据行上面一个都没有
                     {
-                        this._part.Model.ErrorMessage.Message = "检查生产订单是否被使用，或者料品是否能被调用，或者是否齐套状态为齐";
-
-                        return;
+                        //this._part.Model.ErrorMessage.Message = "检查生产订单是否被使用，或者料品是否能被调用，或者是否齐套状态为齐";
+                        continue;
                     }
                     string seee11 = "";
                     try
@@ -279,12 +285,12 @@ namespace YY.U9.Cust.LI.UIPlugIn
                     }
                     catch (Exception ex)
                     {
-                        this._part.Model.ErrorMessage.Message = "检查生产订单是否被使用，或者料品是否能被调用，或者是否齐套状态为齐" + ex.ToString();
+                        this._part.Model.ErrorMessage.Message = "检查生产订单是否被使用，或者料品是否能被调用，或者是否齐套状态为齐" + ex.Message.ToString() + "调入接口报错";
                         return;
                     }
                 }
 
-            
+
 
 
             }
@@ -344,20 +350,26 @@ namespace YY.U9.Cust.LI.UIPlugIn
         public string getkc(string item, string whid)
         {
             string ck = "0";
-            string sqlForCPRK = "select  A5.[Name] as [Wh_Name], A.[ItemInfo_ItemCode] as [Item_ItemCode]," +
-                "isnull( case  when A2.[ItemFormAttribute] in (16, 22) then A.[ItemInfo_ItemName] else A2.[Name] end ,'') as [ItemSeg_Name]," +
-                "sum(A.[ToRetStQty]) as [PUToRetQty], A3.[Round_Precision] as [Round1_Precision], convert(decimal(24, 9), 0) as [InOnWayQty], " +
-                "convert(decimal(24, 9), 0) as [OutOnWayQty], sum( case  when((((A.[IsProdCancel] = 1) or(A.[MO_EntityID] != 0))" +
-                "or A.[ProductDate] is not null) or(A.[WP_EntityID] != 0)) then A.[StoreQty] else convert(decimal(24, 9), 0) end ) as [NotUseQty]," +
-                "sum((((A.[StoreQty] - A.[ResvStQty]) - A.[ResvOccupyStQty]) -  case  when((((A.[IsProdCancel] = 1) or(A.[MO_EntityID] != 0)) or A.[ProductDate] is not null)" +
-                "or(A.[WP_EntityID] != 0)) then A.[StoreQty] else convert(decimal(24, 9), 0) end )) as [CanUseQty], sum(A.[ResvStQty]) as [ReservQty], sum((A.[StoreQty] + A.[ToRetStQty]))" +
-                "as [BalQty], sum((A.[StoreMainQty] + A.[ToRetStMainQty])) as [BalQty_Main]," +
-                "sum((((((A.[StoreQty] - A.[ResvStQty]) - A.[ResvOccupyStQty]) -  case  when((((A.[IsProdCancel] = 1) or(A.[MO_EntityID] != 0)) or A.[ProductDate] is not null) or(A.[WP_EntityID] != 0)) then A.[StoreQty] else convert(decimal(24, 9), 0) end ) +A.[SupplyQtySU]) -A.[DemandQtySU])) as [Temp_PAB], convert(bigint, 0) as [Item_ItemID], " +
-                "convert(bigint, 0) as [W_Uom], convert(bigint, 0) as [MainBaseSU_ID]" +
-                "from InvTrans_WhQoh as A  left join[CBO_Wh] as A1 on(A.[Wh] = A1.[ID])  left join[CBO_ItemMaster] as A2 on(A.[ItemInfo_ItemID] = A2.[ID])  left join[Base_UOM] as A3 on(A.[StoreUOM] = A3.[ID])  left join[Base_Organization] as A4 on(A.[LogisticOrg] = A4.[ID])  left join[CBO_Wh_Trl] as A5 on(A5.SysMlFlag = 'zh-CN') and(A1.[ID] = A5.[ID])" +
-                "where(((A2.[Name] is not null and (A2.[Name] != '')) and(A4.[Code] = N'10')) and(A.ItemInfo_ItemID = '" + item.ToString() + "')) and A5.ID = '" + whid.ToString() + "'" +
-                " group by A5.[Name], A.[ItemInfo_ItemCode]," +
-                "isnull( case  when A2.[ItemFormAttribute] in (16, 22) then A.[ItemInfo_ItemName] else A2.[Name] end ,''), A3.[Round_Precision]";
+            //string sqlForCPRK = "select  A5.[Name] as [Wh_Name], A.[ItemInfo_ItemCode] as [Item_ItemCode]," +
+            //    "isnull( case  when A2.[ItemFormAttribute] in (16, 22) then A.[ItemInfo_ItemName] else A2.[Name] end ,'') as [ItemSeg_Name]," +
+            //    "sum(A.[ToRetStQty]) as [PUToRetQty], A3.[Round_Precision] as [Round1_Precision], convert(decimal(24, 9), 0) as [InOnWayQty], " +
+            //    "convert(decimal(24, 9), 0) as [OutOnWayQty], sum( case  when((((A.[IsProdCancel] = 1) or(A.[MO_EntityID] != 0))" +
+            //    "or A.[ProductDate] is not null) or(A.[WP_EntityID] != 0)) then A.[StoreQty] else convert(decimal(24, 9), 0) end ) as [NotUseQty]," +
+            //    "sum((((A.[StoreQty] - A.[ResvStQty]) - A.[ResvOccupyStQty]) -  case  when((((A.[IsProdCancel] = 1) or(A.[MO_EntityID] != 0)) or A.[ProductDate] is not null)" +
+            //    "or(A.[WP_EntityID] != 0)) then A.[StoreQty] else convert(decimal(24, 9), 0) end )) as [CanUseQty], sum(A.[ResvStQty]) as [ReservQty], sum((A.[StoreQty] + A.[ToRetStQty]))" +
+            //    "as [BalQty], sum((A.[StoreMainQty] + A.[ToRetStMainQty])) as [BalQty_Main]," +
+            //    "sum((((((A.[StoreQty] - A.[ResvStQty]) - A.[ResvOccupyStQty]) -  case  when((((A.[IsProdCancel] = 1) or(A.[MO_EntityID] != 0)) or A.[ProductDate] is not null) or(A.[WP_EntityID] != 0)) then A.[StoreQty] else convert(decimal(24, 9), 0) end ) +A.[SupplyQtySU]) -A.[DemandQtySU])) as [Temp_PAB], convert(bigint, 0) as [Item_ItemID], " +
+            //    "convert(bigint, 0) as [W_Uom], convert(bigint, 0) as [MainBaseSU_ID]" +
+            //    "from InvTrans_WhQoh as A  left join[CBO_Wh] as A1 on(A.[Wh] = A1.[ID])  left join[CBO_ItemMaster] as A2 on(A.[ItemInfo_ItemID] = A2.[ID])  left join[Base_UOM] as A3 on(A.[StoreUOM] = A3.[ID])  left join[Base_Organization] as A4 on(A.[LogisticOrg] = A4.[ID])  left join[CBO_Wh_Trl] as A5 on(A5.SysMlFlag = 'zh-CN') and(A1.[ID] = A5.[ID])" +
+            //    "where(((A2.[Name] is not null and (A2.[Name] != '')) and(A4.[Code] = N'10')) and(A.ItemInfo_ItemID = '" + item.ToString() + "')) and A5.ID = '" + whid.ToString() + "'" +
+            //    " group by A5.[Name], A.[ItemInfo_ItemCode]," +
+            //    "isnull( case  when A2.[ItemFormAttribute] in (16, 22) then A.[ItemInfo_ItemName] else A2.[Name] end ,''), A3.[Round_Precision]"; 
+
+            string sqlForCPRK = "select ItemInfo_ItemCode as ItemCode,org.Code as 组织编码,sum(WhQoh.StoreQty - WhQoh.ResvStQty - WhQoh.ResvOccupyStQty) as CanUseQty  from InvTrans_WhQoh as WhQoh" +
+                " inner join Base_Organization org on org.id = WhQoh.ItemOwnOrg" +
+                " where WhQoh.ItemInfo_ItemID = '" + item.ToString() + "' and WhQoh.Wh = '" + whid.ToString() + "'" +
+                " group by WhQoh.ItemInfo_ItemCode,org.Code";
+
 
             DataTable dataTable = new DataTable();
             DataSet dataSet = new DataSet();

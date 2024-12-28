@@ -38,12 +38,17 @@ namespace YY.U9.Cust.LI.AppPlugIn
             #endregion
 
             string itemLotParam = "";
+
             string itemLotDate = "";
+
             string nowDate = DateTime.Now.ToString("yyyyMMdd");
 
             string lotElotDate = "";//生效日期
+
             int ValidDate = 0;//有效期天数
+
             DateTime InvalidDate = DateTime.Now;//失效日期
+
             long lotMasterID = 0;
 
             foreach (var item in aSN.ASNLine)
@@ -61,7 +66,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
                         ValidDate = item.ItemInfo.ItemID.InventoryInfo.LotValidDate;
                         lotElotDate = nowDate;
                         InvalidDate = DateTime.Now.AddDays(ValidDate);
-                        item.LotEnableDate = InvalidDate;
+                        item.LotEnableDate = DateTime.Now;
                         item.LotDisabledDate = item.LotEnableDate.AddDays(ValidDate);
                         item.LotMater = nowDate;
                     }

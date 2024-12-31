@@ -6,9 +6,52 @@ exports.reportQuery = async function (req, res) {
         const qcTasks = await getAggregateQcTask(req.body,Context.Org.Code);
         const retQcTasks = [];
         let curr = new Date().getTime();
+        const RcvPlanRecordLine =await getRcvPlanRecordLine(req.body,Context.Org.Code);
+        let lineDate = [];
         if (Array.isArray(qcTasks) && qcTasks.length) {
             for (let item of qcTasks) {
+                //item.RcvPlanRecord = item.RcvPlanRecord[item.RcvPlanRecord.length - 1]; 
+                //入库人 2024/1/4更新
+                let RcvName = '';
+                let RcvTime = null;
+                let isOut = '';
+                let ot = req.body._isOut == 1 ? '是':'否';
 
+                let WlD10 = '';
+
+                let WlD11 = '';
+
+                const qcRecord = await  entityFun.findOne('QCRecord', {QCTask: item._id }) 
+
+                if(item.RcvPlanRecord && Context.Org.Code == '10'){ 
+                    for(let line of RcvPlanRecordLine){
+                        if(item.RcvPlanRecord._id.id.toString() == line.RcvPlanRecord.id.toString() && line.ItemMaster.toString() == item.ItemMaster._id.toString()){
+                            RcvName = line.CreatedByName;
+                            RcvTime = line.CreatedOn;
+                            item.pro = line.PrivateDescSeg6;
+                        }
+                    } 
+                } 
+                //item.RcvInTime = new Date(RcvTime.getTime() + 8 * 60 * 60 * 1000);
+
+                if(RcvTime && Context.Org.Code == '10'){
+                    item.RcvInTime = `${RcvTime.getFullYear()}.${padZero(RcvTime.getMonth() + 1)}.${padZero(RcvTime.getDate())} ${padZero(RcvTime.getHours())}:${padZero(RcvTime.getMinutes())}:${padZero(RcvTime.getSeconds())}`
+                    if(item.JudgedOn){
+                        RcvTime = ((RcvTime.getTime() - item.JudgedOn.getTime()) / 3600000).toFixed(2) ;
+                    }else {
+                        RcvTime = ((RcvTime.getTime() - item.CompleteTime.getTime()) / 3600000).toFixed(2) ;
+                    }
+                    isOut = RcvTime > 48 ? '是' : '否'
+                }
+                //------------------------ 
+                if (qcRecord){
+                    item.WlD10 = qcRecord.PrivateDescSeg10;
+                    item.WlD11 = qcRecord.PrivateDescSeg11;
+                }
+
+                item.isOut = isOut;
+                item.RcvTime = RcvTime;
+                item.RcvName = RcvName;
                 item.defectDesc = item.PrivateDescSeg15;
                 item.buyer = item.PrivateDescSeg16;
                 item.project = item.PrivateDescSeg17;
@@ -22,12 +65,16 @@ exports.reportQuery = async function (req, res) {
                 let hour = parseInt(timestamp % 86400000 / 3600000);
                 let minute = parseInt(timestamp % 3600000 / 60000);
                 let second = parseInt(timestamp % 60000 / 1000);
+                /*
                 item.Durationtime =
                     (day ? day + '天' : '') +
                     (hour ? hour + '小时' : '') +
                     (minute ? minute + '分钟' : '') +
                     (second ? second + '秒' : '') ;
-                if(Context.Org.Code == item.Org.Code){
+                 */
+                item.Durationtime = (timestamp / 3600000).toFixed(2)
+                //if(!((req.body.Project && item.project.includes(req.body.Project)) || !req.body.Project))continue;
+                if(Context.Org.Code == item.Org.Code && (req.body._isOut == null || req.body._isOut == '' || ot == isOut)){
                     retQcTasks.push(item);
                 }
 
@@ -46,10 +93,53 @@ exports.reportQuery = async function (req, res) {
     }
 };
 
+
+function padZero(num) {
+    return num < 10 ? '0' + num : num;
+}
+
+function getRcvPlanRecordLine(param,Org){
+    let args = [];
+    addCondition(param);
+    return new Promise((resolve, reject) => {
+        const entity = entityCollection.getEntity('RcvPlanRecordLine');
+        entity.Entity.aggregate(args, function (err, data) {
+            if (err) {
+                const newErr = new Error();
+                newErr.level = 9;
+                newErr.title = '查询库存记录错误';
+                newErr.message = '查询失败，请检查查询参数！' + err.message;
+                resolve([]);
+            } else {
+                resolve(data);
+            }
+        });
+    });
+
+
+    function addCondition(param) {
+
+        if (param.CompleteStartDate || param.CompleteEndDate) {
+            let condition = {};
+            if (param.CompleteStartDate) {
+                condition['$gte'] = new Date(Date.parse(param.CompleteStartDate));
+            }
+            if (param.CompleteEndDate) {
+                condition['$lte'] = new Date(Date.parse(param.CompleteEndDate));
+            }
+            args.unshift({
+                $match: {
+                    'CreatedOn': condition
+                }
+            });
+        }
+    }
+}
+
 function getAggregateQcTask(param,Org) {
     let args = [];
     const populate = [
-        {path: 'ItemMaster', select: 'Code Name Specification Org'},
+        {path: 'ItemMaster', select: 'Code Name Specification Org PrivateDescSeg1'},
         {path: 'WorkLocation', select: 'Code Name'},
         {path: 'Work', select: 'Code Name'},
         {path: 'Supplier', select: 'Code Name'},
@@ -67,6 +157,7 @@ function getAggregateQcTask(param,Org) {
         {path: 'SampedBy', select: 'Code Name', model: 'User'},
         {path: 'JudgedBy', select: 'Code Name', model: 'User'},
         {path: 'JobSchedule', select: 'Code Name'},
+        //{path: 'QcRecord', select: 'PrivateDescSeg10 PrivateDescSeg8'},
         //{path: 'RcvPlanRecord', select: '_id', model: 'LotNo'}
     ];
     populate.forEach(item => {
@@ -100,6 +191,89 @@ function getAggregateQcTask(param,Org) {
             $unwind: {path: '$' + item.path, 'preserveNullAndEmptyArrays': true}
         });
     });
+    //2024-1-04新增
+    args.push({
+        $lookup:
+            {
+                from: 'RcvPlanRecord',
+                let: {
+                    'lid': '$LotNo'
+                },
+                pipeline: [
+                    {
+                        $match: {
+                            $expr: {$eq: ['$LotNo', '$$lid']}
+
+                        }
+                    },
+
+                    {$project:{'_id':1,'Status':1}}
+                ],
+                as: 'RcvPlanRecord'
+            }
+
+    });
+    args.push({
+        $unwind: {path: '$RcvPlanRecord', 'preserveNullAndEmptyArrays': true}
+    });
+
+    /*
+    args.push({
+        $lookup:
+            {
+                from: 'RcvPlanRecordLine',
+                let: {
+                    'lid': '$RcvPlanRecord',
+                    'litem':'$ItemMaster'
+                },
+                pipeline: [
+                    {
+                        $match: {
+                            $expr: {
+                                $and: [
+                                    { $eq: ['$RcvPlanRecord._id', '$$lid'] },
+                                    { $eq: ['$ItemMaster._id', '$$litem'] }
+                                ]
+                            }
+
+                        }
+                    },
+
+                    {$project:{'_id':1,'Status':1}}
+                ],
+                as: 'RcvPlanRecordLine'
+            }
+
+    });
+    args.push({
+        $unwind: {path: '$RcvPlanRecordLine', 'preserveNullAndEmptyArrays': true}
+    });
+
+     */
+    /*
+    args.push({
+        $lookup:
+            {
+                from: 'RCVPlan',
+                let: {
+                    'lid': '$RcvPlanRecord.RCVPlan'
+                },
+                pipeline: [
+                    {
+                        $match: {
+                            $expr: {$eq: ['$_id', '$$lid']}
+
+                        }
+                    },
+
+                    {$project:{'_id':1}}
+                ],
+                as: 'RCVPlan'
+            }
+
+    });
+
+     */
     args.push({
         $match:
             {
@@ -183,6 +357,14 @@ function getAggregateQcTask(param,Org) {
                 }
             });
         }
+        if (/\d/.test(param.RcvPlanRecordStatus)) {
+            //const regExp = new RegExp(param.RcvPlanRecordStatus);
+            args.push({
+                $match: {
+                    'RcvPlanRecord.Status': param.RcvPlanRecordStatus
+                }
+            });
+        }
         if (param.CompleteStartDate || param.CompleteEndDate) {
             let condition = {};
             if (param.CompleteStartDate) {
@@ -213,6 +395,15 @@ function getAggregateQcTask(param,Org) {
             });
         }
 
+        if (param.Project) {
+            const regExp = new RegExp(param.Project);
+            args.push({
+                $match: {
+                    'PrivateDescSeg17': regExp
+                }
+            });
+        }
+
         if (param.JudgedOnStart || param.JudgedOnEnd) {
             let condition = {};
             if (param.JudgedOnStart) {
@@ -236,7 +427,6 @@ function getAggregateQcTask(param,Org) {
                 }
             });
         }
-
         if(Org){
             const regExp = new RegExp(Org);
             args.push({
@@ -245,7 +435,6 @@ function getAggregateQcTask(param,Org) {
                 }
             });
         }
-
     }
 }
 exports.updateQcTask = async function (req, res) {

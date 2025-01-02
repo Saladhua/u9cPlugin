@@ -381,6 +381,7 @@
     <Compile Include="HuaXuan\HxRcvRptDocSubsciber.cs" />
     <Compile Include="HuaXuan\HxReceivementSubsciber.cs" />
     <Compile Include="HuaXuan\HxShpiSubsciber.cs" />
+    <Compile Include="HuaXuan\HxSOSubsciber.cs" />
     <Compile Include="JUNHUA\MiscShipmentInsertedSubscriber.cs" />
     <Compile Include="JUNHUA\MiscShipmentUpdatingSubscriber.cs" />
     <Compile Include="KAIZHI\ASNLineInsertedSubscriber.cs" />

@@ -97,7 +97,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
                 formData.Append("\"operationType\":\"" + operation + "\",");
                 formData.Append("\"tenant\":\"" + tenant + "\",");
                 formData.Append("\"partNumber\":\"" + itemMaster.Code + "\",");
-                formData.Append("\"revision\":\"" + itemMaster.Version + "\",");
+                formData.Append("\"revision\":\"" + "1" + "\",");
                 formData.Append("\"name\":\"" + itemMaster.Name + "\",");
                 formData.Append("\"siteName\":\"" + siteName + "\",");
                 formData.Append("\"type\":\"" + itemMaster.MainItemCategory.Name + "\",");

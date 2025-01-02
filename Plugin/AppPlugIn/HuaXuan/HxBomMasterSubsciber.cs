@@ -106,49 +106,72 @@ namespace YY.U9.Cust.LI.AppPlugIn
 
                 StringBuilder formData = new StringBuilder();
                 formData.Append("{");
-                formData.Append("operationType:" + "0" + ",");
-                formData.Append("tenant:" + tenant + ",");
-                formData.Append("bomDTO:{");
-                formData.Append("name:" + bOMMaster.ItemMaster.Name + ",");
-                formData.Append("revision:" + bOMMaster.BOMVersionCode + ",");
-                formData.Append("description:" + "" + ",");//找不到
-                formData.Append("state:" + bOMMaster.Status.Name + ",");
-                formData.Append("remark:" + bOMMaster.Explain + ",");
-                formData.Append("siteName:" + siteName);
-                formData.Append(" },");
-                formData.Append("bomItems:[");
-                int i = 0;
+                formData.Append("\"operationType\":\"0\",");
+                formData.Append("\"tenant\":\"" + tenant + "\",");
+                formData.Append("\"bomDTO\":{");
+                formData.Append("\"name\":\"" + bOMMaster.ItemMaster.Name + "\",");
+                formData.Append("\"revision\":\"" + bOMMaster.BOMVersionCode + "\",");
+                formData.Append("\"description\":\"\",");
+                formData.Append("\"state\":\"" + "1" + "\",");
+                formData.Append("\"remark\":\"" + bOMMaster.Explain + "\",");
+                formData.Append("\"siteName\":\"" + siteName + "\"");
+                formData.Append("},");
+                formData.Append("\"bomItems\":[");
+                int i = 1;
                 foreach (var item in bOMMaster.BOMComponents)
                 {
                     formData.Append("{");
-                    formData.Append("partNumber:" + item.ItemMaster.Code + ",");
-                    formData.Append("partRevision:" + item.ItemMaster.Version + ",");
-                    formData.Append("quantity:" + item.UsageQty + ",");
-                    formData.Append("description:" + "" + ",");//找不到
-                    formData.Append("replacementType:" + item.SubstituteStyle.Name + ",");//找不到是啥
-                    formData.Append("remark:" + item.Remark + ",");
-                    formData.Append("partAlterDTOs:[");
-                    int k = 0;
+                    formData.Append("\"partNumber\":\"" + item.ItemMaster.Code + "\",");
+                    formData.Append("\"partRevision\":\"" + "1" + "\",");
+                    formData.Append("\"quantity\":\"" + item.UsageQty + "\",");
+                    formData.Append("\"description\":\"\",");
+                    if (item.SubstituteStyle.Name == "None")
+                    {
+                        formData.Append("\"replacementType\":\"" + "" + "\",");
+                    }
+                    else
+                    {
+                        formData.Append("\"replacementType\":\"" + item.SubstituteStyle.Name + "\",");
+                    }
+                    formData.Append("\"remark\":\"" + item.Remark + "\",");
+                    formData.Append("\"partAlterDTOs\":[");
+                    int k = 1;
                     foreach (var itemSubstitutes in item.Substitutes)
                     {
                         formData.Append("{");
-                        formData.Append("partNumber:" + itemSubstitutes.ItemMaster.Code + ",");
-                        formData.Append("partRevision:" + itemSubstitutes.ItemMaster.Version + ",");
-                        formData.Append("quantity:" + itemSubstitutes.SubstituteQty + ",");
-                        formData.Append("description:" + "" + ",");//找不到
-                        formData.Append("effectiveStart:" + item.EffectiveDate + ",");
-                        formData.Append("effectiveEnd:" + item.DisableDate + ",");
-                        formData.Append("type:" + "" + ",");//找不到
+                        formData.Append("\"partNumber\":\"" + itemSubstitutes.ItemMaster.Code + "\",");
+                        formData.Append("\"partRevision\":\"" + "1" + "\",");
+                        formData.Append("\"quantity\":\"" + itemSubstitutes.SubstituteQty + "\",");
+                        formData.Append("\"description\":\"\",");
+                        formData.Append("\"effectiveStart\":\"" + item.EffectiveDate + "\",");
+                        formData.Append("\"effectiveEnd\":\"" + item.DisableDate + "\",");
+                        formData.Append("\"type\":\"\"");
                         formData.Append("}");
-                        if (item.Substitutes.Count != i)
+                        if (k < item.Substitutes.Count - 1)
                         {
                             formData.Append(",");
                         }
                         k++;
                     }
+                    if (item.Substitutes.Count == 0)
+                    {
+                        formData.Append("{");
+                        formData.Append("\"partNumber\":\"" + "" + "\",");
+                        formData.Append("\"partRevision\":\"" + "" + "\",");
+                        formData.Append("\"quantity\":\"" + "" + "\",");
+                        formData.Append("\"description\":\"\",");
+                        formData.Append("\"effectiveStart\":\"" + "" + "\",");
+                        formData.Append("\"effectiveEnd\":\"" + "" + "\",");
+                        formData.Append("\"type\":\"\"");
+                        formData.Append("}");
+                        if (k < item.Substitutes.Count - 1)
+                        {
+                            formData.Append(",");
+                        }
+                    }
                     formData.Append("]");
                     formData.Append("}");
-                    if (bOMMaster.BOMComponents.Count != i)
+                    if (i < bOMMaster.BOMComponents.Count - 1)
                     {
                         formData.Append(",");
                     }
@@ -161,7 +184,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
 
                 formSendData.Append(formData.ToString());
 
-                logger.Error("成品入库新增传出数据：" + formSendData.ToString());
+                logger.Error("物料清单新增传出数据：" + formSendData.ToString());
 
                 string strURL = null;
 

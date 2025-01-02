@@ -83,250 +83,231 @@ namespace YY.U9.Cust.LI.AppPlugIn
                 //  ]
                 //}
 
-                #endregion 
+                #endregion
 
-                if (receivement.ReceivementType.Value == 0)
+
+                if (receivement.BizType.Value != 326)
                 {
-                    if (receivement.BizType.Value != 326)
+                    string operation = "0";
+
+                    string tenant = "slerealm1";
+
+                    string siteName = "华旋工厂";
+
+                    StringBuilder formData = new StringBuilder();
+
+                    formData.Append("{");
+
+                    // 给键和值添加双引号，并确保键值之间有冒号隔开，符合JSON格式要求
+
+
+                    formData.Append("\"tenant\":\"" + tenant + "\",");
+
+                    foreach (var item in receivement.RcvLines)
                     {
-                        string operation = "0";
+                        formData.Append("\"planDate\":\"" + item.PlanArrivedDate.ToString("yyyy-MM-dd") + "\",");  // 如果这里需要根据实际情况填充正确的值，可以后续修改此处逻辑
+                    }
 
-                        string tenant = "slerealm1";
+                    formData.Append("\"orderNumber\":\"" + receivement.DocNo + "\",");
 
-                        string siteName = "华旋工厂";
+                    formData.Append("\"type\":\"" + "0" + "\",");
 
-                        StringBuilder formData = new StringBuilder();
+                    string supCode = "";
 
+                    if (receivement.Supplier != null)
+                    {
+                        formData.Append("\"supplierNumber\":\"" + receivement.Supplier.Code + "\",");
+                        supCode = receivement.Supplier.Code;
+                    }
+                    else
+                    {
+                        formData.Append("\"supplierNumber\":\"" + "" + "\",");
+                        supCode = "";
+                    }
+
+                    formData.Append("\"list\":[");
+
+                    int i = 1;
+
+                    foreach (var item in receivement.RcvLines)
+                    {
                         formData.Append("{");
 
-                        // 给键和值添加双引号，并确保键值之间有冒号隔开，符合JSON格式要求
-                        formData.Append("\"supplierNumber\":\"" + receivement.Supplier.Code + "\",");
+                        formData.Append("\"supplierNumber\":\"" + supCode + "\",");
 
-                        formData.Append("\"tenant\":\"" + tenant + "\",");
+                        formData.Append("\"partNumber\":\"" + item.ItemInfo.ItemCode + "\",");
 
-                        foreach (var item in receivement.RcvLines)
+                        formData.Append("\"demandQuantity\":\"" + item.RejectQtyPU + "\",");
+
+                        if (item.InvLot != null)
                         {
-                            formData.Append("\"planDate\":\"" + item.PlanArrivedDate.ToString("yyyy-MM-dd") + "\",");  // 如果这里需要根据实际情况填充正确的值，可以后续修改此处逻辑
-                        }
-
-                        formData.Append("\"orderNo\":\"" + receivement.DocNo + "\",");
-
-                        formData.Append("\"type\":\"" + "0" + "\",");
-
-                        if (receivement.Supplier != null)
-                        {
-                            formData.Append("\"supplierCode\":\"" + receivement.Supplier.Code + "\",");
+                            formData.Append("\"lotName\":\"" + item.InvLot.LotCode + "\",");
                         }
                         else
                         {
-                            formData.Append("\"supplierCode\":\"" + "" + "\",");
+                            formData.Append("\"lotName\":\"" + "1" + "\",");
                         }
 
-                        formData.Append("\"list\":[");
-
-                        int i = 1;
-
-                        foreach (var item in receivement.RcvLines)
+                        if (item.Wh != null)
                         {
-                            formData.Append("{");
-
-                            formData.Append("\"quantity\":\"" + item.ArriveQtyTU + "\",");
-
-                            formData.Append("\"partNumber\":\"" + item.ItemInfo.ItemCode + "\",");
-
-                            if (item.RcvLineLocations != null)
-                            {
-                                foreach (var rcvLineLocations in item.RcvLineLocations)
-                                {
-                                    formData.Append("\"lotName\":\"" + rcvLineLocations.InvLotCode + "\",");
-                                }
-                                if (item.RcvLineLocations.Count == 0)
-                                {
-                                    formData.Append("\"lotName\":\"" + "1" + "\","); //测试阶段传值1
-                                }
-                            }
-                            else
-                            {
-                                formData.Append("\"lotName\":\"" + "1" + "\",");
-                            }
-
-                            if (item.Wh != null)
-                            {
-                                formData.Append("\"warehouseNumber\":\"" + item.Wh.Code + "\",");
-                            }
-                            else
-                            {
-                                formData.Append("\"warehouseNumber\":\"" + "" + "\",");
-                            }
-
-                            formData.Append("\"detailNo\":\"" + item.DocLineNo + "\"");
-
-                            formData.Append("}");
-                            if (receivement.RcvLines.Count != i)
-                            {
-                                formData.Append(",");
-                            }
-                            i++;
-                        }
-
-                        formData.Append("]}");
-
-                        //发送格式
-                        StringBuilder formSendData = new StringBuilder();
-
-                        formSendData.Append(formData.ToString());
-
-                        logger.Error("采购退货新增传出数据：" + formSendData.ToString());
-
-                        string strURL = null;
-
-                        //测试
-                        //strURL = "http://118.195.189.35:8900/accessPlatform/platformAPI";
-
-                        //正式
-                        //strURL = "http://58.216.169.102:9081/ekp/sys/webservice/kmReviewWebserviceService?wsdl";
-
-
-                        long orgID = Context.LoginOrg.ID;
-
-
-                        //OA服务器地址
-                        string oAURL = Common.GetProfileValue(Common.S_PROFILE_CODE, orgID);
-
-                        if (string.IsNullOrEmpty(oAURL))
-                        {
-                            return;
-                        }
-
-                        strURL = oAURL;
-
-                        string formSendDataGo = formSendData.ToString();
-
-                        strURL = "http://" + strURL + "/services/slewms/api/WmsOrder/outsourcing-return-material-order/sync";
-
-                        string responseText = HttpRequestClient.HttpPostJson(strURL, formSendDataGo, "", "");
-
-                    }
-                    else//委外退货
-                    {
-                        string operation = "0";
-
-                        string tenant = "slerealm1";
-
-                        string siteName = "华旋工厂";
-
-                        StringBuilder formData = new StringBuilder();
-
-                        formData.Append("{");
-
-                        // 给键和值添加双引号，并确保键值之间有冒号隔开，符合 JSON 格式要求
-                        formData.Append("\"tenant\":\"" + tenant + "\",");
-                        formData.Append("\"type\":\"" + "0" + "\",");
-                        formData.Append("\"order\":{");
-
-                        formData.Append("\"oderNumber\":\"" + receivement.DocNo + "\",");
-
-                        foreach (var item in receivement.RcvLines)
-                        {
-                            formData.Append("\"planDate\":\"" + item.APMaturityDate.ToString("yyyy-MM-dd") + "\",");
                             formData.Append("\"warehouseNumber\":\"" + item.Wh.Code + "\",");
                         }
-
-                        formData.Append("\"comment\":\"" + receivement.Memo + "\",");
-
-                        formData.Append("\"supplier\":\"" + receivement.Supplier.Code + "\"");
-
-                        formData.Append("},");
-
-                        formData.Append("\"details\":[");
-
-                        int i = 1;
-
-                        foreach (var item in receivement.RcvLines)
+                        else
                         {
-                            formData.Append("{");
-
-                            formData.Append("\"quantity\":\"" + item.ArriveQtyTU + "\",");
-
-                            formData.Append("\"partNumber\":\"" + item.ItemInfo.ItemCode + "\",");
-
-                            if (item.RcvLineLocations != null)
-                            {
-                                foreach (var rcvLineLocations in item.RcvLineLocations)
-                                {
-                                    formData.Append("\"lotName\":\"" + rcvLineLocations.InvLotCode + "\",");
-                                }
-                                if (item.RcvLineLocations.Count == 0)
-                                {
-                                    formData.Append("\"lotName\":\"" + "1" + "\","); //测试阶段传值1
-                                }
-                            }
-                            else
-                            {
-                                formData.Append("\"lotName\":\"" + "1" + "\",");
-                            }
-
-                            if (item.Wh != null)
-                            {
-                                formData.Append("\"warehouseNumber\":\"" + item.Wh.Code + "\",");
-                            }
-                            else
-                            {
-                                formData.Append("\"warehouseNumber\":\"" + "" + "\",");
-                            }
-
-                            formData.Append("\"sublotName\":\"" + item.ItemInfo.ItemName + "\"");
-
-                            formData.Append("}");
-
-                            if (receivement.RcvLines.Count != i)
-                            {
-                                formData.Append(",");
-                            }
-
-                            i++;
+                            formData.Append("\"warehouseNumber\":\"" + "" + "\",");
                         }
 
-                        formData.Append("]}");
+                        formData.Append("\"detailNo\":\"" + item.DocLineNo + "\"");
 
-                        //发送格式
-                        StringBuilder formSendData = new StringBuilder();
-
-                        formSendData.Append(formData.ToString());
-
-                        logger.Error("采购退货新增传出数据：" + formSendData.ToString());
-
-                        string strURL = null;
-
-                        //测试
-                        //strURL = "http://118.195.189.35:8900/accessPlatform/platformAPI";
-
-                        //正式
-                        //strURL = "http://58.216.169.102:9081/ekp/sys/webservice/kmReviewWebserviceService?wsdl";
-
-
-                        long orgID = Context.LoginOrg.ID;
-
-
-                        //OA服务器地址
-                        string oAURL = Common.GetProfileValue(Common.S_PROFILE_CODE, orgID);
-
-                        if (string.IsNullOrEmpty(oAURL))
+                        formData.Append("}");
+                        if (receivement.RcvLines.Count != i)
                         {
-                            return;
+                            formData.Append(",");
                         }
-
-                        strURL = oAURL;
-
-                        string formSendDataGo = formSendData.ToString();
-
-                        strURL = "http://" + strURL + "/services/slewms/api/WmsOrder/outsourcing-return-order/sync"; 
-
-                        string responseText = HttpRequestClient.HttpPostJson(strURL, formSendDataGo, "", "");
+                        i++;
                     }
+
+                    formData.Append("]}");
+
+                    //发送格式
+                    StringBuilder formSendData = new StringBuilder();
+
+                    formSendData.Append(formData.ToString());
+
+                    logger.Error("采购退货新增传出数据：" + formSendData.ToString());
+
+                    string strURL = null;
+
+                    //测试
+                    //strURL = "http://118.195.189.35:8900/accessPlatform/platformAPI";
+
+                    //正式
+                    //strURL = "http://58.216.169.102:9081/ekp/sys/webservice/kmReviewWebserviceService?wsdl";
+
+
+                    long orgID = Context.LoginOrg.ID;
+
+
+                    //OA服务器地址
+                    string oAURL = Common.GetProfileValue(Common.S_PROFILE_CODE, orgID);
+
+                    if (string.IsNullOrEmpty(oAURL))
+                    {
+                        return;
+                    }
+
+                    strURL = oAURL;
+
+                    string formSendDataGo = formSendData.ToString();
+
+                    strURL = "http://" + strURL + "/services/slewms/api/WmsOrder/PR";
+
+                    string responseText = HttpRequestClient.HttpPostJson(strURL, formSendDataGo, "", "");
+
                 }
+                else//委外退货
+                {
+                    string operation = "0";
+
+                    string tenant = "slerealm1";
+
+                    string siteName = "华旋工厂";
+
+                    StringBuilder formData = new StringBuilder();
+
+                    formData.Append("{");
+
+                    // 给键和值添加双引号，并确保键值之间有冒号隔开，符合 JSON 格式要求
+                    formData.Append("\"tenant\":\"" + tenant + "\",");
+                    formData.Append("\"type\":\"" + "0" + "\",");
+
+                    formData.Append("\"orderNo\":\"" + receivement.DocNo + "\",");
+
+                    foreach (var item in receivement.RcvLines)
+                    {
+                        formData.Append("\"planDate\":\"" + item.ArrivedTime.ToString("yyyy-MM-dd") + "\",");
+                    }
+
+                    formData.Append("\"isNew\":\"" + "True" + "\",");
+
+                    formData.Append("\"itemNumber\":\"" + receivement.DescFlexField.PubDescSeg1 + "\",");
+
+                    if (receivement.Supplier != null)
+                    {
+                        formData.Append("\"supplierCode\":\"" + receivement.Supplier.Code + "\",");
+                    }
+                    else
+                    {
+                        formData.Append("\"supplierCode\":\"" + "" + "\",");
+                    }
+
+                    formData.Append("\"list\":[");
+
+                    int i = 1;
+
+                    foreach (var item in receivement.RcvLines)
+                    {
+                        formData.Append("{");
+
+                        formData.Append("\"quantity\":\"" + item.RcvQtyTU + "\",");
+
+                        formData.Append("\"partNumber\":\"" + item.ItemInfo.ItemCode + "\",");
+
+                        formData.Append("\"productionLine\":\"" + item.DescFlexSegments.PrivateDescSeg2 + "\",");
+
+                        formData.Append("\"procedure\":\"" + item.DescFlexSegments.PrivateDescSeg3 + "\",");
+
+                        formData.Append("\"itemNumber\":\"" + item.DescFlexSegments.PubDescSeg1 + "\",");
+
+                        formData.Append("\"detailNo\":\"" + item.DocLineNo + "\"");
+
+                        formData.Append("}");
+
+                        if (receivement.RcvLines.Count != i)
+                        {
+                            formData.Append(",");
+                        }
+
+                        i++;
+                    }
+
+                    formData.Append("]}");
+
+                    //发送格式
+                    StringBuilder formSendData = new StringBuilder();
+
+                    formSendData.Append(formData.ToString());
+
+                    logger.Error("委外收货新增传出数据：" + formSendData.ToString());
+
+                    string strURL = null;
+
+                    //测试
+                    //strURL = "http://118.195.189.35:8900/accessPlatform/platformAPI";
+
+                    //正式
+                    //strURL = "http://58.216.169.102:9081/ekp/sys/webservice/kmReviewWebserviceService?wsdl";
 
 
+                    long orgID = Context.LoginOrg.ID;
+
+
+                    //OA服务器地址
+                    string oAURL = Common.GetProfileValue(Common.S_PROFILE_CODE, orgID);
+
+                    if (string.IsNullOrEmpty(oAURL))
+                    {
+                        return;
+                    }
+
+                    strURL = oAURL;
+
+                    string formSendDataGo = formSendData.ToString(); 
+
+                    strURL = "http://" + strURL + "/services/slewms/api/WmsOrder/outsourcing-entry-order/sync";
+
+                    string responseText = HttpRequestClient.HttpPostJson(strURL, formSendDataGo, "", "");
+                }
                 #endregion
             }
 

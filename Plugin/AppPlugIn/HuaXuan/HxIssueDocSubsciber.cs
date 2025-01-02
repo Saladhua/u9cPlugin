@@ -169,7 +169,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
                         formData.Append("{");
                         if (item.LotMaster != null)
                         {
-                            formData.Append("\"lotName\":\"" + item.LotMaster.Code + "\",");
+                            formData.Append("\"lotName\":\"" + item.LotMaster.LotCode + "\",");
                         }
                         else
                         {
@@ -250,8 +250,6 @@ namespace YY.U9.Cust.LI.AppPlugIn
                     formData.Append("\"type\":\"0\",");
                     formData.Append("\"orderNo\":\"" + issueDoc.DocNo + "\",");
                     formData.Append("\"planDate\":\"" + issueDoc.BusinessCreatedOn.ToString("yyyy-MM-dd") + "\",");
-                    formData.Append("\"itemNumber\":\"" + "" + "\",");//项目号
-                    formData.Append("\"isNew\":\"" + "false" + "\",");
                     if (!string.IsNullOrEmpty(SupplierCode))
                     {
                         formData.Append("\"supplierCode\":\"" + SupplierCode + "\",");
@@ -271,10 +269,25 @@ namespace YY.U9.Cust.LI.AppPlugIn
 
                         formData.Append("\"detailNo\":\"" + item.LineNum + "\",");
 
-                        formData.Append("\"productionLine\":\"" + "" + "\",");
-                        formData.Append("\"procedure\":\"" + "" + "\",");
-                        formData.Append("\"itemNumber\":\"" + "" + "\",");
 
+                        if (item.Wh != null)
+                        {
+                            formData.Append("\"warehouseNumber\":\"" + item.Wh.Code + "\",");
+                        }
+                        else
+                        {
+                            formData.Append("\"warehouseNumber\":\"" + "" + "\",");
+                        }
+
+
+                        if (item.LotMaster != null)
+                        {
+                            formData.Append("\"lotName\":\"" + item.LotMaster.LotCode + "\",");
+                        }
+                        else
+                        {
+                            formData.Append("\"lotName\":\"" + "" + "\",");
+                        }
 
                         formData.Append("\"quantity\":\"" + item.IssuedQty + "\"");
                         formData.Append("}");
@@ -291,19 +304,15 @@ namespace YY.U9.Cust.LI.AppPlugIn
 
                     formSendData.Append(formData.ToString());
 
-
-
                     string strURL = null;
 
                     //测试
                     //strURL = "http://118.195.189.35:8900/accessPlatform/platformAPI";
 
                     //正式
-                    //strURL = "http://58.216.169.102:9081/ekp/sys/webservice/kmReviewWebserviceService?wsdl";
-
+                    //strURL = "http://58.216.169.102:9081/ekp/sys/webservice/kmReviewWebserviceService?wsdl"; 
 
                     long orgID = Context.LoginOrg.ID;
-
 
                     //OA服务器地址
                     string oAURL = Common.GetProfileValue(Common.S_PROFILE_CODE, orgID);
@@ -319,13 +328,12 @@ namespace YY.U9.Cust.LI.AppPlugIn
 
                     string formSendDataGo = formSendData.ToString();
 
-                    strURL = "http://" + strURL + "/services/slewms/api/WmsOrder/outsourcing-entry-order/sync";
+                    strURL = "http://" + strURL + "/services/slewms/api/WmsOrder/outsourcing-return-material-order/sync";
+
 
                     string responseText = HttpRequestClient.HttpPostJson(strURL, formSendDataGo, "", "");
 
                 }
-
-
 
                 #endregion
             }

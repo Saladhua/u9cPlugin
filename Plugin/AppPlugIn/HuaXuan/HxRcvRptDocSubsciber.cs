@@ -121,7 +121,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
 
                 formSendData.Append(formData.ToString());
 
-                logger.Error("成品入库新增传出数据：" + formSendData.ToString());
+                logger.Error("收货新增传出数据：" + formSendData.ToString());
 
                 string strURL = null;
 

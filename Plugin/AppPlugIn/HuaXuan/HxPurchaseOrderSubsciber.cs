@@ -96,136 +96,240 @@ namespace YY.U9.Cust.LI.AppPlugIn
                 //} 
                 #endregion 
 
-                string operation = "0";
+                if (purchaseOrder.BizType.Value != 326)
+                {
+                    string operation = "0";
 
-                string tenant = "slerealm1";
+                    string tenant = "slerealm1";
 
-                string siteName = "华旋工厂";
+                    string siteName = "华旋工厂";
 
-                //StringBuilder formData = new StringBuilder();
-                //formData.Append("{");
-                //formData.Append("supplierNumber:" + purchaseOrder.Supplier.Name + ",");
-                //formData.Append("planDate:" + purchaseOrder.MaturityDate.ToString("yyyy-MM-dd") + ",");
-                //formData.Append("orderNumber:" + purchaseOrder.DocNo + ",");
-                //formData.Append("tenant:" + tenant + ",");
-                //formData.Append("type:" + "0" + ",");
-                //formData.Append("reMake:" + purchaseOrder.POMemos + ",");
-                //formData.Append("itemNumber:" + "" + ",");//不确定哪个值
-                //formData.Append("isNew:" + "True" + ",");//不确定哪个值
-                //formData.Append("list:[");
-                //int i = 0;
-                //foreach (var item in purchaseOrder.POLines)
-                //{
-                //    formData.Append("{");
-                //    formData.Append("supplierNumber:" + purchaseOrder.Supplier.Name + ",");
-                //    formData.Append("partNumber:" + item.ItemInfo.ItemCode + ",");
-                //    formData.Append("demandQuantity:" + item.ReqQtyTU + ",");
-                //    formData.Append("detailNo:" + item.DocLineNo + ",");
-                //    formData.Append("productionLine:" + item.DescFlexSegments.PrivateDescSeg2 + ",");
-                //    formData.Append("procedure:" + item.DescFlexSegments.PrivateDescSeg3 + ",");
-                //    if (item.Project != null)
-                //    {
-                //        formData.Append("itemNumber:" + item.Project.Code);
-                //    }
-                //    else
-                //    {
-                //        formData.Append("itemNumber:" + "");
-                //    }
-                //    formData.Append("}");
-                //    if (purchaseOrder.POLines.Count != i)
-                //    {
-                //        formData.Append(",");
-                //    }
-                //    i++;
-                //}
-                //formData.Append("]}");
-                StringBuilder formData = new StringBuilder();
-                formData.Append("{");
-                // 给键和值都添加双引号，并在键和值之间添加冒号，确保符合JSON格式
-                formData.Append("\"supplierNumber\":\"" + purchaseOrder.Supplier.Code + "\",");
-                if (purchaseOrder.MaturityDate != null)
-                {
-                    formData.Append("\"planDate\":\"" + purchaseOrder.MaturityDate.ToString("yyyy-MM-dd") + "\",");
-                }
-                else
-                {
-                    formData.Append("\"planDate\":null,");
-                }
-                formData.Append("\"orderNumber\":\"" + purchaseOrder.DocNo + "\",");
-                formData.Append("\"tenant\":\"" + tenant + "\",");
-                formData.Append("\"type\":\"0\",");
-                foreach (var item in purchaseOrder.POMemos)
-                {
-                    formData.Append("\"reMake\":\"" + item.Description + "\",");
-                }
-                if (purchaseOrder.POMemos.Count == 0)
-                {
-                    formData.Append("\"reMake\":\"" + "" + "\",");
-                }
-                formData.Append("\"itemNumber\":null,");
-                formData.Append("\"isNew\":\"True\",");
-                formData.Append("\"list\":[");
-                int i = 1;
-                foreach (var item in purchaseOrder.POLines)
-                {
+                    //StringBuilder formData = new StringBuilder();
+                    //formData.Append("{");
+                    //formData.Append("supplierNumber:" + purchaseOrder.Supplier.Name + ",");
+                    //formData.Append("planDate:" + purchaseOrder.MaturityDate.ToString("yyyy-MM-dd") + ",");
+                    //formData.Append("orderNumber:" + purchaseOrder.DocNo + ",");
+                    //formData.Append("tenant:" + tenant + ",");
+                    //formData.Append("type:" + "0" + ",");
+                    //formData.Append("reMake:" + purchaseOrder.POMemos + ",");
+                    //formData.Append("itemNumber:" + "" + ",");//不确定哪个值
+                    //formData.Append("isNew:" + "True" + ",");//不确定哪个值
+                    //formData.Append("list:[");
+                    //int i = 0;
+                    //foreach (var item in purchaseOrder.POLines)
+                    //{
+                    //    formData.Append("{");
+                    //    formData.Append("supplierNumber:" + purchaseOrder.Supplier.Name + ",");
+                    //    formData.Append("partNumber:" + item.ItemInfo.ItemCode + ",");
+                    //    formData.Append("demandQuantity:" + item.ReqQtyTU + ",");
+                    //    formData.Append("detailNo:" + item.DocLineNo + ",");
+                    //    formData.Append("productionLine:" + item.DescFlexSegments.PrivateDescSeg2 + ",");
+                    //    formData.Append("procedure:" + item.DescFlexSegments.PrivateDescSeg3 + ",");
+                    //    if (item.Project != null)
+                    //    {
+                    //        formData.Append("itemNumber:" + item.Project.Code);
+                    //    }
+                    //    else
+                    //    {
+                    //        formData.Append("itemNumber:" + "");
+                    //    }
+                    //    formData.Append("}");
+                    //    if (purchaseOrder.POLines.Count != i)
+                    //    {
+                    //        formData.Append(",");
+                    //    }
+                    //    i++;
+                    //}
+                    //formData.Append("]}");
+                    StringBuilder formData = new StringBuilder();
                     formData.Append("{");
+                    // 给键和值都添加双引号，并在键和值之间添加冒号，确保符合JSON格式
                     formData.Append("\"supplierNumber\":\"" + purchaseOrder.Supplier.Code + "\",");
-                    formData.Append("\"partNumber\":\"" + item.ItemInfo.ItemCode + "\",");
-                    formData.Append("\"demandQuantity\":\"" + item.ReqQtyTU + "\",");
-                    formData.Append("\"detailNo\":\"" + item.DocLineNo + "\",");
-                    formData.Append("\"productionLine\":\"" + item.DescFlexSegments.PrivateDescSeg2 + "\",");
-                    formData.Append("\"procedure\":\"" + item.DescFlexSegments.PrivateDescSeg3 + "\",");
-                    formData.Append("\"itemNumber\":\"" + item.DescFlexSegments.PubDescSeg1 + "\"");
-                    formData.Append("}");
-                    if (purchaseOrder.POLines.Count != i)
+                    if (purchaseOrder.MaturityDate != null)
                     {
-                        formData.Append(",");
+                        formData.Append("\"planDate\":\"" + purchaseOrder.MaturityDate.ToString("yyyy-MM-dd") + "\",");
                     }
-                    i++;
-                }
-                formData.Append("]}");
+                    else
+                    {
+                        formData.Append("\"planDate\":null,");
+                    }
+                    formData.Append("\"orderNumber\":\"" + purchaseOrder.DocNo + "\",");
+                    formData.Append("\"tenant\":\"" + tenant + "\",");
+                    formData.Append("\"type\":\"0\",");
+                    foreach (var item in purchaseOrder.POMemos)
+                    {
+                        formData.Append("\"reMake\":\"" + item.Description + "\",");
+                    }
+                    if (purchaseOrder.POMemos.Count == 0)
+                    {
+                        formData.Append("\"reMake\":\"" + "" + "\",");
+                    }
+                    formData.Append("\"itemNumber\":null,");
+                    formData.Append("\"isNew\":\"True\",");
+                    formData.Append("\"list\":[");
+                    int i = 1;
+                    foreach (var item in purchaseOrder.POLines)
+                    {
+                        formData.Append("{");
+                        formData.Append("\"supplierNumber\":\"" + purchaseOrder.Supplier.Code + "\",");
+                        formData.Append("\"partNumber\":\"" + item.ItemInfo.ItemCode + "\",");
+                        formData.Append("\"demandQuantity\":\"" + item.ReqQtyTU + "\",");
+                        formData.Append("\"detailNo\":\"" + item.DocLineNo + "\",");
+                        formData.Append("\"productionLine\":\"" + item.DescFlexSegments.PrivateDescSeg2 + "\",");
+                        formData.Append("\"procedure\":\"" + item.DescFlexSegments.PrivateDescSeg3 + "\",");
+                        formData.Append("\"itemNumber\":\"" + item.DescFlexSegments.PubDescSeg1 + "\"");
+                        formData.Append("}");
+                        if (purchaseOrder.POLines.Count != i)
+                        {
+                            formData.Append(",");
+                        }
+                        i++;
+                    }
+                    formData.Append("]}");
 
-                //发送格式
-                StringBuilder formSendData = new StringBuilder();
+                    //发送格式
+                    StringBuilder formSendData = new StringBuilder();
 
-                formSendData.Append(formData.ToString());
-
-                logger.Error("标准采购新增传出数据：" + formSendData.ToString());
-
-                string strURL = null;
-
-                //测试
-                //strURL = "http://118.195.189.35:8900/accessPlatform/platformAPI";
-
-                //正式
-                //strURL = "http://58.216.169.102:9081/ekp/sys/webservice/kmReviewWebserviceService?wsdl";
-
-
-                long orgID = Context.LoginOrg.ID;
-
-
-                //OA服务器地址
-                string oAURL = Common.GetProfileValue(Common.S_PROFILE_CODE, orgID);
-
-                if (string.IsNullOrEmpty(oAURL))
-                {
-                    return;
-                }
-
-                strURL = oAURL;
-
-                string formSendDataGo = formSendData.ToString();
-                if (purchaseOrder.Status.Value <= 2)
-                {
-                    strURL = "http://" + strURL + "/services/slewms/api/WmsOrder/PU";
+                    formSendData.Append(formData.ToString());
 
                     logger.Error("标准采购新增传出数据：" + formSendData.ToString());
 
-                    string responseText = HttpRequestClient.HttpPostJson(strURL, formSendDataGo, "", "");
+                    string strURL = null;
+
+                    //测试
+                    //strURL = "http://118.195.189.35:8900/accessPlatform/platformAPI";
+
+                    //正式
+                    //strURL = "http://58.216.169.102:9081/ekp/sys/webservice/kmReviewWebserviceService?wsdl";
 
 
+                    long orgID = Context.LoginOrg.ID;
+
+
+                    //OA服务器地址
+                    string oAURL = Common.GetProfileValue(Common.S_PROFILE_CODE, orgID);
+
+                    if (string.IsNullOrEmpty(oAURL))
+                    {
+                        return;
+                    }
+
+                    strURL = oAURL;
+
+                    string formSendDataGo = formSendData.ToString();
+                    if (purchaseOrder.Status.Value <= 2)
+                    {
+                        strURL = "http://" + strURL + "/services/slewms/api/WmsOrder/PU";
+
+                        logger.Error("标准采购新增传出数据：" + formSendData.ToString());
+
+                        string responseText = HttpRequestClient.HttpPostJson(strURL, formSendDataGo, "", "");
+
+
+                    }
+                    #endregion
                 }
-                #endregion
+                else
+                {
+                    string operation = "0";
+
+                    string tenant = "slerealm1";
+
+                    string siteName = "华旋工厂";
+                    StringBuilder formData = new StringBuilder();
+                    formData.Append("{");
+
+                    // 给键和值添加双引号，并确保键值之间有冒号隔开，符合 JSON 格式要求
+                    formData.Append("\"tenant\":\"" + tenant + "\",");
+                    formData.Append("\"type\":\"" + "0" + "\",");
+
+                    formData.Append("\"orderNo\":\"" + purchaseOrder.DocNo + "\",");
+
+                    foreach (var item in purchaseOrder.POLines)
+                    {
+                        foreach (var itemPOShipLine in item.POShiplines)
+                        {
+                            formData.Append("\"planDate\":\"" + itemPOShipLine.PlanArriveDate.ToString("yyyy-MM-dd") + "\",");
+                        }
+
+                    }
+
+                    formData.Append("\"isNew\":\"" + "True" + "\",");
+
+                    formData.Append("\"itemNumber\":\"" + purchaseOrder.DescFlexField.PubDescSeg1 + "\",");
+
+                    if (purchaseOrder.Supplier != null)
+                    {
+                        formData.Append("\"supplierCode\":\"" + purchaseOrder.Supplier.Code + "\",");
+                    }
+                    else
+                    {
+                        formData.Append("\"supplierCode\":\"" + "" + "\",");
+                    }
+
+                    formData.Append("\"list\":[");
+
+                    int i = 1;
+
+                    foreach (var item in purchaseOrder.POLines)
+                    {
+                        formData.Append("{");
+
+                        formData.Append("\"quantity\":\"" + item.PurQtyTU + "\",");
+
+                        formData.Append("\"partNumber\":\"" + item.ItemInfo.ItemCode + "\",");
+
+                        formData.Append("\"productionLine\":\"" + item.DescFlexSegments.PrivateDescSeg2 + "\",");
+
+                        formData.Append("\"procedure\":\"" + item.DescFlexSegments.PrivateDescSeg3 + "\",");
+
+                        formData.Append("\"itemNumber\":\"" + item.DescFlexSegments.PubDescSeg1 + "\",");
+
+                        formData.Append("\"detailNo\":\"" + item.DocLineNo + "\"");
+
+                        formData.Append("}");
+
+                        if (purchaseOrder.POLines.Count != i)
+                        {
+                            formData.Append(",");
+                        }
+
+                        i++;
+                    }
+
+                    formData.Append("]}");
+
+                    //发送格式 
+                    string strURL = null;
+
+                    //测试
+                    //strURL = "http://118.195.189.35:8900/accessPlatform/platformAPI";
+
+                    //正式
+                    //strURL = "http://58.216.169.102:9081/ekp/sys/webservice/kmReviewWebserviceService?wsdl";
+
+
+                    long orgID = Context.LoginOrg.ID;
+
+
+                    //OA服务器地址
+                    string oAURL = Common.GetProfileValue(Common.S_PROFILE_CODE, orgID);
+
+                    if (string.IsNullOrEmpty(oAURL))
+                    {
+                        return;
+                    }
+
+                    strURL = oAURL;
+
+                    string formSendDataGo = formData.ToString();
+ 
+                    strURL = "http://" + strURL + "/services/slewms/api/WmsOrder/outsourcing-entry-order/sync";
+
+                    logger.Error("委外采购新增传出数据：" + formSendDataGo.ToString());
+
+                    string responseText = HttpRequestClient.HttpPostJson(strURL, formSendDataGo, "", ""); 
+                }
             }
 
         }

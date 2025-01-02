@@ -186,7 +186,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
                         if (!string.IsNullOrEmpty(item.ItemMasterCode.ToString()) && !string.IsNullOrEmpty(item.CompleteWhCode.ToString()))
                         {
                             kuc = getkc(item.ItemMasterCode.ToString(), item.CompleteWhCode.ToString());
-                            kucy = getkc(item.ItemMasterCode.ToString(), "1002302100001184");
+                            //kucy = getkc(item.ItemMasterCode.ToString(), "1002302100001184");
                         }
                         //kuc
                         decimal see = decimal.Parse(kuc);
@@ -210,7 +210,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
                         //if (item.PrivateDescSeg15 == "1" && DrQty > 0 && item.SetableStatus == "2" && DQTY > 0 && quanjuQ <= DrQty && string.IsNullOrEmpty(item.DescFlexField_PrivateDescSeg2))
 
                         #endregion
-                        if (item.PrivateDescSeg15 == "1" && item.SetableStatus == "2" && iqty > decimal.Parse(kucy))
+                        if (item.PrivateDescSeg15 == "1" && item.SetableStatus == "2")
                         {
                             UFIDA.U9.ISV.TransferInISV.IC_TransInLineDTOData Bom_line = new UFIDA.U9.ISV.TransferInISV.IC_TransInLineDTOData();
                             Bom_line.TransInOwnerOrg = new UFIDA.U9.CBO.Pub.Controller.CommonArchiveDataDTOData();
@@ -247,15 +247,21 @@ namespace YY.U9.Cust.LI.UIPlugIn
                             Bom_subLine.TransOutWh = new UFIDA.U9.CBO.Pub.Controller.CommonArchiveDataDTOData();
                             Bom_subLine.TransOutWh.Code = "01";
 
-                            Bom_subLine.StoreUOMQty = DrQty;
+                            Bom_subLine.StoreUOMQty = iqty;
 
                             Bom_subLine.StoreUOM = new CommonArchiveDataDTOData();
 
                             //Bom_subLine.StoreUOM.ID = long.Parse(item.StoreUOM);
 
+                            kucy = getkc(item.ItemMasterCode.ToString(), "1002302100001184");
+
                             listBomSubline.Add(Bom_subLine);//加载子行
                             Bom_line.TransInSubLines = listBomSubline;
-                            listBomLine.Add(Bom_line);//加载行 
+                            if (decimal.Parse(kucy) != 0)
+                            {
+                                listBomLine.Add(Bom_line);//加载行  
+                            }
+
                         }
 
                     }

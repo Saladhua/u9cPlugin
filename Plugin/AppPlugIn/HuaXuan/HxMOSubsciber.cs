@@ -45,7 +45,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
 
             #region 调用接口
             //if (payReqFundHead.DocStatus.Value == 1 && payReqFundHead.DocStatus.Value == 0)
-            if (mO.SysState == UFSoft.UBF.PL.Engine.ObjectState.Updated)
+            if (mO.SysState == UFSoft.UBF.PL.Engine.ObjectState.Updated && mO.DocState.Value == 4)
             {
                 //string appid = TokenManager.appid;
 
@@ -97,31 +97,27 @@ namespace YY.U9.Cust.LI.AppPlugIn
 
                 StringBuilder formData = new StringBuilder();
                 formData.Append("{");
-                formData.Append("tenant:" + tenant + ",");
-                formData.Append("orderNumber:" + "0" + ",");
-                formData.Append("partNumber:" + mO.ItemMaster.Code + ",");
-                formData.Append("projectType:" + "" + ",");//项目类型
-                formData.Append("projectName:" + "" + ",");//项目名称
-                formData.Append("quantity:" + mO.ProductQty + ",");
-                formData.Append("customerNumber:" + "" + ",");//客户编号
-                formData.Append("planStartDate:" + mO.ParentMO.StartDate.ToString("yyyy-MM-dd") + ",");
-                formData.Append("planEndDate:" + mO.ParentMO.CompleteDate.ToString("yyyy-MM-dd") + ",");
-                formData.Append("operationType:" + "0" + ",");
-                formData.Append("comment:" + mO.Memo + ",");
-                formData.Append("mo:[");
-                int i = 0;
+                formData.Append("\"tenant\":\"" + tenant + "\",");
+                formData.Append("\"orderNumber\":\"" + mO.DocNo + "\",");
+                formData.Append("\"partNumber\":\"" + mO.ItemMaster.Code + "\",");
+                formData.Append("\"projectType\":\"\",");
+                formData.Append("\"projectName\":\"\",");
+                formData.Append("\"quantity\":" + mO.ProductQty + ",");
+                formData.Append("\"customerNumber\":\"\",");
+                formData.Append("\"planStartDate\":\"" + mO.StartDate.ToString("yyyy-MM-dd") + "\",");
+                formData.Append("\"planEndDate\":\"" + mO.CompleteDate.ToString("yyyy-MM-dd") + "\",");
+                formData.Append("\"operationType\":\"0\",");
+                formData.Append("\"comment\":\"" + mO.Memo + "\",");
+                formData.Append("\"mo\":[");
+                int i = 1;
                 foreach (var item in mO.MOPickLists)
                 {
                     formData.Append("{");
-
-                    formData.Append("partNumber:" + item.ItemMaster.Code + ",");
-
-                    formData.Append("quantity:" + item.IssuedQty + ",");
-
-                    formData.Append("moPickListId:" + item.ID);
-
+                    formData.Append("\"partNumber\":\"" + item.ItemMaster.Code + "\",");
+                    formData.Append("\"quantity\":" + item.ActualReqQty + ",");
+                    formData.Append("\"moPickListId\":\"" + item.ID + "\"");
                     formData.Append("}");
-                    if (mO.MOPickLists.Count != i)
+                    if (mO.MOPickLists.Count > i)
                     {
                         formData.Append(",");
                     }
@@ -134,7 +130,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
 
                 formSendData.Append(formData.ToString());
 
-                logger.Error("生产领料新增传出数据：" + formSendData.ToString());
+                logger.Error("生产订单新增传出数据：" + formSendData.ToString());
 
                 string strURL = null;
 

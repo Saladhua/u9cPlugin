@@ -593,8 +593,9 @@
     <None Include="CL\备料复制配置文件\pzwj.bdxml" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="JS对比\" />
+    <Content Include="JS对比\PC-QcPlan-NK.server.controller.js" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

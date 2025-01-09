@@ -44,7 +44,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
 
             #region 调用接口
             //if (payReqFundHead.DocStatus.Value == 1 && payReqFundHead.DocStatus.Value == 0)
-            if (purchaseOrder.SysState == UFSoft.UBF.PL.Engine.ObjectState.Updated)
+            if (purchaseOrder.SysState == UFSoft.UBF.PL.Engine.ObjectState.Updated && purchaseOrder.Status.Value == 2)
             {
                 //string appid = TokenManager.appid;
 
@@ -147,7 +147,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
                 {
                     logger.Error("标准采购关闭传出数据：" + formSendData.ToString());
                     string responseText = HttpRequestClient.HttpPostJson(strURL, formSendDataGo, "", "");
-                } 
+                }
 
                 #endregion
             }

@@ -176,6 +176,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
                             formData.Append("\"lotName\":\"" + "1" + "\",");
                         }
                         formData.Append("\"partNumber\":\"" + item.ItemInfo.ItemCode + "\",");
+                        formData.Append("\"detailNo\":\"" + item.LineNum + "\",");
                         if (item.Wh != null)
                         {
                             formData.Append("\"warehouseNumber\":\"" + item.Wh.Code + "\",");

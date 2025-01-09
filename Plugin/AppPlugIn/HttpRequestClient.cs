@@ -8,6 +8,8 @@ namespace YY.U9.Cust.LI.AppPlugIn
 {
     class HttpRequestClient
     {
+
+
         /// <summary>
         /// http的Post请求
         /// </summary>
@@ -66,6 +68,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
         /// <returns></returns>
         public static string HttpPostJson(string requestUrl, string data, string token, string transid)
         {
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(requestUrl);
             request.Method = "POST";
             request.ContentType = "application/json";
@@ -93,18 +96,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
             StreamReader myreader = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
             responseText = myreader.ReadToEnd();
             myreader.Close();
-
             return responseText;
-            //using (HttpClient client = new HttpClient())
-            //{
-            //    client.DefaultRequestHeaders.Add("token", token);
-            //    client.DefaultRequestHeaders.Add("transid", transid);
-            //    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            //    //var content = ;
-            //    HttpResponseMessage response = await client.PostAsync(requestUrl, new StringContent(data, Encoding.UTF8, "application/json"));
-            //    string rdata = response.Content.ReadAsStringAsync().Result;
-            //    return rdata;
-            //}
         }
 
         /// <summary>
@@ -168,7 +160,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
             }
         }
 
- 
+
 
     }
 }

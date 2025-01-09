@@ -257,7 +257,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
 
                             listBomSubline.Add(Bom_subLine);//加载子行
                             Bom_line.TransInSubLines = listBomSubline;
-                            if (decimal.Parse(kucy) != 0)
+                            if (decimal.Parse(kucy) > 0)
                             {
                                 listBomLine.Add(Bom_line);//加载行  
                             }
@@ -409,13 +409,19 @@ namespace YY.U9.Cust.LI.UIPlugIn
         public string getActualReqQty(long item, string moid, string docno)
         {
             string ck = "0";
-            string sqlForCPRK = "select sum(ActualReqQty) as ActualReqQty" +
-                " from MO_MO a inner" +
-                " join MO_MOPickList b" +
-                " on a.ID = b.MO" +
-                " where b.ItemMaster = '" + item.ToString() + "'" +
-                "and(select DescFlexField_PrivateDescSeg15 from CBO_ItemMaster where ID = b.ItemMaster) = '1'" +
-                "and a.DocState != '3' and b.SupplyWh='" + moid + "'";
+            //string sqlForCPRK = "select sum(ActualReqQty) as ActualReqQty" +
+            //    " from MO_MO a inner" +
+            //    " join MO_MOPickList b" +
+            //    " on a.ID = b.MO" +
+            //    " where b.ItemMaster = '" + item.ToString() + "'" +
+            //    "and(select DescFlexField_PrivateDescSeg15 from CBO_ItemMaster where ID = b.ItemMaster) = '1'" +
+            //    "and a.DocState != '3' and b.SupplyWh='" + moid + "'";
+            string sqlForCPRK = "select  top(1) MatchQty,A1.ItemMaster,A1.MOID from     " +
+                " MO_SimuMatchResult A1 " +
+                " left join MO_SimuDemandPick A2 on A2.ID = A1.DemandPick " +
+                " where A2.docno > '200000' " +
+                " and A1.MOID = (select ID from MO_MO where DocNo = '" + docno + "') and A1.ItemMaster = '" + item.ToString() + "' " +
+                " and A1.Wh = '" + moid + "'";
             DataTable dataTable = new DataTable();
             DataSet dataSet = new DataSet();
             //sqlForCPRK 成品入库
@@ -423,7 +429,8 @@ namespace YY.U9.Cust.LI.UIPlugIn
             dataTable = dataSet.Tables[0];
             if (dataTable != null && dataTable.Rows.Count > 0)
             {
-                ck = dataTable.Rows[0]["ActualReqQty"] == null ? "0" : dataTable.Rows[0]["ActualReqQty"].ToString();
+                //ck = dataTable.Rows[0]["ActualReqQty"] == null ? "0" : dataTable.Rows[0]["ActualReqQty"].ToString();
+                ck = dataTable.Rows[0]["MatchQty"] == null ? "0" : dataTable.Rows[0]["MatchQty"].ToString();
             }
 
             if (string.IsNullOrEmpty(ck))

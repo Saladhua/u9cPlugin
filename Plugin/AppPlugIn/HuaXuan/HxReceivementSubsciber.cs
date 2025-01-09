@@ -205,6 +205,10 @@ namespace YY.U9.Cust.LI.AppPlugIn
                     string responseText = HttpRequestClient.HttpPostJson(strURL, formSendDataGo, "", "");
 
                 }
+                //else if (receivement.BizType.Value==)
+                //{
+
+                //}
                 else//委外退货
                 {
                     string operation = "0";
@@ -219,29 +223,41 @@ namespace YY.U9.Cust.LI.AppPlugIn
 
                     // 给键和值添加双引号，并确保键值之间有冒号隔开，符合 JSON 格式要求
                     formData.Append("\"tenant\":\"" + tenant + "\",");
+
                     formData.Append("\"type\":\"" + "0" + "\",");
+
+                    formData.Append("\"order\":{");
 
                     formData.Append("\"orderNo\":\"" + receivement.DocNo + "\",");
 
                     foreach (var item in receivement.RcvLines)
                     {
                         formData.Append("\"planDate\":\"" + item.ArrivedTime.ToString("yyyy-MM-dd") + "\",");
+
+                        if (item.Wh != null)
+                        {
+                            formData.Append("\"warehouseNumber\":\"" + item.Wh.Code + "\",");
+                        }
+                        else
+                        {
+                            formData.Append("\"warehouseNumber\":\"" + "" + "\",");
+                        }
                     }
 
-                    formData.Append("\"isNew\":\"" + "True" + "\",");
-
-                    formData.Append("\"itemNumber\":\"" + receivement.DescFlexField.PubDescSeg1 + "\",");
+                    formData.Append("\"comment\":\"" + receivement.Memo + "\",");
 
                     if (receivement.Supplier != null)
                     {
-                        formData.Append("\"supplierCode\":\"" + receivement.Supplier.Code + "\",");
+                        formData.Append("\"supplierCode\":\"" + receivement.Supplier.Code + "\"");
                     }
                     else
                     {
-                        formData.Append("\"supplierCode\":\"" + "" + "\",");
+                        formData.Append("\"supplierCode\":\"" + "" + "\"");
                     }
 
-                    formData.Append("\"list\":[");
+                    formData.Append("},");
+
+                    formData.Append("\"details\":[");
 
                     int i = 1;
 
@@ -249,15 +265,27 @@ namespace YY.U9.Cust.LI.AppPlugIn
                     {
                         formData.Append("{");
 
-                        formData.Append("\"quantity\":\"" + item.RcvQtyTU + "\",");
+                        formData.Append("\"quantity\":\"" + item.RejectQtyTU + "\",");
 
                         formData.Append("\"partNumber\":\"" + item.ItemInfo.ItemCode + "\",");
 
-                        formData.Append("\"productionLine\":\"" + item.DescFlexSegments.PrivateDescSeg2 + "\",");
+                        if (item.Wh != null)
+                        {
+                            formData.Append("\"warehouseNumber\":\"" + item.Wh.Code + "\",");
+                        }
+                        else
+                        {
+                            formData.Append("\"warehouseNumber\":\"" + "" + "\",");
+                        }
 
-                        formData.Append("\"procedure\":\"" + item.DescFlexSegments.PrivateDescSeg3 + "\",");
-
-                        formData.Append("\"itemNumber\":\"" + item.DescFlexSegments.PubDescSeg1 + "\",");
+                        if (item.InvLot != null)
+                        {
+                            formData.Append("\"lotName\":\"" + item.InvLot.LotCode + "\",");
+                        }
+                        else
+                        {
+                            formData.Append("\"lotName\":\"" + "" + "\",");
+                        } 
 
                         formData.Append("\"detailNo\":\"" + item.DocLineNo + "\"");
 
@@ -302,9 +330,9 @@ namespace YY.U9.Cust.LI.AppPlugIn
 
                     strURL = oAURL;
 
-                    string formSendDataGo = formSendData.ToString(); 
+                    string formSendDataGo = formSendData.ToString();
 
-                    strURL = "http://" + strURL + "/services/slewms/api/WmsOrder/outsourcing-entry-order/sync";
+                    strURL = "http://" + strURL + "/services/slewms/api/WmsOrder/outsourcing-return-order/sync";
 
                     string responseText = HttpRequestClient.HttpPostJson(strURL, formSendDataGo, "", "");
                 }

@@ -4,23 +4,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UFIDA.U9.Base;
-using UFIDA.U9.SM.Ship;
+using UFIDA.U9.PM.Rcv;
+using UFIDA.U9.SM.RMA;
 using UFSoft.UBF.Business;
 using UFSoft.UBF.Util.Log;
 
 namespace YY.U9.Cust.LI.AppPlugIn
 {
     /// <summary>
-    /// 标准出货
+    /// 退货
     /// </summary>
     [UFSoft.UBF.Eventing.Configuration.Failfast]
-    class HxShpiSubsciber : UFSoft.UBF.Eventing.IEventSubscriber
+
+    class HxRAMSubsciber : UFSoft.UBF.Eventing.IEventSubscriber
     {
-        private static readonly ILogger logger = LoggerManager.GetLogger(typeof(HxRcvRptDocSubsciber));
+        private static readonly ILogger logger = LoggerManager.GetLogger(typeof(HxRAMSubsciber));
 
-        //OA 系统地址
         public readonly static string S_PROFILE_CODE = "Z002";
-
         public void Notify(params object[] args)
         {
             #region 从事件参数中取得当前业务实体
@@ -29,14 +29,15 @@ namespace YY.U9.Cust.LI.AppPlugIn
                 return;
 
             BusinessEntity.EntityKey key = ((UFSoft.UBF.Business.EntityEvent)args[0]).EntityKey;
+
             if (key == null)
             {
                 return;
             }
 
-            Ship ship = key.GetEntity() as Ship;
+            RMA rMA = key.GetEntity() as RMA;
 
-            if (ship == null)
+            if (rMA == null)
             {
                 return;
             }
@@ -44,9 +45,8 @@ namespace YY.U9.Cust.LI.AppPlugIn
 
             #region 调用接口
             //if (payReqFundHead.DocStatus.Value == 1 && payReqFundHead.DocStatus.Value == 0) 
-            if (ship.SysState == UFSoft.UBF.PL.Engine.ObjectState.Updated && ship.Status.Value == 2)
+            if (rMA.SysState == UFSoft.UBF.PL.Engine.ObjectState.Updated && rMA.OriginalData.Status.Value == 0)
             {
-
                 //string appid = TokenManager.appid;
 
                 //string appsecret = TokenManager.appsecret;
@@ -54,6 +54,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
                 //string timeFormat = DateTime.Now.ToString("yyyyMMddhhmmss");
 
                 //Random random = new Random();
+
                 //string number = Convert.ToString(random.Next(10000000, 99999999));
 
                 //string transid = appid + timeFormat + number;
@@ -67,20 +68,22 @@ namespace YY.U9.Cust.LI.AppPlugIn
 
                 #region 报文
                 //{
-                //  "tenant":"slerealm1",
-                //    "type":0,
-                //    "orderNo":"order-20241204001-001",
-                //    "supplierCode":"gys",
-                //    "planDate":"2024-12-10",
-                //    "list":[
-                //        {
-                //                        "lotName":"lot-20241204-001",
-                //            "partNumber":"020402040130.1",
-                //            "quantity":100
-                //        }
-                //    ]
+                //      "customerNumber": "客户编码值",
+                //      "planDate": "yyyy-MM-dd 值",
+                //      "tenant": "租户值",
+                //      "orderNumber": "单号值",
+                //      "type": "操作类型值（0 或 1）",
+                //      "reMake": "备注值",
+                //      "list": [
+                //          {
+                //          "partNumber": "物料编码值",
+                //          "returnQuantity": "退货数量值",
+                //          "detailNo": "行号值",
+                //          "lotName": "批次码值",
+                //          "warehouseNumber": "仓库码值"
+                //          }
+                //          ]
                 //} 
-
                 #endregion
 
                 string operation = "0";
@@ -90,20 +93,52 @@ namespace YY.U9.Cust.LI.AppPlugIn
                 string siteName = "华旋工厂";
 
                 StringBuilder formData = new StringBuilder();
+
                 formData.Append("{");
-                formData.Append("\"customerNumber\":\"" + ship.OrderBy.Code + "\",");
-                formData.Append("\"planDate\":\"" + ship.ShipConfirmDate.ToString("yyyy-MM-dd") + "\",");
-                formData.Append("\"orderNumber\":\"" + ship.DocNo + "\",");
-                formData.Append("\"type\":\"0\",");
-                formData.Append("\"orderType\":\"" + ship.DocType.Name + "\",");
-                formData.Append("\"reMake\":\"" + ship.ShipMemo + "\",");
+
+                // 给键和值添加双引号，并确保键值之间有冒号隔开，符合 JSON 格式要求
+                formData.Append("\"tenant\":\"" + tenant + "\",");
+
+                formData.Append("\"type\":\"" + "0" + "\",");
+
+                if (rMA.Customer != null)
+                {
+                    formData.Append("\"customerNumber\":\"" + rMA.Customer.Code + "\",");
+                }
+                else
+                {
+                    formData.Append("\"customerNumber\":\"" + "" + "\",");
+                }
+
+                formData.Append("\"tenant\":\"" + tenant + "\",");
+
+                formData.Append("\"orderNumber\":\"" + rMA.DocNo + "\",");
+
+                formData.Append("\"type\":\"" + "0" + "\",");
+
+                formData.Append("\"reMake\":\"" + rMA.Remark + "\",");
+
                 formData.Append("\"list\":[");
-                int i = 0;
-                foreach (var item in ship.ShipLines)
+
+                int i = 1;
+
+                foreach (var item in rMA.RMALines)
                 {
                     formData.Append("{");
-                    formData.Append("\"customerNumber\":\"" + "" + "\",");
+
                     formData.Append("\"partNumber\":\"" + item.ItemInfo.ItemCode + "\",");
+
+                    formData.Append("\"returnQuantity\":\"" + item.ApplyQtyTU1 + "\",");
+
+                    if (item.Warehouse != null)
+                    {
+                        formData.Append("\"warehouseNumber\":\"" + item.Warehouse.Code + "\",");
+                    }
+                    else
+                    {
+                        formData.Append("\"warehouseNumber\":\"" + "" + "\",");
+                    }
+
                     if (item.LotInfo != null)
                     {
                         formData.Append("\"lotName\":\"" + item.LotInfo.LotCode + "\",");
@@ -112,17 +147,19 @@ namespace YY.U9.Cust.LI.AppPlugIn
                     {
                         formData.Append("\"lotName\":\"" + "" + "\",");
                     }
-                    formData.Append("\"demandQuantity\":\"" + item.QtyPriceAmount + "\",");
-                    formData.Append("\"detailNo\":\"" + item.DocLineNo + "\",");
-                    formData.Append("\"baseEntry\":\"" + item.SrcDocNo + "\",");
-                    formData.Append("\"baseline\":\"" + item.SrcDocLineNo + "\"");
+
+                    formData.Append("\"detailNo\":\"" + item.DocLineNo + "\"");
+
                     formData.Append("}");
-                    if (i < ship.ShipLines.Count - 1)
+
+                    if (rMA.RMALines.Count != i)
                     {
                         formData.Append(",");
                     }
+
                     i++;
                 }
+
                 formData.Append("]}");
 
                 //发送格式
@@ -130,7 +167,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
 
                 formSendData.Append(formData.ToString());
 
-                logger.Error("标准出货新增传出数据：" + formSendData.ToString());
+                logger.Error("委外收货新增传出数据：" + formSendData.ToString());
 
                 string strURL = null;
 
@@ -156,7 +193,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
 
                 string formSendDataGo = formSendData.ToString();
 
-                strURL = "http://" + strURL + "/services/slewms/api/WmsOrder/SO";
+                strURL = "http://" + strURL + "/services/slewms/api/WmsOrder/SR";
 
                 string responseText = HttpRequestClient.HttpPostJson(strURL, formSendDataGo, "", "");
 
@@ -164,5 +201,6 @@ namespace YY.U9.Cust.LI.AppPlugIn
             }
 
         }
+
     }
 }

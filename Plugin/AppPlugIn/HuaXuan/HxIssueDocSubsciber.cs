@@ -338,6 +338,199 @@ namespace YY.U9.Cust.LI.AppPlugIn
 
                 #endregion
             }
+            if (issueDoc.SysState == UFSoft.UBF.PL.Engine.ObjectState.Deleted)
+            {
+                //string appid = TokenManager.appid;
+
+                //string appsecret = TokenManager.appsecret;
+
+                //string timeFormat = DateTime.Now.ToString("yyyyMMddhhmmss");
+
+                //Random random = new Random();
+                //string number = Convert.ToString(random.Next(10000000, 99999999));
+
+                //string transid = appid + timeFormat + number;
+
+                //string token = TokenManager.GetAccessToken(appid, appsecret, transid);
+
+                //if (string.IsNullOrEmpty(token))
+                //{
+                //    throw new Exception("未获取到Token，同步MES失败！");
+                //}
+
+                #region 报文
+                //                {
+                //                    "tenant":"slerealm1",
+                //    "type":0,
+                //    "order":{
+                //                        "oderNumber":"order-20241204-001",
+                //        "planDate":"2024-12-04",
+                //        "comment":"备注",
+                //        "supplier":"020002",
+                //        "warehouseNumber":"OID241010001"
+                //    },
+                //    "details":[
+                //        {
+                //                        "lotName":"lot-20241204-001",
+                //            "partNumber":"020402040130.1",
+                //            "sublotName":"容器",
+                //"warehouseNumber":"OID241010001"，
+                //            "quantity":100
+                //        }
+                //    ]
+                //}
+
+
+
+                #endregion
+
+                string SupplierCode = "";
+
+                string WhCode = "";
+
+                string got = "F";
+
+                foreach (var item in issueDoc.IssueDocLines)
+                {
+                    if (item.SubconstractSupplier != null)
+                    {
+                        SupplierCode = item.SubconstractSupplier.Code;
+                    }
+                    if (item.Wh != null)
+                    {
+                        WhCode = item.Wh.Code;
+                    }
+
+                    try
+                    {
+                        string RecedeReasonName = item.RecedeReason.Name;
+
+                        if (!string.IsNullOrEmpty(RecedeReasonName))
+                        {
+                            got = "T";//代表是委外退料调用委外半成品入库
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        got = "F";
+                    }
+
+                }
+
+                if (got == "F")
+                {
+
+                    string operation = "0";
+
+                    string tenant = "slerealm1";
+
+                    string siteName = "华旋工厂";
+
+                    StringBuilder formData = new StringBuilder();
+                    formData.Append("{");
+                    formData.Append("\"tenant\":\"" + tenant + "\",");
+                    formData.Append("\"type\":\"1\",");
+                    formData.Append("\"order\":{");
+                    formData.Append("\"orderNo\":\"" + issueDoc.DocNo + "\"");
+                    formData.Append("}");
+                    formData.Append("}");
+
+                    //发送格式
+                    StringBuilder formSendData = new StringBuilder();
+
+                    formSendData.Append(formData.ToString());
+
+                    string strURL = null;
+
+                    //测试
+                    //strURL = "http://118.195.189.35:8900/accessPlatform/platformAPI";
+
+                    //正式
+                    //strURL = "http://58.216.169.102:9081/ekp/sys/webservice/kmReviewWebserviceService?wsdl";
+
+
+                    long orgID = Context.LoginOrg.ID;
+
+
+                    //OA服务器地址
+                    string oAURL = Common.GetProfileValue(Common.S_PROFILE_CODE, orgID);
+
+                    if (string.IsNullOrEmpty(oAURL))
+                    {
+                        return;
+                    }
+
+                    strURL = oAURL;
+
+                    logger.Error("非成套领料删除传出数据：" + formSendData.ToString());
+
+                    string formSendDataGo = formSendData.ToString();
+
+
+                    strURL = "http://" + strURL + "/services/slewms/api/WmsOrder/outsourcing-pick-order/sync";
+
+                    if (got == "T")
+                    {
+                        strURL = "http://" + strURL + "/services/slewms/api/WmsOrder/outsourcing-entry-order/sync";
+                    }
+
+                    string responseText = HttpRequestClient.HttpPostJson(strURL, formSendDataGo, "", "");
+
+                    logger.Error("非成套领料删除返回报文：" + responseText.ToString());
+                }
+                else if (got == "T")
+                {
+                    string operation = "0";
+
+                    string tenant = "slerealm1";
+
+                    string siteName = "华旋工厂";
+
+                    StringBuilder formData = new StringBuilder();
+                    formData.Append("{");
+                    formData.Append("\"tenant\":\"" + tenant + "\",");
+                    formData.Append("\"type\":\"1\",");
+                    formData.Append("\"orderNo\":\"" + issueDoc.DocNo + "\",");
+                    formData.Append("}");
+
+                    //发送格式
+                    StringBuilder formSendData = new StringBuilder();
+
+                    formSendData.Append(formData.ToString());
+
+                    string strURL = null;
+
+                    //测试
+                    //strURL = "http://118.195.189.35:8900/accessPlatform/platformAPI";
+
+                    //正式
+                    //strURL = "http://58.216.169.102:9081/ekp/sys/webservice/kmReviewWebserviceService?wsdl"; 
+
+                    long orgID = Context.LoginOrg.ID;
+
+                    //OA服务器地址
+                    string oAURL = Common.GetProfileValue(Common.S_PROFILE_CODE, orgID);
+
+                    if (string.IsNullOrEmpty(oAURL))
+                    {
+                        return;
+                    }
+
+                    strURL = oAURL;
+
+                    logger.Error("委外退料删除传出数据：" + formSendData.ToString());
+
+                    string formSendDataGo = formSendData.ToString();
+
+                    strURL = "http://" + strURL + "/services/slewms/api/WmsOrder/outsourcing-return-material-order/sync";
+ 
+                    string responseText = HttpRequestClient.HttpPostJson(strURL, formSendDataGo, "", "");
+
+                    logger.Error("委外退料删除返回报文:" + responseText.ToString());
+
+                }
+
+            }
 
         }
     }

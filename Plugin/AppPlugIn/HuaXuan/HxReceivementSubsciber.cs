@@ -285,7 +285,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
                         else
                         {
                             formData.Append("\"lotName\":\"" + "" + "\",");
-                        } 
+                        }
 
                         formData.Append("\"detailNo\":\"" + item.DocLineNo + "\"");
 
@@ -337,8 +337,174 @@ namespace YY.U9.Cust.LI.AppPlugIn
                     string responseText = HttpRequestClient.HttpPostJson(strURL, formSendDataGo, "", "");
                 }
                 #endregion
-            }
 
+            }
+            if (receivement.SysState == UFSoft.UBF.PL.Engine.ObjectState.Deleted)
+            {
+                //string appid = TokenManager.appid;
+
+                //string appsecret = TokenManager.appsecret;
+
+                //string timeFormat = DateTime.Now.ToString("yyyyMMddhhmmss");
+
+                //Random random = new Random();
+                //string number = Convert.ToString(random.Next(10000000, 99999999));
+
+                //string transid = appid + timeFormat + number;
+
+                //string token = TokenManager.GetAccessToken(appid, appsecret, transid);
+
+                //if (string.IsNullOrEmpty(token))
+                //{
+                //    throw new Exception("未获取到Token，同步MES失败！");
+                //}
+
+                #region 报文
+                //                {
+                //                    "supplierNumber": "test001",
+                //  "planDate": "2024-11-25",
+                //  "orderNumber": "11010101-1",
+                //  "type": 0,
+                //  "reMake": "测试用例",
+                //  "list": [
+                //    {
+                //                        "supplierNumber": "test001",
+                //      "partNumber": "030300010130",
+                //      "lotName": "20241126001",
+                //      "demandQuantity": 1000,
+                //      "warehouseNumber": "OID20241126001",
+                //      "detailNo": 1
+                //    }
+                //  ]
+                //}
+
+                #endregion
+
+
+                if (receivement.BizType.Value != 326)
+                {
+                    string operation = "0";
+
+                    string tenant = "slerealm1";
+
+                    string siteName = "华旋工厂";
+
+                    StringBuilder formData = new StringBuilder();
+
+                    formData.Append("{"); 
+                    // 给键和值添加双引号，并确保键值之间有冒号隔开，符合JSON格式要求 
+                    formData.Append("\"tenant\":\"" + tenant + "\",");
+
+                    formData.Append("\"orderNumber\":\"" + receivement.DocNo + "\",");
+
+                    formData.Append("\"type\":\"" + "1" + "\"");
+
+                    formData.Append("}");
+
+                    //发送格式
+                    StringBuilder formSendData = new StringBuilder();
+
+                    formSendData.Append(formData.ToString());
+
+                    logger.Error("采购退货删除传出数据：" + formSendData.ToString());
+
+                    string strURL = null;
+
+                    //测试
+                    //strURL = "http://118.195.189.35:8900/accessPlatform/platformAPI";
+
+                    //正式
+                    //strURL = "http://58.216.169.102:9081/ekp/sys/webservice/kmReviewWebserviceService?wsdl";
+
+
+                    long orgID = Context.LoginOrg.ID;
+
+
+                    //OA服务器地址
+                    string oAURL = Common.GetProfileValue(Common.S_PROFILE_CODE, orgID);
+
+                    if (string.IsNullOrEmpty(oAURL))
+                    {
+                        return;
+                    }
+
+                    strURL = oAURL;
+
+                    string formSendDataGo = formSendData.ToString();
+
+                    strURL = "http://" + strURL + "/services/slewms/api/WmsOrder/PR";
+
+                    string responseText = HttpRequestClient.HttpPostJson(strURL, formSendDataGo, "", "");
+
+                    logger.Error("采购退货删除返回数据：" + responseText.ToString());
+
+                }
+                //else if (receivement.BizType.Value==)
+                //{
+
+                //}
+                else//委外退货
+                {
+                    string operation = "0";
+
+                    string tenant = "slerealm1";
+
+                    string siteName = "华旋工厂";
+
+                    StringBuilder formData = new StringBuilder();
+
+                    formData.Append("{");
+
+                    // 给键和值添加双引号，并确保键值之间有冒号隔开，符合 JSON 格式要求
+                    formData.Append("\"tenant\":\"" + tenant + "\",");
+
+                    formData.Append("\"type\":\"" + "1" + "\",");
+
+                    formData.Append("\"order\":{");
+
+                    formData.Append("\"orderNo\":\"" + receivement.DocNo + "\"");
+
+                    formData.Append("}");
+
+                    formData.Append("}");
+
+                    //发送格式
+                    StringBuilder formSendData = new StringBuilder();
+
+                    formSendData.Append(formData.ToString());
+
+                    logger.Error("委外收货删除传出数据：" + formSendData.ToString());
+
+                    string strURL = null;
+
+                    //测试
+                    //strURL = "http://118.195.189.35:8900/accessPlatform/platformAPI";
+
+                    //正式
+                    //strURL = "http://58.216.169.102:9081/ekp/sys/webservice/kmReviewWebserviceService?wsdl";
+
+
+                    long orgID = Context.LoginOrg.ID;
+
+
+                    //OA服务器地址
+                    string oAURL = Common.GetProfileValue(Common.S_PROFILE_CODE, orgID);
+
+                    if (string.IsNullOrEmpty(oAURL))
+                    {
+                        return;
+                    }
+
+                    strURL = oAURL;
+
+                    string formSendDataGo = formSendData.ToString();
+
+                    strURL = "http://" + strURL + "/services/slewms/api/WmsOrder/outsourcing-return-order/sync";
+
+                    string responseText = HttpRequestClient.HttpPostJson(strURL, formSendDataGo, "", "");
+                }
+
+            }
         }
 
     }

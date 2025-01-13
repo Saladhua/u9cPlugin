@@ -45,48 +45,60 @@ namespace YY.U9.Cust.LI.AppPlugIn
             //if (bOMMaster.SysState == UFSoft.UBF.PL.Engine.ObjectState.Updated)
             if (aRBillHead.SysState == UFSoft.UBF.PL.Engine.ObjectState.Deleted)
             {
-                string ApiTokenAndID = JHBassApiData.GetApiTokenAndID();
-                // 使用 Newtonsoft.Json 库中的 JObject 来解析 JSON 字符串
-                JObject obj = JObject.Parse(ApiTokenAndID);
-                // 获取 corpAccessToken 的值
-                string corpAccessToken = (string)obj["corpAccessToken"];
-                // 获取 corpId 的值
-                string corpId = (string)obj["corpId"];
-
-                string strulr = "https://open.fxiaoke.com/cgi/crm/v2/data/query";
-
-                string fieldValue = aRBillHead.DocNo;//单号 
-
-                string dataObjectApiName = "object_C2Pcu__c";//实体
-
-                string fieldName = "name";//实体字段 
-
-                string CrmData = JHBassApiData.GetDatas(strulr, corpAccessToken, corpId, fieldValue, dataObjectApiName, fieldName);
-
-                JObject objCrmID = JObject.Parse(CrmData);
-
-                string CrmID = "";
-
+                string bwen1 = "";
+                string bwen2 = "";
                 try
                 {
-                    CrmID = (string)objCrmID["data"]["dataList"][0]["_id"];
+                    string ApiTokenAndID = JHBassApiData.GetApiTokenAndID();
+                    // 使用 Newtonsoft.Json 库中的 JObject 来解析 JSON 字符串
+                    JObject obj = JObject.Parse(ApiTokenAndID);
+                    bwen1 = obj.ToString();
+                    // 获取 corpAccessToken 的值
+                    string corpAccessToken = (string)obj["corpAccessToken"];
+                    // 获取 corpId 的值
+                    string corpId = (string)obj["corpId"];
+
+                    string strulr = "https://open.fxiaoke.com/cgi/crm/v2/data/query";
+
+                    string fieldValue = aRBillHead.DocNo;//单号 
+
+                    string dataObjectApiName = "object_C2Pcu__c";//实体
+
+                    string fieldName = "name";//实体字段 
+
+                    string CrmData = JHBassApiData.GetDatas(strulr, corpAccessToken, corpId, fieldValue, dataObjectApiName, fieldName);
+
+                    JObject objCrmID = JObject.Parse(CrmData);
+
+                    string CrmID = "";
+
+                    try
+                    {
+                        CrmID = (string)objCrmID["data"]["dataList"][0]["_id"];
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.Error("删除数据：" + CrmData.ToString() + "单号：" + aRBillHead.DocNo + ex.ToString());
+                        return;
+                    }
+                    // 获取 corpAccessToken 的值
+
+
+                    string Invastrulr = "https://open.fxiaoke.com/cgi/crm/custom/v2/data/invalid";
+
+                    string InvaDate = JHBassApiData.InvaDate(Invastrulr, corpAccessToken, corpId, CrmID, dataObjectApiName);
+
+                    JObject returnDate = JObject.Parse(InvaDate);
+
+                    bwen2 = returnDate.ToString();
+
+                    logger.Error("删除数据：" + returnDate.ToString() + "单号：" + aRBillHead.DocNo);
+
                 }
                 catch (Exception ex)
                 {
-                    logger.Error("删除数据：" + CrmData.ToString() + "单号：" + aRBillHead.DocNo + ex.ToString());
-                    return;
+                    logger.Error("删除数据报文1：" + bwen1 + "删除数据报文2：" + bwen2);
                 }
-                // 获取 corpAccessToken 的值
-
-
-                string Invastrulr = "https://open.fxiaoke.com/cgi/crm/custom/v2/data/invalid";
-
-                string InvaDate = JHBassApiData.InvaDate(Invastrulr, corpAccessToken, corpId, CrmID, dataObjectApiName);
-
-                JObject returnDate = JObject.Parse(InvaDate);
-
-                logger.Error("删除数据：" + returnDate.ToString() + "单号：" + aRBillHead.DocNo);
-
             }
         }
     }

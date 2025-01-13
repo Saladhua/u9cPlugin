@@ -125,8 +125,6 @@ namespace YY.U9.Cust.LI.UIPlugIn
 
                 if (itemc.ToString() == "1002302240000602" || itemc.ToString() == "1002302240000591")
                 {
-
-
                     List<MoItem> mos = Mmos.Where(x => x.CompleteWhCode == long.Parse(itemc.ToString())).ToList();
                     #region 调入单
                     UFIDA.U9.ISV.TransferInISV.Proxy.CommonCreateTransferInSVProxy transferInSVProxy = new UFIDA.U9.ISV.TransferInISV.Proxy.CommonCreateTransferInSVProxy();
@@ -179,13 +177,15 @@ namespace YY.U9.Cust.LI.UIPlugIn
 
                         //decimal DrQty = 0;
 
-                        decimal iqty = nnmos.Where(x => x.ItemMasterCode == item.ItemMasterCode).Sum(x => x.ActualReqQty);
+                        decimal iqty = 0;
+
+                        iqty = nnmos.Where(x => x.ItemMasterCode == item.ItemMasterCode).Sum(x => x.ActualReqQty);
 
                         string kuc = "0";
                         string kucy = "0";
                         if (!string.IsNullOrEmpty(item.ItemMasterCode.ToString()) && !string.IsNullOrEmpty(item.CompleteWhCode.ToString()))
                         {
-                            kuc = getkc(item.ItemMasterCode.ToString(), item.CompleteWhCode.ToString());
+                            //kuc = getkc(item.ItemMasterCode.ToString(), item.CompleteWhCode.ToString());
                             //kucy = getkc(item.ItemMasterCode.ToString(), "1002302100001184");
                         }
                         //kuc
@@ -218,7 +218,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
                             Bom_line.TransInWh = new UFIDA.U9.CBO.Pub.Controller.CommonArchiveDataDTOData();
                             Bom_line.TransInWh.ID = item.CompleteWhCode;//调入存储地点
                             Bom_line.StoreUOMQty = iqty;//调入数量
-                            Bom_line.CostUOMQty = iqty;//成本数量
+                            Bom_line.CostUOMQty = iqty;//成本数量l 
                             Bom_line.CostUOM = new CommonArchiveDataDTOData();
 
                             Bom_line.CostUOM.ID = item.CostUOM;
@@ -257,7 +257,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
 
                             listBomSubline.Add(Bom_subLine);//加载子行
                             Bom_line.TransInSubLines = listBomSubline;
-                            if (decimal.Parse(kucy) > 0)
+                            if (decimal.Parse(kucy) > 0 && iqty > 0)
                             {
                                 listBomLine.Add(Bom_line);//加载行  
                             }
@@ -295,10 +295,6 @@ namespace YY.U9.Cust.LI.UIPlugIn
                         return;
                     }
                 }
-
-
-
-
             }
         }
 
@@ -375,8 +371,6 @@ namespace YY.U9.Cust.LI.UIPlugIn
                 " inner join Base_Organization org on org.id = WhQoh.ItemOwnOrg" +
                 " where WhQoh.ItemInfo_ItemID = '" + item.ToString() + "' and WhQoh.Wh = '" + whid.ToString() + "'" +
                 " group by WhQoh.ItemInfo_ItemCode,org.Code";
-
-
             DataTable dataTable = new DataTable();
             DataSet dataSet = new DataSet();
             //sqlForCPRK 成品入库
@@ -416,12 +410,21 @@ namespace YY.U9.Cust.LI.UIPlugIn
             //    " where b.ItemMaster = '" + item.ToString() + "'" +
             //    "and(select DescFlexField_PrivateDescSeg15 from CBO_ItemMaster where ID = b.ItemMaster) = '1'" +
             //    "and a.DocState != '3' and b.SupplyWh='" + moid + "'";
-            string sqlForCPRK = "select  top(1) MatchQty,A1.ItemMaster,A1.MOID from     " +
+            //string sqlForCPRK = "select  top(1) MatchQty,A1.ItemMaster,A1.MOID from " +
+            //    " MO_SimuMatchResult A1 " +
+            //    " left join MO_SimuDemandPick A2 on A2.ID = A1.DemandPick " +
+            //    " where A2.docno > '200000' " +
+            //    " and A1.MOID = (select ID from MO_MO where DocNo = '" + docno + "') and A1.ItemMaster = '" + item.ToString() + "' " +
+            //    " and A1.Wh = '" + moid + "'";
+            string sqlForCPRK = "select  top(1) MatchQty,A1.ItemMaster,A1.MOID from  " +
                 " MO_SimuMatchResult A1 " +
                 " left join MO_SimuDemandPick A2 on A2.ID = A1.DemandPick " +
-                " where A2.docno > '200000' " +
-                " and A1.MOID = (select ID from MO_MO where DocNo = '" + docno + "') and A1.ItemMaster = '" + item.ToString() + "' " +
-                " and A1.Wh = '" + moid + "'";
+                " left join MO_MO B1 ON B1.ID = A1.MOID " +
+                " left join CBO_ItemMaster C1 ON C1.ID = A1.ItemMaster  " +
+                " where A2.docno > '200000'" +
+                " and B1.DocNo = '" + docno + "'  and A1.ItemMaster = '" + item.ToString() + "' " +
+                " and A1.Wh = '1002302100001184'  and B1.DescFlexField_PrivateDescSeg2 <> ''" +
+                " and C1.DescFlexField_PrivateDescSeg15 = '0' ";
             DataTable dataTable = new DataTable();
             DataSet dataSet = new DataSet();
             //sqlForCPRK 成品入库

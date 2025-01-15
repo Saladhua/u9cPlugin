@@ -9,6 +9,9 @@ using UFSoft.UBF.UI.WebControlAdapter;
 
 namespace YY.U9.Cust.LI.UIPlugIn
 {
+    /// <summary>
+    /// 报销单
+    /// </summary>
     class ReimburseBillMainUIFormWebPartExtended : ExtendedPartBase
     {
         private ReimburseBillMainUIFormWebPart _part;

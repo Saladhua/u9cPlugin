@@ -560,8 +560,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="NK\InvoiceBListUIFormWebPartExtended.cs" />
+    <Compile Include="NK\NKLAPMainUIFormWebPartExtended.cs" />
+    <Compile Include="NK\NKLMiscShipUIMainFormWebPartExtended.cs" />
+    <Compile Include="NK\NKMethod.cs" />
     <Compile Include="NK\ReceivalMainUIFormWebPartExtended.cs" />
     <Compile Include="NK\ReimburseBillMainUIFormWebPartExtended.cs" />
+    <Compile Include="NK\ReimburseBillMainUIFormWebPartExtended25115.cs" />
     <Compile Include="TransferFormUIMainFormWebPartExtended.cs" />
     <Compile Include="APRefScmBillUIFormWebPartExtended.cs" />
     <Compile Include="Common.cs" />

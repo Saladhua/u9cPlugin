@@ -396,8 +396,11 @@
     <Compile Include="KAIZHI\SupplierUpDateSubscriber.cs" />
     <Compile Include="kehua\ARBillHeadPriceRecalSubscriber.cs" />
     <Compile Include="kehua\KHAPBillHeadInsertedSubscriber.cs" />
+    <Compile Include="NK\NKAPBillHeadUpdateSubscrilber.cs" />
     <Compile Include="NK\NKLIDeductDocUpdateSubscrilber.cs" />
     <Compile Include="NK\NKLIPurchaseOrderInsertedSubscrilber.cs" />
+    <Compile Include="NK\NKMiscShipUpdateSubscrilber.cs" />
+    <Compile Include="NK\ReimburseBillHeadUpdateSubscrilber.cs" />
     <Compile Include="TokenManager.cs" />
     <Compile Include="Common.cs" />
     <Compile Include="HttpRequestClient.cs" />

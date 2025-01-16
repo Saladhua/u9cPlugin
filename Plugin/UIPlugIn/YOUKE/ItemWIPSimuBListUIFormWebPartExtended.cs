@@ -423,7 +423,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
                 " left join CBO_ItemMaster C1 ON C1.ID = A1.ItemMaster  " +
                 " where A2.docno > '200000'" +
                 " and B1.DocNo = '" + docno + "'  and A1.ItemMaster = '" + item.ToString() + "' " +
-                " and A1.Wh = '1002302100001184'  and B1.DescFlexField_PrivateDescSeg2 <> ''" +
+                " and B1.DescFlexField_PrivateDescSeg2 <> ''" +
                 " and C1.DescFlexField_PrivateDescSeg15 = '0' ";
             DataTable dataTable = new DataTable();
             DataSet dataSet = new DataSet();

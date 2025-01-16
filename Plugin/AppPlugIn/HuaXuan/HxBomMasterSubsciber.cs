@@ -44,7 +44,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
 
             #region 调用接口
             //if (payReqFundHead.DocStatus.Value == 1 && payReqFundHead.DocStatus.Value == 0)
-            if (bOMMaster.SysState == UFSoft.UBF.PL.Engine.ObjectState.Updated)
+            if (bOMMaster.SysState == UFSoft.UBF.PL.Engine.ObjectState.Inserted)
             {
                 //string appid = TokenManager.appid;
 
@@ -214,6 +214,8 @@ namespace YY.U9.Cust.LI.AppPlugIn
 
                 string responseText = HttpRequestClient.HttpPostJson(strURL, formSendDataGo, "", "");
 
+                logger.Error("物料清单返回报文：" + responseText.ToString());
+
                 #endregion
             }
 
@@ -283,7 +285,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
                 formData.Append("\"tenant\":\"" + tenant + "\",");
                 formData.Append("\"bomDTO\":{");
                 formData.Append("\"name\":\"" + bOMMaster.ItemMaster.Name + "\",");
-                formData.Append("\"revision\":\"" + bOMMaster.BOMVersionCode + "\",");
+                formData.Append("\"revision\":\"" + bOMMaster.BOMVersionCode + "\"");
                 formData.Append("}");
                 formData.Append("}");
 
@@ -322,7 +324,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
 
                 string responseText = HttpRequestClient.HttpPostJson(strURL, formSendDataGo, "", "");
 
- 
+                logger.Error("物料清单删除返回报文：" + responseText.ToString());
             }
 
         }

@@ -417,7 +417,10 @@ namespace YY.U9.Cust.LI.AppPlugIn
 
                 }
 
-                if (got == "F")
+
+                int see = issueDoc.IssueDocType.BusinessType.Value;
+
+                if (see != 326)
                 {
 
                     string operation = "0";
@@ -478,7 +481,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
 
                     logger.Error("非成套领料删除返回报文：" + responseText.ToString());
                 }
-                else if (got == "T")
+                else if (see == 326)
                 {
                     string operation = "0";
 
@@ -490,7 +493,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
                     formData.Append("{");
                     formData.Append("\"tenant\":\"" + tenant + "\",");
                     formData.Append("\"type\":\"1\",");
-                    formData.Append("\"orderNo\":\"" + issueDoc.DocNo + "\",");
+                    formData.Append("\"orderNo\":\"" + issueDoc.DocNo + "\"");
                     formData.Append("}");
 
                     //发送格式
@@ -523,7 +526,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
                     string formSendDataGo = formSendData.ToString();
 
                     strURL = "http://" + strURL + "/services/slewms/api/WmsOrder/outsourcing-return-material-order/sync";
- 
+
                     string responseText = HttpRequestClient.HttpPostJson(strURL, formSendDataGo, "", "");
 
                     logger.Error("委外退料删除返回报文:" + responseText.ToString());

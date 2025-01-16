@@ -92,6 +92,9 @@ namespace YY.U9.Cust.LI.AppPlugIn
                 formData.Append("\"fd_danJuLeiXing\":");
                 formData.Append("\"" + pR.DocType.Code + "\",");
 
+                formData.Append("\"fd_beiZhu\":");
+                formData.Append("\"" + pR.Memo + "\",");
+
                 formData.Append("\"fd_riQi\":");
                 formData.Append("\"" + pR.BusinessDate.ToString("yyyy-MM-dd") + "\",");
 
@@ -151,6 +154,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
 
                 formData.Append("\"fd_CultureName\":");
                 formData.Append("\"" + "zh-CN" + "\",");
+
 
                 //formData.Append("\"fd_OrgCode\":");
                 //formData.Append("\"" + pR.Org.Code + "\",");
@@ -274,7 +278,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
                 formData.Append("<docStatus>20</docStatus >");
                 formData.Append("<docCreator>{");
                 formData.Append("\"LoginName\":");
-                formData.Append("\"" + PDContext.Current.UserCode+ "\"}");
+                formData.Append("\"" + PDContext.Current.UserCode + "\"}");
                 formData.Append("</docCreator>");
                 formData.Append("</arg0>");
                 formData.Append("</web:addReview>");

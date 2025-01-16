@@ -30,7 +30,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
                     string PDesPri10 = "";
                     try
                     {
-                        PDesPri10 = item["Project_DescFlexField_PrivateDescSeg10_ID"] == null ? "" : item["Project_DescFlexField_PrivateDescSeg10_ID"].ToString();
+                        PDesPri10 = item["Project"] == null ? "" : item["Project"].ToString();
                     }
                     catch (Exception ex)
                     {

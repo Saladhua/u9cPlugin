@@ -44,7 +44,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
 
             #region 调用接口
             //if (payReqFundHead.DocStatus.Value == 1 && payReqFundHead.DocStatus.Value == 0)
-            if (itemMaster.SysState == UFSoft.UBF.PL.Engine.ObjectState.Updated)
+            if (itemMaster.SysState == UFSoft.UBF.PL.Engine.ObjectState.Inserted)
             {
                 //string appid = TokenManager.appid;
 
@@ -146,7 +146,14 @@ namespace YY.U9.Cust.LI.AppPlugIn
 
                 strURL = "http://" + strURL + "/services/slemaindata/api/parts/sync";
 
-                string responseText = HttpRequestClient.HttpPostJson(strURL, formSendDataGo, "", "");
+                if (itemMaster.MainItemCategory.Name == "成品" || itemMaster.MainItemCategory.Name == "半成品" || itemMaster.MainItemCategory.Name == "原材料")
+                {
+                    string responseText = HttpRequestClient.HttpPostJson(strURL, formSendDataGo, "", "");
+
+                    logger.Error("料品返回报文：" + responseText.ToString());
+
+                }
+
 
                 #endregion
             }

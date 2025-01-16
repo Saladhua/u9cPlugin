@@ -31,7 +31,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
                     string BenDesPri10 = "";
                     try
                     {
-                        BenDesPri10 = item["BenefitProject_DescFlexField_PrivateDescSeg10_ID"] == null ? "" : item["BenefitProject_DescFlexField_PrivateDescSeg10_ID"].ToString();
+                        BenDesPri10 = item["BenefitProject"] == null ? "" : item["BenefitProject"].ToString();
                     }
                     catch (Exception ex)
                     {

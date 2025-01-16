@@ -49,7 +49,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
                     string ExDesPri10 = "";
                     try
                     {
-                        ExDesPri10 = item["ExpensePayProject_DescFlexField_PrivateDescSeg10_ID"] == null ? "" : item["ExpensePayProject_DescFlexField_PrivateDescSeg10_ID"].ToString();
+                        ExDesPri10 = item["ExpensePayProject"] == null ? "" : item["ExpensePayProject"].ToString();
                     }
                     catch (Exception ex)
                     {

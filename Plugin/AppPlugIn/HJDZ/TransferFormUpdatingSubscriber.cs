@@ -32,7 +32,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
             if (item == null)
             {
                 return;
-            }
+            } 
             string lineid = item.TransferFormL.ID.ToString();
             string lotinfo_docno = "";
             //string itemmasterid = item["ItemInfo_ItemID"].ToString();
@@ -140,6 +140,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
                 start = true;
                 #endregion
             }
+            
             if (start == true)
             {
                 item.SupplierInfo.Code = gyscode;

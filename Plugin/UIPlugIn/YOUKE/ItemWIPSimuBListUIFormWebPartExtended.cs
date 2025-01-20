@@ -13,6 +13,7 @@ using UFSoft.UBF.PL.Engine;
 using UFSoft.UBF.UI.ControlModel;
 using UFSoft.UBF.UI.Custom;
 using UFSoft.UBF.UI.IView;
+using UFSoft.UBF.UI.MD.Runtime;
 using UFSoft.UBF.UI.WebControlAdapter;
 using UFSoft.UBF.UI.WebControls;
 using UFSoft.UBF.Util.DataAccess;
@@ -65,6 +66,10 @@ namespace YY.U9.Cust.LI.UIPlugIn
             //" FROM MO_MOPickList a INNER JOIN MO_MO b ON a.MO = b.ID WHERE b.DocNo = '" + docno + "'" +
             //" AND b.ItemMaster = (SELECT ID FROM CBO_ItemMaster WHERE Code = '" + itemcode + "' AND Org = '" + PDContext.Current.OrgID + "')";
             #endregion
+            int sererer = _part.Model.ItemWIPSimu.Cache.Count;
+
+
+
             foreach (var item in _part.Model.ItemWIPSimu.SelectRecords)
             {
                 //IssuedQty--已发放数量
@@ -237,8 +242,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
                             Bom_line.DescFlexSegments.PrivateDescSeg1 = item.MoID;
 
                             Bom_line.TransInSubLines = new List<UFIDA.U9.ISV.TransferInISV.IC_TransInSubLineDTOData>();
-                            //子行
-
+                            //子行 
                             List<UFIDA.U9.ISV.TransferInISV.IC_TransInSubLineDTOData> listBomSubline = new List<UFIDA.U9.ISV.TransferInISV.IC_TransInSubLineDTOData>();
                             UFIDA.U9.ISV.TransferInISV.IC_TransInSubLineDTOData Bom_subLine = new UFIDA.U9.ISV.TransferInISV.IC_TransInSubLineDTOData();
 
@@ -256,19 +260,18 @@ namespace YY.U9.Cust.LI.UIPlugIn
                             kucy = getkc(item.ItemMasterCode.ToString(), "1002302100001184");
 
                             listBomSubline.Add(Bom_subLine);//加载子行
+
                             Bom_line.TransInSubLines = listBomSubline;
+
                             if (decimal.Parse(kucy) > 0 && iqty > 0)
                             {
                                 listBomLine.Add(Bom_line);//加载行  
-                            }
-
+                            } 
                         }
-
                     }
                     Bom.TransInLines = listBomLine;
                     listBom.Add(Bom);
                     transferInSVProxy.TransferInDTOList = listBom;
-
                     if (Bom.TransInLines.Count == 0)//单据行上面一个都没有
                     {
                         //this._part.Model.ErrorMessage.Message = "检查生产订单是否被使用，或者料品是否能被调用，或者是否齐套状态为齐";
@@ -423,8 +426,8 @@ namespace YY.U9.Cust.LI.UIPlugIn
                 " left join CBO_ItemMaster C1 ON C1.ID = A1.ItemMaster  " +
                 " where A2.docno > '200000'" +
                 " and B1.DocNo = '" + docno + "'  and A1.ItemMaster = '" + item.ToString() + "' " +
-                " and B1.DescFlexField_PrivateDescSeg2 <> ''" +
-                " and C1.DescFlexField_PrivateDescSeg15 = '0' ";
+                " and B1.DescFlexField_PrivateDescSeg2 = ''" +
+                " and C1.DescFlexField_PrivateDescSeg15 = '1' ";
             DataTable dataTable = new DataTable();
             DataSet dataSet = new DataSet();
             //sqlForCPRK 成品入库

@@ -147,7 +147,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
                         formData.Append("\"effectiveEnd\":\"" + item.DisableDate + "\",");
                         formData.Append("\"type\":\"\"");
                         formData.Append("}");
-                        if (k < item.Substitutes.Count - 1)
+                        if (k <= item.Substitutes.Count - 1)
                         {
                             formData.Append(",");
                         }
@@ -171,7 +171,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
                     }
                     formData.Append("]");
                     formData.Append("}");
-                    if (i < bOMMaster.BOMComponents.Count - 1)
+                    if (i <= bOMMaster.BOMComponents.Count - 1)
                     {
                         formData.Append(",");
                     }

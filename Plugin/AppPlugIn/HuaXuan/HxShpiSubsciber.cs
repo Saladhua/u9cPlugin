@@ -117,7 +117,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
                     formData.Append("\"baseEntry\":\"" + item.SrcDocNo + "\",");
                     formData.Append("\"baseline\":\"" + item.SrcDocLineNo + "\"");
                     formData.Append("}");
-                    if (i < ship.ShipLines.Count - 1)
+                    if (i <= ship.ShipLines.Count - 1)
                     {
                         formData.Append(",");
                     }

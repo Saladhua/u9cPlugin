@@ -2,18 +2,14 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Reflection;
 using UFIDA.U9.CBO.Pub.Controller;
 using UFIDA.U9.CBO.SCM.Item;
 using UFIDA.U9.MFG.MO.StartAnalysisUIModel;
-using UFIDA.U9.MO.MO;
-using UFIDA.U9.MO.MOBP.ManufactureSimuBP;
 using UFIDA.U9.UI.PDHelper;
 using UFSoft.UBF.PL.Engine;
 using UFSoft.UBF.UI.ControlModel;
 using UFSoft.UBF.UI.Custom;
 using UFSoft.UBF.UI.IView;
-using UFSoft.UBF.UI.MD.Runtime;
 using UFSoft.UBF.UI.WebControlAdapter;
 using UFSoft.UBF.UI.WebControls;
 using UFSoft.UBF.Util.DataAccess;
@@ -66,9 +62,8 @@ namespace YY.U9.Cust.LI.UIPlugIn
             //" FROM MO_MOPickList a INNER JOIN MO_MO b ON a.MO = b.ID WHERE b.DocNo = '" + docno + "'" +
             //" AND b.ItemMaster = (SELECT ID FROM CBO_ItemMaster WHERE Code = '" + itemcode + "' AND Org = '" + PDContext.Current.OrgID + "')";
             #endregion
-            int sererer = _part.Model.ItemWIPSimu.Cache.Count;
 
-
+            int sererer = _part.Model.ItemWIPSimu.Cache.Count; 
 
             foreach (var item in _part.Model.ItemWIPSimu.SelectRecords)
             {
@@ -157,6 +152,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
                     decimal quanjuQ = 0;
 
                     List<MoItem> nnmos = new List<MoItem>();
+
                     foreach (var item in nmos)
                     {
                         MoItem moItem = new MoItem();
@@ -170,13 +166,12 @@ namespace YY.U9.Cust.LI.UIPlugIn
                     }
                     //行
                     foreach (var item in nmos)
-                    {
-
+                    { 
                         string ssee = item.ItemMasterCode.ToString();
+
                         string ssee2 = item.CompleteWhCode.ToString();
 
-                        string docno = item.MoID.ToString();//生产订单的单号
-
+                        string docno = item.MoID.ToString();//生产订单的单号 
 
                         //decimal iqty = decimal.Parse(getActualReqQty(item.ItemMasterCode, ssee2, docno));
 
@@ -187,16 +182,22 @@ namespace YY.U9.Cust.LI.UIPlugIn
                         iqty = nnmos.Where(x => x.ItemMasterCode == item.ItemMasterCode).Sum(x => x.ActualReqQty);
 
                         string kuc = "0";
+
                         string kucy = "0";
+
                         if (!string.IsNullOrEmpty(item.ItemMasterCode.ToString()) && !string.IsNullOrEmpty(item.CompleteWhCode.ToString()))
                         {
                             //kuc = getkc(item.ItemMasterCode.ToString(), item.CompleteWhCode.ToString());
                             //kucy = getkc(item.ItemMasterCode.ToString(), "1002302100001184");
                         }
+
                         //kuc
                         decimal see = decimal.Parse(kuc);
+
                         // item.IssuedQty = iqty;
+
                         decimal DrQty = iqty - decimal.Parse(kuc);
+
                         #region 原来的
                         //if (decimal.Parse(item.KCKYL) != item.IssuedQty)//生产订单备料对应料品的总数和库存可用量不等
                         //{
@@ -215,6 +216,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
                         //if (item.PrivateDescSeg15 == "1" && DrQty > 0 && item.SetableStatus == "2" && DQTY > 0 && quanjuQ <= DrQty && string.IsNullOrEmpty(item.DescFlexField_PrivateDescSeg2))
 
                         #endregion
+
                         if (item.PrivateDescSeg15 == "1" && item.SetableStatus == "2")
                         {
                             UFIDA.U9.ISV.TransferInISV.IC_TransInLineDTOData Bom_line = new UFIDA.U9.ISV.TransferInISV.IC_TransInLineDTOData();
@@ -341,16 +343,13 @@ namespace YY.U9.Cust.LI.UIPlugIn
             public string Round_Precision { get; set; }
             public string DescFlexField_PrivateDescSeg2 { get; set; }
 
-        }
-
+        } 
 
         public class NMoItem
         {
             public long ItemMasterCode { get; set; }
 
-        }
-
-
+        } 
 
         public string getkc(string item, string whid)
         {
@@ -388,9 +387,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
                 ck = "0";
             }
             return ck;
-        }
-
-
+        } 
         /// <summary>
         /// 
         /// </summary>
@@ -424,8 +421,8 @@ namespace YY.U9.Cust.LI.UIPlugIn
                 " left join MO_SimuDemandPick A2 on A2.ID = A1.DemandPick " +
                 " left join MO_MO B1 ON B1.ID = A1.MOID " +
                 " left join CBO_ItemMaster C1 ON C1.ID = A1.ItemMaster  " +
-                " where A2.docno > '200000'" +
-                " and B1.DocNo = '" + docno + "'  and A1.ItemMaster = '" + item.ToString() + "' " +
+                " where " +
+                " B1.DocNo = '" + docno + "'  and A1.ItemMaster = '" + item.ToString() + "' " +
                 " and B1.DescFlexField_PrivateDescSeg2 = ''" +
                 " and C1.DescFlexField_PrivateDescSeg15 = '1' ";
             DataTable dataTable = new DataTable();

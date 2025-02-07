@@ -85,6 +85,15 @@ namespace YY.U9.Cust.LI.AppPlugIn
 
                 #endregion
 
+                if (receivement.ReceivementType.Value == 1 && receivement.BizType.Value == 326)
+                {
+                    return;
+                }
+
+                if (receivement.ReceivementType.Value == 2)
+                {
+                    return;
+                }
 
                 if (receivement.BizType.Value != 326)
                 {
@@ -350,7 +359,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
                 //Random random = new Random();
                 //string number = Convert.ToString(random.Next(10000000, 99999999));
 
-                //string transid = appid + timeFormat + number;
+                //string tranysid = appid + timeFormat + number;
 
                 //string token = TokenManager.GetAccessToken(appid, appsecret, transid);
 
@@ -391,7 +400,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
 
                     StringBuilder formData = new StringBuilder();
 
-                    formData.Append("{"); 
+                    formData.Append("{");
                     // 给键和值添加双引号，并确保键值之间有冒号隔开，符合JSON格式要求 
                     formData.Append("\"tenant\":\"" + tenant + "\",");
 

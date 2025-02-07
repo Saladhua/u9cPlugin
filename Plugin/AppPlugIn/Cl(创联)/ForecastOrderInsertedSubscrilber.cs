@@ -17,7 +17,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
     class ForecastOrderInsertedSubscrilber : UFSoft.UBF.Eventing.IEventSubscriber
     {
         private static readonly UFSoft.UBF.Util.Log.ILogger logger = LoggerManager.GetLogger(typeof(ForecastOrderInsertedSubscrilber));
-
+          
 
         public void Notify(params object[] args)
         {
@@ -36,9 +36,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
             {
                 return;
             }
-            #endregion
-
-
+            #endregion 
 
             string DocNo = "";//单号
 
@@ -54,6 +52,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
 
             int maxEValue = -1;
             //枚举赋值
+
             //插入之后
             foreach (var item in forecastOrder.ForecastOrderLines)
             {

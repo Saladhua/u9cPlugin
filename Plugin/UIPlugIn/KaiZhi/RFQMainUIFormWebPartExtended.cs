@@ -29,7 +29,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
         /// </summary>
         /// <param name="part"></param>
         /// <param name="e"></param>
-        [Obsolete]
+
         public override void AfterInit(IPart part, System.EventArgs e)
         {
             base.AfterInit(part, e);
@@ -61,7 +61,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
             CommonFunction.Layout(card2, BtnSettle4, 14, 0);
         }
 
-        [Obsolete]
+
         public void BtnAR_Click(object sender, EventArgs e)
         {
             //收集界面错误信息
@@ -117,7 +117,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
 
             NavigateManager.ShowModelWebpart(_part, "ea003f06-b0c8-4f6e-9428-124c1d425613", _part.TaskId.ToString(), 300, 300, null, true, true);
         }
-        [Obsolete]
+
         public void BtnAC_Click(object sender, EventArgs e)
         {
             //收集界面错误信息

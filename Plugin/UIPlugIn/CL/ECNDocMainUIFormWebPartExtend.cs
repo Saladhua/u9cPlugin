@@ -20,7 +20,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
         /// </summary>
         /// <param name="part"></param>
         /// <param name="args"></param>
-        [Obsolete]
+
         public override void AfterInit(IPart part, EventArgs args)
         {
             base.AfterInit(part, args);
@@ -37,9 +37,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
             CommonFunction.Layout(card, BtnAR, 20, 0);//一般为从左往右按钮个数乘以2
             //（4）、绑定按钮事件
             BtnAR.Click += new EventHandler(BtnECNDoc_Click);
-        }
-
-        [Obsolete]
+        } 
 
         public void BtnECNDoc_Click(object sender, EventArgs e)
         {
@@ -56,7 +54,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
 
             //批量变更，勾选或者不勾选，不勾选直接调用接口，勾选之后需要调用自己做的接口
 
-            if (IsBatchChange=="False")
+            if (IsBatchChange == "False")
             {
                 #region 循环调用接口
 

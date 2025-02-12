@@ -19,7 +19,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
     {
         private ToPoTryCalcUIFormWebPart _part;
         IUFButton BtnSettle;
-        [Obsolete]
+
         public override void AfterInit(IPart part, EventArgs args)
         {
             //首先调用原来的事件
@@ -38,7 +38,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
             CommonFunction.Layout(card, BtnSettle, 6, 0);
 
         }
-        [Obsolete]
+
         public void BtnAR_Click(object sender, EventArgs e)
         {
             //收集界面错误信息

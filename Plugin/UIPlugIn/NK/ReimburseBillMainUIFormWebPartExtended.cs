@@ -22,7 +22,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
         /// </summary>
         /// <param name="part"></param>
         /// <param name="e"></param>
-        [Obsolete]
+         
         public override void AfterInit(IPart part, System.EventArgs e)
         {
             base.AfterInit(part, e);
@@ -39,7 +39,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
             card.Controls.Add(BtnSettle3);
             CommonFunction.Layout(card, BtnSettle3, 18, 0);
         }
-        [Obsolete]
+         
         public void BtnAR_Click(object sender, EventArgs e)
         {
             //收集界面错误信息

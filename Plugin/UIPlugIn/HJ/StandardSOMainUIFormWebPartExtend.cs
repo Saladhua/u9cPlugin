@@ -21,7 +21,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
 
         IUFButton BtnSettle;
 
-        [Obsolete]
+
         public override void AfterInit(IPart part, EventArgs args)
         {
             base.AfterInit(part, args);
@@ -63,7 +63,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
 
         //销售订单列表：销售订单取数完成之后把信息回写到销售订单列表界面对应字段里面
 
-        [Obsolete]
+
         public void BtnSettle_Click(object sender, EventArgs e)
         {
             string ItemMaster_Code1 = "";

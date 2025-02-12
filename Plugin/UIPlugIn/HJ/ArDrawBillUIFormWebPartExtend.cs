@@ -22,9 +22,8 @@ namespace YY.U9.Cust.LI.UIPlugIn
         /// 初始化后扩展
         /// </summary>
         /// <param name="part"></param>
-        /// <param name="e"></param>
+        /// <param name="e"></param> 
 
-        [Obsolete]
         public override void AfterInit(IPart part, System.EventArgs e)
         {
             base.AfterInit(part, e);
@@ -44,7 +43,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
             BtnAR.Click += new EventHandler(BtnAR_Click);
         }
 
-        [Obsolete]
+
         public void BtnAR_Click(object sender, EventArgs e)
         {
             //收集界面错误信息

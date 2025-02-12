@@ -22,7 +22,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
 
         IUFButton BtnSettle;
 
-        [Obsolete]
+
         public override void AfterInit(IPart part, EventArgs args)
         {
             base.AfterInit(part, args);
@@ -65,7 +65,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
             CommonFunction.Layout(card, BtnSettle, 11, 0);
         }
 
-        [Obsolete]
+
         public void BtnSettle_Click(object sender, EventArgs e)
         {
             //收集界面错误信息

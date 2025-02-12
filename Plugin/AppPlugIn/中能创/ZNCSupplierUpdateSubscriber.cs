@@ -48,7 +48,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
             //{
             #region 调用接口
 
-            int a = 0;
+            //int a = 0;
             //string appid = TokenManager.appid;
             //string appsecret = TokenManager.appsecret;
 
@@ -113,25 +113,27 @@ namespace YY.U9.Cust.LI.AppPlugIn
 
             formData.Append("\"fd_gongYingShangZhuangTai\":");
 
-            string gongYingShangZhuangTai = "待核准";
-            switch (supplier.State.Value)
-            {
-                case 0:
-                    gongYingShangZhuangTai = "已核准";
-                    break;
-                case 1:
-                    gongYingShangZhuangTai = "待核准";
-                    break;
-                case 2:
-                    gongYingShangZhuangTai = "不准交易";
-                    break;
-                case 3:
-                    gongYingShangZhuangTai = "核准中";
-                    break;
-                default:
-                    gongYingShangZhuangTai = "待核准";
-                    break;
-            }
+            //string gongYingShangZhuangTai = "待核准";
+
+            //switch (supplier.State.Value)
+            //{
+            //    case 0:
+            //        gongYingShangZhuangTai = "已核准";
+            //        break;
+            //    case 1:
+            //        gongYingShangZhuangTai = "待核准";
+            //        break;
+            //    case 2:
+            //        gongYingShangZhuangTai = "不准交易";
+            //        break;
+            //    case 3:
+            //        gongYingShangZhuangTai = "核准中";
+            //        break;
+            //    default:
+            //        gongYingShangZhuangTai = "待核准";
+            //        break;
+            //}
+
             formData.Append("\"" + supplier.State.Value + "\",");
 
             formData.Append("\"fd_CultureName\":");

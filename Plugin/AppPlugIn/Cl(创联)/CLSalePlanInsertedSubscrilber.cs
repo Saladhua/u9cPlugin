@@ -156,6 +156,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
             }
             catch (System.Exception ex)
             {
+                string meses = ex.Message;
                 return;
             }
         }

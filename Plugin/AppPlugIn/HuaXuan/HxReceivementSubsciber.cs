@@ -97,11 +97,11 @@ namespace YY.U9.Cust.LI.AppPlugIn
 
                 if (receivement.BizType.Value != 326)
                 {
-                    string operation = "0";
+                    //string operation = "0";
 
                     string tenant = "slerealm1";
 
-                    string siteName = "华旋工厂";
+                    //string siteName = "华旋工厂";
 
                     StringBuilder formData = new StringBuilder();
 
@@ -220,11 +220,11 @@ namespace YY.U9.Cust.LI.AppPlugIn
                 //}
                 else//委外退货
                 {
-                    string operation = "0";
+                    //string operation = "0";
 
                     string tenant = "slerealm1";
 
-                    string siteName = "华旋工厂";
+                    // string siteName = "华旋工厂";
 
                     StringBuilder formData = new StringBuilder();
 
@@ -392,11 +392,11 @@ namespace YY.U9.Cust.LI.AppPlugIn
 
                 if (receivement.BizType.Value != 326)
                 {
-                    string operation = "0";
+                    //string operation = "0";
 
                     string tenant = "slerealm1";
 
-                    string siteName = "华旋工厂";
+                    //string siteName = "华旋工厂";
 
                     StringBuilder formData = new StringBuilder();
 
@@ -454,11 +454,11 @@ namespace YY.U9.Cust.LI.AppPlugIn
                 //}
                 else//委外退货
                 {
-                    string operation = "0";
+                    //string operation = "0";
 
                     string tenant = "slerealm1";
 
-                    string siteName = "华旋工厂";
+                    // string siteName = "华旋工厂";
 
                     StringBuilder formData = new StringBuilder();
 

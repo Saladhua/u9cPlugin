@@ -78,8 +78,8 @@ namespace YY.U9.Cust.LI.AppPlugIn
                 string longs = string.IsNullOrEmpty(item.DescFlexSegments.PrivateDescSeg1) ? "" : item.DescFlexSegments.PrivateDescSeg1;
                 string wide = string.IsNullOrEmpty(item.DescFlexSegments.PrivateDescSeg2) ? "" : item.DescFlexSegments.PrivateDescSeg2;
                 //item.LotInfo.LotMaster.LotCode = GetBatch(longs, wide);
-                string db = "InvDoc_MiscRcvTransL";
-                string dbname = "Lotinfo_lotcode";
+                //string db = "InvDoc_MiscRcvTransL";
+                //string dbname = "Lotinfo_lotcode";
                 #region 长宽没有值的情况下，手工录入批次号，不调用开发功能
                 if (string.IsNullOrEmpty(longs) && string.IsNullOrEmpty(wide))
                 {

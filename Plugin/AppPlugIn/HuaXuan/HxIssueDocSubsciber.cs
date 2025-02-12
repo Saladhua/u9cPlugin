@@ -119,6 +119,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
                     }
                     catch (Exception ex)
                     {
+                        string mes = ex.Message;
                         got = "F";
                     }
 
@@ -127,11 +128,11 @@ namespace YY.U9.Cust.LI.AppPlugIn
                 if (got == "F")
                 {
 
-                    string operation = "0";
+                    //string operation = "0";
 
                     string tenant = "slerealm1";
 
-                    string siteName = "华旋工厂";
+                    //string siteName = "华旋工厂";
 
                     StringBuilder formData = new StringBuilder();
                     formData.Append("{");
@@ -239,11 +240,11 @@ namespace YY.U9.Cust.LI.AppPlugIn
                 }
                 else if (got == "T")
                 {
-                    string operation = "0";
+                    //string operation = "0";
 
                     string tenant = "slerealm1";
 
-                    string siteName = "华旋工厂";
+                    //string siteName = "华旋工厂";
 
                     StringBuilder formData = new StringBuilder();
                     formData.Append("{");
@@ -412,6 +413,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
                     }
                     catch (Exception ex)
                     {
+                        string meses = ex.Message;
                         got = "F";
                     }
 
@@ -423,11 +425,11 @@ namespace YY.U9.Cust.LI.AppPlugIn
                 if (see != 326)
                 {
 
-                    string operation = "0";
+                    //string operation = "0";
 
                     string tenant = "slerealm1";
 
-                    string siteName = "华旋工厂";
+                    //string siteName = "华旋工厂";
 
                     StringBuilder formData = new StringBuilder();
                     formData.Append("{");
@@ -483,11 +485,11 @@ namespace YY.U9.Cust.LI.AppPlugIn
                 }
                 else if (see == 326)
                 {
-                    string operation = "0";
+                    //string operation = "0";
 
                     string tenant = "slerealm1";
 
-                    string siteName = "华旋工厂";
+                    //string siteName = "华旋工厂";
 
                     StringBuilder formData = new StringBuilder();
                     formData.Append("{");

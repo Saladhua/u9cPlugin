@@ -27,14 +27,14 @@ namespace YY.U9.Cust.LI.AppPlugIn
             if (args == null || args.Length == 0 || !(args[0] is UFSoft.UBF.Business.EntityEvent))
                 return;
 
-            BusinessEntity.EntityKey key = ((UFSoft.UBF.Business.EntityEvent)args[0]).EntityKey;
+            var key = ((UFSoft.UBF.Business.EntityEvent)args[0]).EntityKey;
             if (key == null)
             {
                 return;
             }
 
 
-            MiscShipment miscShipments = key.GetEntity() as MiscShipment;
+            var miscShipments = key.GetEntity() as MiscShipment;
 
 
             if (miscShipments == null)

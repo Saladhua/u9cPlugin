@@ -94,13 +94,13 @@ namespace YY.U9.Cust.LI.AppPlugIn
                 //    "demandQuantity":5000
                 //    }]
                 //} 
-                #endregion 
+                #endregion
 
-                string operation = "0";
+                //string operation = "0";
 
-                string tenant = "slerealm1";
+                //string tenant = "slerealm1";
 
-                string siteName = "华旋工厂";
+                // string siteName = "华旋工厂";
 
                 StringBuilder formData = new StringBuilder();
                 formData.Append("{");

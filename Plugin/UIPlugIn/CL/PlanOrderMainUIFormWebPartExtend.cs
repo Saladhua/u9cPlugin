@@ -18,12 +18,17 @@ namespace YY.U9.Cust.LI.UIPlugIn
         private PlanOrderMainUIFormWebPart _part;
 
         IUFButton BtnSettle3;
+
         /// <summary>
         /// 初始化后扩展
         /// </summary>
         /// <param name="part"></param>
         /// <param name="e"></param>
-        public override void AfterInit(IPart part, System.EventArgs e)
+        [Obsolete]
+
+#pragma warning disable CS0809 // 过时成员重写未过时成员
+        public override void AfterInit(IPart part, EventArgs e)
+#pragma warning restore CS0809 // 过时成员重写未过时成员
         {
             base.AfterInit(part, e);
             _part = part as PlanOrderMainUIFormWebPart;
@@ -157,7 +162,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
             this._part = (_part as PlanOrderMainUIFormWebPart);
             string whs = "";
             DataTable dt = new DataTable();
-            bool set = false;//set 用来判断是否重新选了料品筛选
+            //bool set = false;//set 用来判断是否重新选了料品筛选
             //调用模版提供的默认实现.--默认实现可能会调用相应的Action.
 
             if (HttpContext.Current.Session["Doc_Code"] != null)
@@ -171,7 +176,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
                     DataRow dr = dt.Rows[i];
                     whs = whs + "'" + dr["ID"].ToString() + "'" + ",";
                 }
-                set = true;
+                //set = true;
             }
 
 
@@ -200,6 +205,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
                 }
                 catch (Exception ex)
                 {
+                    string ms = ex.Message;
                     //string message = "料号或单号为空";
                     //throw new Exception(message);
                     continue;
@@ -287,6 +293,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
                     }
                     catch (Exception ex)
                     {
+                        string mes = ex.Message;
                         continue;
                     }
                 }

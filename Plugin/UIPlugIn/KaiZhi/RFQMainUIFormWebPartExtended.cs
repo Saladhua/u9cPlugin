@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,6 +29,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
         /// </summary>
         /// <param name="part"></param>
         /// <param name="e"></param>
+        [Obsolete]
         public override void AfterInit(IPart part, System.EventArgs e)
         {
             base.AfterInit(part, e);
@@ -69,13 +71,13 @@ namespace YY.U9.Cust.LI.UIPlugIn
             }
             this._part.OnDataCollect(this);
 
-            string DocLineNo = "";
+            //string DocLineNo = "";
 
-            string LineID = "";
+            //string LineID = "";
 
             string ID = "";
 
-            string Status = "";
+            //string Status = "";
 
             foreach (var item in this._part.Model.RequestForQuotation.Records)
             {
@@ -125,7 +127,28 @@ namespace YY.U9.Cust.LI.UIPlugIn
             }
             this._part.OnDataCollect(this);
 
+
+            //ExeConfigurationFileMap configMap = new ExeConfigurationFileMap();
+            //configMap.ExeConfigFilename = @"D:\yonyou\U9CE\KKConfig\web.config";
+            //Configuration config = ConfigurationManager.OpenMappedExeConfiguration(configMap, ConfigurationUserLevel.None);
+            //// 读取配置项
+            //string see = config.AppSettings.Settings["Project"]?.Value;
+
+
             NavigateManager.ShowModelWebpart(_part, "ea003f06-b0c8-4f6e-9428-124c1d425613", _part.TaskId.ToString(), 992, 470, null, true, true);
+        }
+
+
+
+        public string GetConfigValue()
+        {
+            // 手动加载配置文件
+            ExeConfigurationFileMap configMap = new ExeConfigurationFileMap();
+            configMap.ExeConfigFilename = @"D:\yonyou\U9CE\KKConfig\web.config";
+            Configuration config = ConfigurationManager.OpenMappedExeConfiguration(configMap, ConfigurationUserLevel.None);
+            // 读取配置项
+            return config.AppSettings.Settings["project"]?.Value;
         }
     }
 }
+

@@ -90,7 +90,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
 
                 string siteName = "华旋工厂";
 
-                string m = "\"";
+                //string m = "\"";
 
                 StringBuilder formData = new StringBuilder();
                 formData.Append("{");
@@ -202,9 +202,9 @@ namespace YY.U9.Cust.LI.AppPlugIn
 
                 string tenant = "slerealm1";
 
-                string siteName = "华旋工厂";
+                //string siteName = "华旋工厂";
 
-                string m = "\"";
+                //string m = "\"";
 
                 StringBuilder formData = new StringBuilder();
                 formData.Append("{");

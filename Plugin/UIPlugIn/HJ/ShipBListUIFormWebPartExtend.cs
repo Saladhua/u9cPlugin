@@ -22,6 +22,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
 
         IUFButton BtnSettle;
 
+        [Obsolete]
         public override void AfterInit(IPart part, EventArgs args)
         {
             base.AfterInit(part, args);
@@ -77,9 +78,9 @@ namespace YY.U9.Cust.LI.UIPlugIn
             //Cache.GetSelectRecord();
             // List<IUIRecord> list = UIRuntimeHelper.Instance.GetSelectRecordFromCache(_part.Model.Ship.Cache.GetSelectRecord()).ToList);
 
-            string ItemCode = "";//料品
-            string LotCode = "";//批号
-            string DocNo = "";//单号
+            //string ItemCode = "";//料品
+            //string LotCode = "";//批号
+            //string DocNo = "";//单号
             try
             {
                 _part.DataCollect();//数据收集

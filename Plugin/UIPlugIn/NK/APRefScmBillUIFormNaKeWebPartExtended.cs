@@ -854,11 +854,11 @@ namespace YY.U9.Cust.LI.UIPlugIn
 
             string DocNo = "";
 
-            string ContractsNumber = "0";//合同数量
+            //string ContractsNumber = "0";//合同数量
 
-            string RuKuNum = "0";//已入库数量
+            //string RuKuNum = "0";//已入库数量
 
-            string InvoicesNum = "0";//已开票数量
+            //string InvoicesNum = "0";//已开票数量
             string docno = "'0',";
             string itemcode = "'0',";
             string item_id = "'0',";

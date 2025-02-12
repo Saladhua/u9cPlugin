@@ -20,6 +20,8 @@ namespace YY.U9.Cust.LI.UIPlugIn
         private StandardSOMainUIFormWebPart _part;
 
         IUFButton BtnSettle;
+
+        [Obsolete]
         public override void AfterInit(IPart part, EventArgs args)
         {
             base.AfterInit(part, args);

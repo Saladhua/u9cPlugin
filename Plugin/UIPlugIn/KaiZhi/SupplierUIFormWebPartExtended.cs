@@ -11,14 +11,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
     /// </summary>
     class SupplierUIFormWebPartExtended : UFSoft.UBF.UI.Custom.ExtendedPartBase
     {
-        private SupplierMainUIFormWebPart _part;
-
-
-        IUFMenu BtnSettle;
-
-
-
-
+        private SupplierMainUIFormWebPart _part; 
         /// <summary>
         /// 初始化后扩展
         /// UFIDA.U9.BS.Job.RequestClient.dll

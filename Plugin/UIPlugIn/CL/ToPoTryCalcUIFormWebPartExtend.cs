@@ -19,7 +19,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
     {
         private ToPoTryCalcUIFormWebPart _part;
         IUFButton BtnSettle;
-
+        [Obsolete]
         public override void AfterInit(IPart part, EventArgs args)
         {
             //首先调用原来的事件

@@ -15,7 +15,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
     class MODivideMainUIFormWebPartExtend : ExtendedPartBase
     {
         private MODivideMainUIFormWebPart _part;
-        HiddenField wpFindID;
+        //HiddenField wpFindID;
         IUFButton BtnSettle;
 
 
@@ -24,6 +24,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
         /// </summary>
         /// <param name="part"></param>
         /// <param name="e"></param>
+        [Obsolete]
         public override void AfterInit(IPart part, System.EventArgs e)
         {
             base.AfterInit(part, e);

@@ -63,7 +63,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
             //" AND b.ItemMaster = (SELECT ID FROM CBO_ItemMaster WHERE Code = '" + itemcode + "' AND Org = '" + PDContext.Current.OrgID + "')";
             #endregion
 
-            int sererer = _part.Model.ItemWIPSimu.Cache.Count; 
+            int sererer = _part.Model.ItemWIPSimu.Cache.Count;
 
             foreach (var item in _part.Model.ItemWIPSimu.SelectRecords)
             {
@@ -102,6 +102,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
                             }
                             catch (Exception ex)
                             {
+                                string mes = ex.Message;
                                 //this._part.Model.ErrorMessage.Message = "单号" + docno + "下备料" + itemcode + "供应地点为空";
                                 continue;
                             }
@@ -129,7 +130,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
                     #region 调入单
                     UFIDA.U9.ISV.TransferInISV.Proxy.CommonCreateTransferInSVProxy transferInSVProxy = new UFIDA.U9.ISV.TransferInISV.Proxy.CommonCreateTransferInSVProxy();
 
-                    UFIDA.U9.ISV.TransferInISV.IC_TransferInDTOData[] Boms;
+                    //UFIDA.U9.ISV.TransferInISV.IC_TransferInDTOData[] Boms;
                     List<UFIDA.U9.ISV.TransferInISV.IC_TransferInDTOData> listBom = new List<UFIDA.U9.ISV.TransferInISV.IC_TransferInDTOData>();
                     List<UFIDA.U9.ISV.TransferInISV.IC_TransInLineDTOData> listBomLine = new List<UFIDA.U9.ISV.TransferInISV.IC_TransInLineDTOData>();
 
@@ -149,7 +150,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
                     List<MoItem> nmos = ForLoopRemove(mos);
 
                     //设置全局变量Q
-                    decimal quanjuQ = 0;
+                    //decimal quanjuQ = 0;
 
                     List<MoItem> nnmos = new List<MoItem>();
 
@@ -166,7 +167,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
                     }
                     //行
                     foreach (var item in nmos)
-                    { 
+                    {
                         string ssee = item.ItemMasterCode.ToString();
 
                         string ssee2 = item.CompleteWhCode.ToString();
@@ -268,7 +269,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
                             if (decimal.Parse(kucy) > 0 && iqty > 0)
                             {
                                 listBomLine.Add(Bom_line);//加载行  
-                            } 
+                            }
                         }
                     }
                     Bom.TransInLines = listBomLine;
@@ -343,13 +344,13 @@ namespace YY.U9.Cust.LI.UIPlugIn
             public string Round_Precision { get; set; }
             public string DescFlexField_PrivateDescSeg2 { get; set; }
 
-        } 
+        }
 
         public class NMoItem
         {
             public long ItemMasterCode { get; set; }
 
-        } 
+        }
 
         public string getkc(string item, string whid)
         {
@@ -387,7 +388,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
                 ck = "0";
             }
             return ck;
-        } 
+        }
         /// <summary>
         /// 
         /// </summary>

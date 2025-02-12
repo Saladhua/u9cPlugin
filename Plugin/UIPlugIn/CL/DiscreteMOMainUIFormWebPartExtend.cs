@@ -91,6 +91,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
                 }
                 catch (Exception ex)
                 {
+                    string mse = ex.Message;
                     return;
                 }
 

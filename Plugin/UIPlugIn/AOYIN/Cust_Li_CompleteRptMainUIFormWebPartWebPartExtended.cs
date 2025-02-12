@@ -247,31 +247,31 @@ namespace YY.U9.Cust.LI.UIPlugIn
             UFSoft.UBF.UI.WebControlAdapter.UFWebButton4ToolbarAdapter webButton = sender as UFSoft.UBF.UI.WebControlAdapter.UFWebButton4ToolbarAdapter;
             this._part = (part as CompleteRptMainUIFormWebPart);
             //报废入库数量
-            string scrapping = "";
+            //string scrapping = "";
             //生产订单单号
-            string moDocNo = "";
+            //string moDocNo = "";
             //生产订单的id
-            string moDocNoID = "";
+            //string moDocNoID = "";
             //料品 -- 取料品的行
-            string itemmaster = "";
+            //string itemmaster = "";
             //入库数量
-            string rcvQtyByProductUom = "";
+            //string rcvQtyByProductUom = "";
             //精度
-            string roundPrecision = "";
+            //string roundPrecision = "";
             //差异
-            Decimal difference = 0;
+            //Decimal difference = 0;
             //私有字段3
-            string dprivateDescSeg3 = "";
+            //string dprivateDescSeg3 = "";
             //私有字段4
-            string dprivateDescSeg4 = "";
+            //string dprivateDescSeg4 = "";
             //私有字段5
-            string dprivateDescSeg5 = "";
+            //string dprivateDescSeg5 = "";
             //已发放数量
-            string issuedQty = "";
+            //string issuedQty = "";
             //bom用量
-            string bOMReqQty = "";
+            //string bOMReqQty = "";
             //特别发料量
-            string specialIssuedQty = "";
+            //string specialIssuedQty = "";
             try
             {
                 string s = webButton.Action;
@@ -283,7 +283,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
 
             if (webButton.Action == "ApproveClick")//SubmitClick  ApproveClick
             {
-                string Yi = "是";//所有行差异是否满足
+                //string Yi = "是";//所有行差异是否满足
 
                 //foreach (var item in _part.Model.CompleteRpt.Records)
                 //{

@@ -35,6 +35,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
             }
             catch (Exception ex) //写入日志
             { //默认写入日志 
+                string meses = ex.Message;
             }
             try
             {

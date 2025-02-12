@@ -335,8 +335,8 @@ namespace YY.U9.Cust.LI.UIPlugIn
                     item["LotInfo_LotMaster"] = n;
                     longs = string.IsNullOrEmpty(longs) ? "" : item["DescFlexSegments_PrivateDescSeg1"].ToString();
                     wide = string.IsNullOrEmpty(wide) ? "" : item["DescFlexSegments_PrivateDescSeg2"].ToString();
-                    string db = "InvDoc_TransferFormSL";
-                    string dbname = "Lotinfo_lotcode";
+                    //string db = "InvDoc_TransferFormSL";
+                    //string dbname = "Lotinfo_lotcode";
                     //item["LotInfo_LotCode"] = MiscRcvUIMainFormWebPartExtended.GetBatch(longs, wide, db, dbname);
                     throw new Exception(e.Message);
                 }

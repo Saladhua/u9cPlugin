@@ -12,9 +12,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
 {
     class APRefScmBillUIFormWebPartExtended : UFSoft.UBF.UI.Custom.ExtendedPartBase
     {
-        private APRefScmBillUIFormWebPart _part;
-
-        IUFMenu BtnSettle;
+        private APRefScmBillUIFormWebPart _part; 
         /// <summary>
         /// 初始化后扩展
         /// UFIDA.U9.BS.Job.RequestClient.dll

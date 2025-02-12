@@ -16,23 +16,15 @@ namespace YY.U9.Cust.LI.UIPlugIn
     {
         private BomMainUIFormWebPart _part;
 
-        IUIRecordBuilder _builder;
-
-        IUFMenu BtnSettle;
         /// <summary>
         /// 初始化后扩展
-        /// UFIDA.U9.BS.Job.RequestClient.dll
         /// </summary>
         /// <param name="part"></param>
-        /// <param name="e"></param>        
+        /// <param name="e"></param>
         public override void AfterInit(IPart part, System.EventArgs e)
         {
             base.AfterInit(part, e);
-            this._part = (part as BomMainUIFormWebPart);
-
-
-
-
+            this._part = (part as BomMainUIFormWebPart);  
         }
 
 

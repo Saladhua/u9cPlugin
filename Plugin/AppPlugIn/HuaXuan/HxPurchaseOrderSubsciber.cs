@@ -98,11 +98,11 @@ namespace YY.U9.Cust.LI.AppPlugIn
 
                 if (purchaseOrder.BizType.Value != 326)
                 {
-                    string operation = "0";
+                    //string operation = "0";
 
                     string tenant = "slerealm1";
 
-                    string siteName = "华旋工厂";
+                    //string siteName = "华旋工厂";
 
                     //StringBuilder formData = new StringBuilder();
                     //formData.Append("{");
@@ -231,11 +231,11 @@ namespace YY.U9.Cust.LI.AppPlugIn
                 }
                 else
                 {
-                    string operation = "0";
+                    //string operation = "0";
 
                     string tenant = "slerealm1";
 
-                    string siteName = "华旋工厂";
+                    //string siteName = "华旋工厂";
                     StringBuilder formData = new StringBuilder();
                     formData.Append("{");
 
@@ -385,11 +385,11 @@ namespace YY.U9.Cust.LI.AppPlugIn
 
                 if (purchaseOrder.BizType.Value != 326)
                 {
-                    string operation = "0";
+                    //string operation = "0";
 
                     string tenant = "slerealm1";
 
-                    string siteName = "华旋工厂";
+                    //string siteName = "华旋工厂";
 
                     //StringBuilder formData = new StringBuilder();
                     //formData.Append("{");
@@ -475,11 +475,11 @@ namespace YY.U9.Cust.LI.AppPlugIn
                 }
                 else
                 {
-                    string operation = "1";
+                    //string operation = "1";
 
                     string tenant = "slerealm1";
 
-                    string siteName = "华旋工厂";
+                    //string siteName = "华旋工厂";
                     StringBuilder formData = new StringBuilder();
 
                     formData.Append("{");

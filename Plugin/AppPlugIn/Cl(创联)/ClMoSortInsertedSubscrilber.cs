@@ -27,12 +27,12 @@ namespace YY.U9.Cust.LI.AppPlugIn
             //从事件参数中取得当前业务实体
             if (args == null || args.Length == 0 || !(args[0] is UFSoft.UBF.Business.EntityEvent))
                 return;
-            BusinessEntity.EntityKey key = ((UFSoft.UBF.Business.EntityEvent)args[0]).EntityKey;
+            var key = ((UFSoft.UBF.Business.EntityEvent)args[0]).EntityKey;
             if (key == null)
             {
                 return;
             }
-            MO mo = key.GetEntity() as MO;
+            var mo = key.GetEntity() as MO;
             if (mo == null)
             {
                 return;
@@ -62,7 +62,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
 
             //mo.SysState
 
-            List<MOPickList> OldMoPiclLists = new List<MOPickList>();
+            var OldMoPiclLists = new List<MOPickList>();
 
             foreach (var item in mo.MOPickLists)
             {

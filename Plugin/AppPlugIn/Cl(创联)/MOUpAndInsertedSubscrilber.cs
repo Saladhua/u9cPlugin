@@ -84,7 +84,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
             //}
             #endregion
 
-            string D5 = "";
+            //string D5 = "";
 
             if (mo.DocState.Value == 0)
             {

@@ -326,6 +326,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
                     }
                     catch (Exception ex)
                     {
+                        string meses = ex.Message;
                     }
                 }
                 //总功率 = 功率 * 数量(功率计算之后四舍五入再乘以数量)
@@ -343,6 +344,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
                     }
                     catch (Exception ex)
                     {
+                        string mes = ex.Message;
                     }
                 }
                 //总功率 = 功率 * 数量

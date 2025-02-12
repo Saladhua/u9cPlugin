@@ -58,6 +58,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
             }
             catch (Exception ex)
             {
+                string meses = ex.Message;
                 return;
             }
             string rcvdocno = "";//标准收货单据的单号

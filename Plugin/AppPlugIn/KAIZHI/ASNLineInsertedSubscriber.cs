@@ -39,7 +39,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
 
             string itemLotParam = "";
 
-            string itemLotDate = "";
+            //string itemLotDate = "";
 
             string nowDate = DateTime.Now.ToString("yyyyMMdd");
 
@@ -49,7 +49,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
 
             DateTime InvalidDate = DateTime.Now;//失效日期
 
-            long lotMasterID = 0;
+            //long lotMasterID = 0;
 
             foreach (var item in aSN.ASNLine)
             {

@@ -126,7 +126,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
             #region 调入单
             UFIDA.U9.ISV.TransferInISV.Proxy.CommonCreateTransferInSVProxy transferInSVProxy = new UFIDA.U9.ISV.TransferInISV.Proxy.CommonCreateTransferInSVProxy();
 
-            UFIDA.U9.ISV.TransferInISV.IC_TransferInDTOData[] Boms;
+            //UFIDA.U9.ISV.TransferInISV.IC_TransferInDTOData[] Boms;
             List<UFIDA.U9.ISV.TransferInISV.IC_TransferInDTOData> listBom = new List<UFIDA.U9.ISV.TransferInISV.IC_TransferInDTOData>();
             List<UFIDA.U9.ISV.TransferInISV.IC_TransInLineDTOData> listBomLine = new List<UFIDA.U9.ISV.TransferInISV.IC_TransInLineDTOData>();
 

@@ -15,7 +15,12 @@ namespace YY.U9.Cust.LI.UIPlugIn
     {
         private ECNDocMainUIFormWebPart _part;
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="part"></param>
+        /// <param name="args"></param>
+        [Obsolete]
         public override void AfterInit(IPart part, EventArgs args)
         {
             base.AfterInit(part, args);

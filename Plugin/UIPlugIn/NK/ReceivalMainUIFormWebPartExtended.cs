@@ -25,6 +25,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
         /// </summary>
         /// <param name="part"></param>
         /// <param name="e"></param>
+        [Obsolete]
         public override void AfterInit(IPart part, System.EventArgs e)
         {
             base.AfterInit(part, e);

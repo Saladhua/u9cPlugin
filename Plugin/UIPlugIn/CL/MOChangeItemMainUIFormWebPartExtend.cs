@@ -11,15 +11,15 @@ namespace YY.U9.Cust.LI.UIPlugIn
     class MOChangeItemMainUIFormWebPartExtend : ExtendedPartBase
     {
         private MOChangeItemMainUIFormWebPart _part;
-        HiddenField wpFindID;
+   
         IUFButton BtnSettle;
-
 
         /// <summary>
         /// 初始化后扩展
         /// </summary>
         /// <param name="part"></param>
         /// <param name="e"></param>
+        [Obsolete]
         public override void AfterInit(IPart part, System.EventArgs e)
         {
             base.AfterInit(part, e);

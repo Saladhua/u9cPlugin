@@ -107,6 +107,7 @@ namespace YY.U9.Cust.LI.AppPlugIn
                 }
                 catch (Exception ex)
                 {
+                    string meses = ex.Message;
                     logger.Error("删除数据报文1：" + bwen1 + "删除数据报文2：" + bwen2);
                 }
             }

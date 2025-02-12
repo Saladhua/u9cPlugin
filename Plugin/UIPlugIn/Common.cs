@@ -23,6 +23,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
             }
             catch (Exception ex)
             {
+                string meses = ex.Message;
                 return 0;
             }
         }
@@ -41,6 +42,7 @@ namespace YY.U9.Cust.LI.UIPlugIn
             }
             catch (Exception ex)
             {
+                string mes = ex.Message;
                 return 0;
             }
         }
